@@ -5,7 +5,7 @@
 ## 작업 브랜치 유형
 
 - [ ] 기능 (feature/xxx)
-- [ ] 에셋 (asset/xxx)
+- [ ] 에셋 (assets/xxx)
 - [ ] 버그 수정
 - [ ] 기타
 
