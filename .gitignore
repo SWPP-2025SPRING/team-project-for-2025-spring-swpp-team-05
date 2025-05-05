@@ -1,0 +1,32 @@
+# === 기본 Unity 관련 무시 항목 ===
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+
+# === IDE 관련 파일 ===
+.vscode/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+
+# === OS 별 파일 ===
+.DS_Store
+Thumbs.db
+
+# === 기타 ===
+*.apk
+*.aab
+*.log
+
+# === Git 무시 설정을 저장하는 파일은 Git에 포함시킴 ===
+!.gitignore
