@@ -53,6 +53,7 @@ public class PlayerControl : MonoBehaviour
     void Update()
     {
         horizontalInput = Input.GetAxis("Horizontal");
+        // TODO: 킥보드로 바꾸고 나서는 킥보드 애니메이션으로 바꾸기
         playerAnimator.SetFloat("Speed_f", 0.6f);
 
         if (Mathf.Abs(horizontalInput) > 0.01f)
