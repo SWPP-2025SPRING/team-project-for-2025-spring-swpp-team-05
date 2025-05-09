@@ -31,7 +31,6 @@ jobs:
       - name: Build WebGL
         uses: game-ci/unity-builder@v4
         with:
-          projectPath: MonsterUniversity
           targetPlatform: WebGL
           unityVersion: 2021.3.45f1
         env:
