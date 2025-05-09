@@ -1,0 +1,16 @@
+Assets:
+  - 'assets/*'
+  - '\basset\b'
+Bug:
+  - '\bbug\b'
+  - '\bfix\b'
+Documentation:
+  - '\bdocumentation\b'
+  - '\bdocs\b'
+Feature:
+  - '\bfeature\b'
+  - '\bfeat\b'
+Refactor:
+  - '\brefactor\b'
+UI:
+  - '\bui\b'

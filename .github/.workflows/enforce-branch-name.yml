@@ -1,0 +1,16 @@
+name: Enforce Branch Name
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  enforce-branch-name:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enforce Branch Name
+        uses: finleyfamily/action-enforce-branch-name@v1.0.1
+        with:
+          allowed_prefixes: features,assets,main,develop
+          exclude: main,develop
+          regex: '^(features|assets)\/[a-zA-Z0-9\-_]+$'
