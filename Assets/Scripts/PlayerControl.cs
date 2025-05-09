@@ -19,18 +19,17 @@ public class PlayerControl : MonoBehaviour
     // Move Action
     // private float forwardInput;
     private float horizontalInput;
-    private float moveSpeed = 10.0f;
     private Vector3 moveDirection;
 
     // Player Stats
-    // private int playerHP;
-    // private int attackPower;
-    // private float attackRange;
+    private float moveSpeed;
+    private int attackPower;
+    private float attackRange;
 
-    // private int defaultHP = 100;
-    // private int maxHP = 100;
-    // private int defaultAttackPower = 10;
-    // private float defaultAttackRange = 3.0f;
+    private float defaultMoveSpeed = 10.0f;
+    // private float maxMoveSpeed = 30.0f;
+    private int defaultAttackPower = 10;
+    private float defaultAttackRange = 3.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -39,6 +38,15 @@ public class PlayerControl : MonoBehaviour
         playerAnimator = GetComponent<Animator>();
         playerAudio = GetComponent<AudioSource>();
         Physics.gravity *= 1;
+        initializePlayerStats();
+    }
+
+    void initializePlayerStats()
+    {
+        moveSpeed = defaultMoveSpeed;
+        attackPower = defaultAttackPower;
+        attackRange = defaultAttackRange;
+
     }
 
     // Update is called once per frame
