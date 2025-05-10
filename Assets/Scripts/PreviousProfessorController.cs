@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProfessorController : MonoBehaviour
+public class PreviousProfessorController : MonoBehaviour
 {
     private GameObject player;
     public float speed = 40f;
