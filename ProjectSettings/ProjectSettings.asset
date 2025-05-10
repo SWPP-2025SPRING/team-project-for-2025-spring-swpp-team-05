@@ -4,7 +4,11 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 24
+<<<<<<< HEAD
   productGUID: f46251019536bba4f9e9add389634ccc
+=======
+  productGUID: 1ee78887b8da441178560aa1fc3d26ce
+>>>>>>> develop
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
@@ -721,11 +725,19 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
+<<<<<<< HEAD
   cloudProjectId: d044896b-8498-40c8-b02b-f27fc88c1ae7
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
   projectName: Monster University
   organizationId: garu326
+=======
+  cloudProjectId: f94603c7-6344-492f-b738-e0bbbbdbe2c3
+  framebufferDepthMemorylessMode: 0
+  qualitySettingsNames: []
+  projectName: Monster University
+  organizationId: taeyoung0307
+>>>>>>> develop
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   playerDataPath: 
