@@ -4,20 +4,20 @@ using UnityEngine;
 
 public enum DebuffType
 {
-  SpeedDown,
-  ReverseControl
+    SpeedDown,
+    ReverseControl
 }
 
 public class Debuff
 {
-  public DebuffType Type;
-  public float Duration;
-  public float Timer;
+    public DebuffType Type;
+    public float Duration;
+    public float Timer;
 
-  public Debuff(DebuffType type, float duration)
-  {
-    Type = type;
-    Duration = duration;
-    Timer = 0f;
-  }
+    public Debuff(DebuffType type, float duration)
+    {
+        Type = type;
+        Duration = duration;
+        Timer = 0f;
+    }
 }
