@@ -2,7 +2,7 @@ name: Build and Deploy WebGL
 
 on:
   push:
-    branches: [main]
+    branches: [develop]
 
 jobs:
   build:
