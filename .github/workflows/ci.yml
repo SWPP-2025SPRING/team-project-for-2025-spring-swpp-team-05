@@ -13,6 +13,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          lfs: true
+          fetch-depth: 0
       - name: Run Super-Linter
         uses: super-linter/super-linter@v6
         env:
@@ -37,6 +40,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           lfs: true
+          fetch-depth: 0
 
       - name: Cache Library
         uses: actions/cache@v4
