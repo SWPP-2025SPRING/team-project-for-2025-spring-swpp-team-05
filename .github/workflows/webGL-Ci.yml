@@ -29,7 +29,7 @@ jobs:
             Library-${{ runner.os }}-
 
       - name: Build WebGL
-        uses: game-ci/unity-builder@v4
+        uses: game-ci/unity-builder@v4.4.0
         with:
           targetPlatform: WebGL
           unityVersion: 2021.3.45f1

@@ -50,12 +50,12 @@ jobs:
           restore-keys: Library-
 
       - name: Setup Unity
-        uses: game-ci/setup-unity@v3
+        uses: game-ci/setup-unity@v4.4.0
         with:
           unityVersion: 2021.3.45f1 # 프로젝트 Unity 버전에 맞게 수정
 
       - name: Build project
-        uses: game-ci/unity-builder@v4
+        uses: game-ci/unity-builder@v4.4.0
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
