@@ -1,0 +1,36 @@
+name: Auto Assign Reviewers and Assignee
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  auto-assign-reviewers:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assign reviewers and assignee
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const prAuthor = context.payload.pull_request.user.login;
+
+            // list of team members
+            const teamMembers = ['Tangle0307', 'summersummerwhy', 'hometogo4ever', 'HayoungGloria', 'LeeGwanWoo']; 
+            const reviewers = teamMembers.filter(member => member !== prAuthor);
+
+            // 1. auto assign reviewers: team members except for prAuthor
+            await github.rest.pulls.requestReviewers({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber,
+              reviewers: reviewers
+            });
+
+            // 2. auto assign assignee: prAuthor
+            await github.rest.issues.addAssignees({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              assignees: [prAuthor]
+            });
