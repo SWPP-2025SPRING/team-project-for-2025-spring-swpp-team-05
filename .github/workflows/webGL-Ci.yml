@@ -1,8 +1,10 @@
 name: Build and Deploy WebGL
 
 on:
-  push:
+  pull_request:
     branches: [develop]
+  push:
+    branches: [main, develop]
 
 jobs:
   build:
