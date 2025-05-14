@@ -15,7 +15,7 @@ public class ProfessorController : MonoBehaviour
         while (true)
         {
             // 정지 시간: 2초 또는 1초
-            float waitTime = facingForward ? 2f : 1f;
+            float waitTime = facingForward ? 1.5f : 1f;
             yield return new WaitForSeconds(waitTime);
 
             // 현재 방향 기준으로 목표 회전 계산
