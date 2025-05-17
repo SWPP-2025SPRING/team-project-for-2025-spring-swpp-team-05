@@ -4,6 +4,10 @@ using UnityEngine;
 public class ProfessorController : MonoBehaviour
 {
     private bool facingForward = true;
+    public float rotateDuration = 0.2f;
+    public float facingForwardTime = 1.5f;
+    public float facingBackwardTime = 1f;
+
 
     void Start()
     {
@@ -15,7 +19,7 @@ public class ProfessorController : MonoBehaviour
         while (true)
         {
             // 정지 시간: 2초 또는 1초
-            float waitTime = facingForward ? 1.5f : 1f;
+            float waitTime = facingForward ? facingForwardTime : facingBackwardTime;
             yield return new WaitForSeconds(waitTime);
 
             // 현재 방향 기준으로 목표 회전 계산
@@ -23,7 +27,6 @@ public class ProfessorController : MonoBehaviour
             Quaternion endRot = startRot * Quaternion.Euler(0f, 180f, 0f);
 
             // 회전 시간과 속도 설정
-            float rotateDuration = 0.2f;
             float elapsed = 0f;
 
             while (elapsed < rotateDuration)
