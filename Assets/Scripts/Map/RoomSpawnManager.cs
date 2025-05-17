@@ -33,7 +33,7 @@ public class RoomSpawnManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -57,7 +57,7 @@ public class RoomSpawnManager : MonoBehaviour
         monsterCount = monsterAmount();
         remainMonsterCount = monsterCount;
         summonedMonsters = new List<GameObject>();
-        
+
         float aspect = roomXSize / roomZSize;
         int col = Mathf.CeilToInt(Mathf.Sqrt(monsterCount * aspect));
         int row = Mathf.CeilToInt(monsterCount / col);
