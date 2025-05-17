@@ -14,19 +14,26 @@ public class TestSceneLoader : MonoBehaviour
 
     public bool cheatModeActive = false;
 
-    public Button sceneChangeButton;
+    public Button[] sceneChangeButton;
+    public string[] sceneNames;
 
-    // Start is called before the first frame update
     void Start()
     {
-        sceneChangeButton.onClick.AddListener(LoadTestScene);
-        sceneChangeButton.interactable = false; // 버튼을 처음에 비활성화
-        sceneChangeButton.gameObject.SetActive(false); // 버튼을 처음에 비활성화
+        // 일단 모든 버튼 비활성화
+        for (int i = 0; i < sceneChangeButton.Length; i++)
+        {
+            int index = i; // 클로저 방지
+            sceneChangeButton[i].gameObject.SetActive(false);
+            sceneChangeButton[i].interactable = false;
+
+            // 미리 이벤트 연결해두고, 치트 모드에서만 활성화되게 함
+            sceneChangeButton[i].onClick.AddListener(() =>
+            {
+                LoadScene(sceneNames[index]);
+            });
+        }
     }
 
-
-
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))
@@ -39,7 +46,7 @@ public class TestSceneLoader : MonoBehaviour
             }
             else
             {
-                pressCount = 1; // 너무 늦게 눌렀으면 카운트 초기화
+                pressCount = 1;
             }
 
             lastPressTime = currentTime;
@@ -47,7 +54,7 @@ public class TestSceneLoader : MonoBehaviour
             if (pressCount >= requiredPresses)
             {
                 ActivateCheatMode();
-                pressCount = 0; // 다시 초기화
+                pressCount = 0;
             }
         }
     }
@@ -58,21 +65,25 @@ public class TestSceneLoader : MonoBehaviour
         {
             cheatModeActive = true;
             Debug.Log("🎉 Cheat Mode Activated!");
-            // 여기에 원하는 치트 기능 실행
         }
-        sceneChangeButton.gameObject.SetActive(true); // 버튼 활성화
-        sceneChangeButton.interactable = true; // 버튼 활성화
+
+        // 버튼 전부 활성화
+        for (int i = 0; i < sceneChangeButton.Length; i++)
+        {
+            sceneChangeButton[i].gameObject.SetActive(true);
+            sceneChangeButton[i].interactable = true;
+        }
     }
 
-    void LoadTestScene()
+    void LoadScene(string sceneName)
     {
         if (cheatModeActive)
         {
-            SceneManager.LoadScene("TestScene");
+            SceneManager.LoadScene(sceneName);
         }
         else
         {
-            Debug.Log("Cheat mode is not active. Cannot load TestScene.");
+            Debug.Log("Cheat mode is not active. Cannot load scene.");
         }
     }
 }
