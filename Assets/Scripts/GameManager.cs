@@ -10,17 +10,17 @@ public class GameManager : MonoBehaviour
     // public UIManager uiManager;
 
 
-    public bool isGameActive;    
+    public bool isGameActive;
     // Start is called before the first frame update
     void Start()
     {
         isGameActive = true;
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

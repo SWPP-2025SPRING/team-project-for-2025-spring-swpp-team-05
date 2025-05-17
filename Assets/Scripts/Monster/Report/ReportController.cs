@@ -15,12 +15,12 @@ public class ReportController : MonoBehaviour
     public float detectionRadius = 5f;
     public float attatchDistance = 0.3f;
 
-    
+
 
     private bool isLaunched = false;
     private bool isAttatched = false;
     private Vector3 attachOffset;
-    
+
 
     // Start is called before the first frame update
     void Start()
@@ -62,7 +62,7 @@ public class ReportController : MonoBehaviour
             ChasePlayer();
         }
 
-        
+
     }
 
 
@@ -77,7 +77,7 @@ public class ReportController : MonoBehaviour
         reportRigidbody.AddForce(force, ForceMode.VelocityChange);
     }
 
-    
+
     void AttackStart()
     {
         isAttatched = true;
