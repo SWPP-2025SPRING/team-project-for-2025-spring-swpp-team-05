@@ -44,6 +44,6 @@ public class FollowPlayer : MonoBehaviour
     void LateUpdate()
     {
         transform.position = player.transform.TransformPoint(currentOffset);
-        transform.LookAt(player.transform.position + Vector3.up * 2f); 
+        transform.LookAt(player.transform.position + Vector3.up * 2f);
     }
 }
