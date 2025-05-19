@@ -1,6 +1,6 @@
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using System.Linq;
 
 public class WebGLBuildScript
 {
@@ -8,6 +8,8 @@ public class WebGLBuildScript
     public static void BuildWebGL()
     {
         // 컬러 스페이스 강제 설정
+        EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.WebGL, BuildTarget.WebGL);
+        PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Disabled;
         PlayerSettings.colorSpace = ColorSpace.Gamma;
 
         // 빌드 설정에 등록된 씬만 사용

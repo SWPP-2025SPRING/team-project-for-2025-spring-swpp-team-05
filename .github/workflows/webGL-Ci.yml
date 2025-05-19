@@ -1,8 +1,10 @@
 name: Build and Deploy WebGL
 
 on:
+  pull_request:
+    branches: [develop]
   push:
-    branches: [main]
+    branches: [main, develop]
 
 jobs:
   build:
@@ -29,7 +31,7 @@ jobs:
             Library-${{ runner.os }}-
 
       - name: Build WebGL
-        uses: game-ci/unity-builder@v4
+        uses: game-ci/unity-builder@v4.4.0
         with:
           targetPlatform: WebGL
           unityVersion: 2021.3.45f1
@@ -37,6 +39,7 @@ jobs:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          ALLOW_DIRTY_BUILD: true
 
       - name: Fix WebGL path and set permissions
         run: |

@@ -16,3 +16,6 @@
 
 # Unity 패키지
 *.unitypackage filter=lfs diff=lfs merge=lfs -text
+
+# EOL
+* text eol=crlf
