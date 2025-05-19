@@ -26,7 +26,7 @@
 |김하영| [@HayoungGloria](https://github.com/HayoungGloria) | 종강하고 싶고 졸업하고 싶은 대학교 4학년 |
 |민서진| [@summersummerwhy](https://github.com/summersummerwhy) | 게임을 별로 안좋아하는데 어쩌다보니 게임을 개발하게 된 … |
 |유태영| [@Tangle0307](https://github.com/Tangle0307) | 언어를 안전하게 만들고 싶은 학부생입니다. |
-|이관우| [@LeeGwanWoo](https://github.com/LeeGwanWoo) | 장차 대한민국을 대표하는 PD가 될 사람밍 |
+|이관우| [@LeeGwanWoo](https://github.com/LeeGwanWoo) | 장차 대한민국을 대표하는 PD가 될 사람 |
 
 
 ---
