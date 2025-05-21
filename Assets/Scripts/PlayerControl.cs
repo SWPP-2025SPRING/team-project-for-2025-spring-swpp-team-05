@@ -72,6 +72,16 @@ public class PlayerControl : MonoBehaviour
             Quaternion turnRotation = Quaternion.Euler(0, horizontalInput * 100 * Time.deltaTime, 0);
             transform.rotation *= turnRotation;
         }
+
+        if (isStun)
+        {
+            string input = Input.inputString;
+            if (input.Length > 0)
+            {
+                char inputChar = input[0];
+                TrySolveStun(inputChar);
+            }
+        }
     }
 
     void FixedUpdate()
