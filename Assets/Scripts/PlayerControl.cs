@@ -51,6 +51,7 @@ public class PlayerControl : MonoBehaviour
         playerAudio = GetComponent<AudioSource>();
         Physics.gravity *= 1;
         initializePlayerStats();
+        deactivateCodeText();
     }
 
     void initializePlayerStats()
@@ -109,6 +110,7 @@ public class PlayerControl : MonoBehaviour
             currentCode = code.GetNext();
             nextCode = code.GetNextNext();
             nextNextCode = code.GetNextNextNext();
+            activateCodeText();
             UpdateCodeText();
         }
         isStun = true;
@@ -163,9 +165,11 @@ public class PlayerControl : MonoBehaviour
                 {
                     // 더 이상 해결할 코드가 없음
                     isStun = false;
+                    prevCode = ' ';
                     currentCode = ' ';
                     nextCode = ' ';
                     nextNextCode = ' ';
+                    deactivateCodeText();
                 }
             }
             else
@@ -191,5 +195,21 @@ public class PlayerControl : MonoBehaviour
         codeTexts[1].text = currentCode.ToString();
         codeTexts[2].text = nextCode.ToString();
         codeTexts[3].text = nextNextCode.ToString();
+    }
+
+    private void activateCodeText()
+    {
+        foreach (TextMeshProUGUI codeText in codeTexts)
+        {
+            codeText.gameObject.SetActive(true);
+        }
+    }
+
+    private void deactivateCodeText()
+    {
+        foreach (TextMeshProUGUI codeText in codeTexts)
+        {
+            codeText.gameObject.SetActive(false);
+        }
     }
 }

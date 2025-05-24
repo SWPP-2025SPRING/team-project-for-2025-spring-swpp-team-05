@@ -22,8 +22,8 @@ public class ReportController : MonoBehaviour
     private Vector3 attachOffset;
 
     // Stun Player
-    private float stunRate = 10f;
-    private int codeLength = 6;
+    public float stunRate = 10f;
+    public int codeLength = 6;
     private SolveCode solveCode;
 
 
@@ -111,6 +111,6 @@ public class ReportController : MonoBehaviour
 
     public void KnockOut()
     {
-        Destroy(this);
+        Destroy(gameObject);
     }
 }

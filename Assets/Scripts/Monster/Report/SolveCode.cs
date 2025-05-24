@@ -22,6 +22,7 @@ public class SolveCode
     public SolveCode(GameObject enemy, int codeLength, float rate, float duration = 0f)
     {
         string code = GenerateRandomCode(codeLength);
+        Debug.Log("Generated Code: " + code);
         this.enemy = enemy;
         this.stunRate = rate;
         this.stunDuration = duration;
@@ -65,10 +66,7 @@ public class SolveCode
     {
         if (codeQueue.Count > 1)
         {
-            char next = codeQueue.Dequeue();
-            char nextNext = codeQueue.Peek();
-            codeQueue.Enqueue(next);
-            return nextNext;
+            return this.PeekAt(1);
         }
         else
         {
@@ -80,12 +78,7 @@ public class SolveCode
     {
         if (codeQueue.Count > 2)
         {
-            char next = codeQueue.Dequeue();
-            char nextNext = codeQueue.Dequeue();
-            char nextNextNext = codeQueue.Peek();
-            codeQueue.Enqueue(next);
-            codeQueue.Enqueue(nextNext);
-            return nextNextNext;
+            return this.PeekAt(2);
         }
         else
         {
@@ -96,7 +89,7 @@ public class SolveCode
     public bool Solve(char input)
     {
         char expected = codeQueue.Peek();
-        if (input == expected)
+        if (char.ToUpper(input) == char.ToUpper(expected))
         {
             codeQueue.Dequeue();
             if (codeQueue.Count == 0)
@@ -107,7 +100,7 @@ public class SolveCode
         }
         else
         {
-            throw new SolveError("Wrong Input");
+            throw new SolveError("Wrong Input : " + input + ", expected: " + expected);
         }
     }
 
@@ -123,5 +116,11 @@ public class SolveCode
         }
 
         return new string(result);
+    }
+
+    private char PeekAt(int index)
+    {
+        char[] snapshot = codeQueue.ToArray();
+        return index < snapshot.Length ? snapshot[index] : ' ';
     }
 }

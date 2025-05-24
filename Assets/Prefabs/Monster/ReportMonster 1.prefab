@@ -69,6 +69,8 @@ MonoBehaviour:
   homingSpeed: 30
   detectionRadius: 10
   attatchDistance: 3
+  stunRate: 0.5
+  codeLength: 6
 --- !u!65 &4158691759673839687
 BoxCollider:
   m_ObjectHideFlags: 0
