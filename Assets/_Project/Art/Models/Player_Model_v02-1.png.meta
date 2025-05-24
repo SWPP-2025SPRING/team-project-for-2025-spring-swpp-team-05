@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: 318b08afdf8f34ebab446f7c6f3ceb28
+=======
+guid: 2c82dc18226b6bf4e9ee1cfc3c23df77
+>>>>>>> 8085fdd2 (GwanWoo worked for Player Asset, Rigging, not completed)
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
