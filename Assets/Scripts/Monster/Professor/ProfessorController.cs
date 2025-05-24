@@ -7,10 +7,15 @@ public class ProfessorController : MonoBehaviour
     public float rotateDuration = 0.2f;
     public float facingForwardTime = 1.5f;
     public float facingBackwardTime = 1f;
+    public int maxHP = 100;
+    public int currentHP;
+    private Animator animator;
 
 
     void Start()
     {
+        currentHP = maxHP;
+        animator = GetComponent<Animator>();
         StartCoroutine(PatrolRoutine());
     }
 
@@ -43,4 +48,38 @@ public class ProfessorController : MonoBehaviour
             facingForward = !facingForward;
         }
     }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Attacked(1); // Decrease HP by 1 (you can change the damage value)
+        }
+    }
+
+    // ...existing code...
+
+    public void Attacked(int damage)
+    {
+        currentHP -= damage;
+        if (animator != null)
+        {
+            animator.SetBool("Attacked", true);
+            StartCoroutine(ResetAttackedFlag());
+        }
+        if (currentHP <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private IEnumerator ResetAttackedFlag()
+    {
+        yield return new WaitForSeconds(0.2f); // 0.2초 후에 false로 변경 (원하는 시간으로 조정)
+        if (animator != null)
+        {
+            animator.SetBool("Attacked", false);
+        }
+    }
+    // ...existing code...
 }
