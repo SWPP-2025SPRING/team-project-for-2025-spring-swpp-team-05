@@ -22,25 +22,14 @@ public class PlayerControl : MonoBehaviour
     private float horizontalInput;
     private Vector3 moveDirection;
 
-    // Player Stats
-    private float moveSpeed;
-    private int attackPower;
-    private float attackRange;
-
-    private float defaultMoveSpeed = 10.0f;
-    // private float maxMoveSpeed = 30.0f;
-    private int defaultAttackPower = 10;
-    private float defaultAttackRange = 3.0f;
 
     // Report Moster Interaction Variable
     public TextMeshProUGUI[] codeTexts;
-    private float stunRateAgg = 0f;
     private Queue<SolveCode> stunQ = new Queue<SolveCode>();
     private char prevCode = ' ';
     private char currentCode = ' ';
     private char nextCode = ' ';
     private char nextNextCode = ' ';
-    private bool isStun = false;
 
 
     // Start is called before the first frame update
@@ -50,16 +39,7 @@ public class PlayerControl : MonoBehaviour
         playerAnimator = GetComponent<Animator>();
         playerAudio = GetComponent<AudioSource>();
         Physics.gravity *= 1;
-        initializePlayerStats();
         deactivateCodeText();
-    }
-
-    void initializePlayerStats()
-    {
-        moveSpeed = defaultMoveSpeed;
-        attackPower = defaultAttackPower;
-        attackRange = defaultAttackRange;
-
     }
 
     // Update is called once per frame
@@ -74,7 +54,7 @@ public class PlayerControl : MonoBehaviour
             transform.rotation *= turnRotation;
         }
 
-        if (isStun)
+        if (PlayerStatus.instance.isSlow)
         {
             string input = Input.inputString;
             if (input.Length > 0)
@@ -95,16 +75,16 @@ public class PlayerControl : MonoBehaviour
 
     void MovePlayerForward()
     {
-        playerAnimator.SetFloat("Speed_f", moveSpeed / defaultMoveSpeed);
+        playerAnimator.SetFloat("Speed_f", PlayerStatus.instance.moveSpeed / PlayerStatus.instance.defaultMoveSpeed);
         Vector3 moveDirection = transform.forward;
-        Vector3 newPosition = transform.position + moveDirection * moveSpeed * Time.deltaTime;
+        Vector3 newPosition = transform.position + moveDirection * PlayerStatus.instance.moveSpeed * Time.deltaTime;
         playerRb.MovePosition(newPosition);
 
     }
 
     public void StunPlayer(SolveCode code)
     {
-        if (!isStun)
+        if (PlayerStatus.instance.isSlow)
         {
             prevCode = ' ';
             currentCode = code.GetNext();
@@ -113,14 +93,9 @@ public class PlayerControl : MonoBehaviour
             activateCodeText();
             UpdateCodeText();
         }
-        isStun = true;
-        stunRateAgg += code.GetStunRate();
-        moveSpeed = defaultMoveSpeed * (1 - stunRateAgg);
-        if (moveSpeed < 0)
-        {
-            moveSpeed = 0.01f;
-        }
+
         stunQ.Enqueue(code);
+        PlayerStatus.instance.SlowPlayer(code.GetStunRate());
     }
 
     public void TrySolveStun(char code)
@@ -133,19 +108,7 @@ public class PlayerControl : MonoBehaviour
             {
                 // 이번 코드 해결
                 (GameObject enemy, float rate, float duration) = solveCode.GetEnemy();
-                stunRateAgg -= rate;
-
-                // 스피드 재계산
-                if (stunRateAgg < 0)
-                {
-                    stunRateAgg = 0;
-                }
-                moveSpeed = defaultMoveSpeed * (1 - stunRateAgg);
-                if (moveSpeed < 0)
-                {
-                    moveSpeed = 0.01f;
-                }
-
+                PlayerStatus.instance.ReviveSlow(rate);
                 // 몬스터 퇴치
                 enemy.GetComponent<ReportController>().KnockOut();
 
@@ -164,7 +127,6 @@ public class PlayerControl : MonoBehaviour
                 else
                 {
                     // 더 이상 해결할 코드가 없음
-                    isStun = false;
                     prevCode = ' ';
                     currentCode = ' ';
                     nextCode = ' ';

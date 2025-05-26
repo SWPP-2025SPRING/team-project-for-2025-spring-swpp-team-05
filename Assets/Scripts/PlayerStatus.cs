@@ -14,12 +14,14 @@ public class PlayerStatus : MonoBehaviour
     public float defaultAttackPower = 10;
     public float defaultAttackRange = 3.0f;
 
-    private float stunRateAgg = 0f;
+    private float slowRateAgg = 0f;
+    public bool isSlow { get; private set; } = false;
     public bool isStun { get; private set; } = false;
 
     public int level { get; private set; } = 1;
-    public int exp { get; private set; } = 0;
-    public int nextExp { get; private set; } = 100;
+
+    //public int exp { get; private set; } = 0;
+    //public int nextExp { get; private set; } = 100;
 
     private void Awake()
     {
@@ -35,47 +37,50 @@ public class PlayerStatus : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void StunPlayer(float stunRate)
+    public void SlowPlayer(float slowRate)
     {
-        if (!isStun)
+        if (!isSlow)
         {
-            isStun = true;
+            isSlow = true;
         }
-        stunRateAgg += stunRate;
-        moveSpeed = defaultMoveSpeed * (1 - stunRateAgg);
+        slowRateAgg += slowRate;
+        moveSpeed = defaultMoveSpeed * (1 - slowRateAgg);
         if (moveSpeed < 0)
         {
             moveSpeed = 0.01f;
         }
     }
 
-    public void ReviveStun(float stunRate, bool isFinal)
+    public void ReviveSlow(float slowRate)
     {
-        stunRateAgg -= stunRate;
-        if (stunRateAgg < 0)
+        slowRateAgg -= slowRate;
+        if (slowRateAgg < 0)
         {
-            stunRateAgg = 0;
+            slowRateAgg = 0;
         }
-        moveSpeed = defaultMoveSpeed * (1 - stunRateAgg);
+        moveSpeed = defaultMoveSpeed * (1 - slowRateAgg);
         if (moveSpeed < 0)
         {
             moveSpeed = 0.01f;
         }
-        if (isFinal)
+        if (slowRateAgg < 0.01f)
         {
-            isStun = false;
+            isSlow = false;
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public void StunPlayer(float stunTime)
     {
-
+        isStun = true;
+        StartCoroutine(StunPlayerCoroutine(stunTime));
     }
 
-    // Update is called once per frame
-    void Update()
+    IEnumerator StunPlayerCoroutine(float stunTime)
     {
-
+        float tempSpeed = moveSpeed;
+        moveSpeed = 0;
+        yield return new WaitForSeconds(stunTime);
+        moveSpeed = tempSpeed;
+        isStun = false;
     }
 }
