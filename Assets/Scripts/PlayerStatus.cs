@@ -6,15 +6,15 @@ public class PlayerStatus : MonoBehaviour
 {
     public static PlayerStatus instance { get; private set; }
 
-    public int moveSpeed { get; private set; }
-    public int attackPower { get; private set; }
+    public float moveSpeed { get; private set; }
+    public float attackPower { get; private set; }
     public float attackRange { get; private set; }
 
     public float defaultMoveSpeed = 10.0f;
-    public int defaultAttackPower = 10;
+    public float defaultAttackPower = 10;
     public float defaultAttackRange = 3.0f;
 
-    private void stunRateAgg = 0f;
+    private float stunRateAgg = 0f;
     public bool isStun { get; private set; } = false;
 
     public int level { get; private set; } = 1;
@@ -26,7 +26,7 @@ public class PlayerStatus : MonoBehaviour
         if (instance != null && instance != this)
         {
             Destroy(gameObject);
-            return
+            return;
         }
         instance = this;
         moveSpeed = defaultMoveSpeed;
