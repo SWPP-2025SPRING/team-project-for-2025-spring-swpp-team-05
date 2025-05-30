@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4471061022533775356}
   - component: {fileID: 4471061022533775357}
   - component: {fileID: 4471061022533775354}
+  - component: {fileID: 4158691759673839687}
   m_Layer: 0
   m_Name: ReportMonster 1
   m_TagString: Untagged
@@ -48,7 +49,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 4
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!114 &4471061022533775354
 MonoBehaviour:
@@ -63,6 +64,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
+  launchForce: 20
+  horizontalForce: 3
+  homingSpeed: 30
+  detectionRadius: 10
+  attatchDistance: 3
+  stunRate: 0.5
+  codeLength: 6
+--- !u!65 &4158691759673839687
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4471061022533775355}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.5385592, y: 2.360127, z: 0.36348438}
+  m_Center: {x: -0.010418177, y: 0.01577282, z: -0.04321909}
 --- !u!1001 &4471061022323303291
 PrefabInstance:
   m_ObjectHideFlags: 0
