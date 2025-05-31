@@ -9608,6 +9608,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: RoomSection
       objectReference: {fileID: 0}
+    - target: {fileID: 7771313297349332821, guid: df1a519f8d56ab74cb0ab4f8d8aede21, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 48446025c3396a84ab7e829a0a00c46b, type: 2}
     - target: {fileID: 9116778884845968744, guid: df1a519f8d56ab74cb0ab4f8d8aede21, type: 3}
       propertyPath: m_Enabled
       value: 1
