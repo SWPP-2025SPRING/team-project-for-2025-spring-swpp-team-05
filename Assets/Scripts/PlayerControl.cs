@@ -46,6 +46,10 @@ public class PlayerControl : MonoBehaviour
     void Update()
     {
         horizontalInput = Input.GetAxis("Horizontal");
+        if (PlayerStatus.instance.isReverseControl)
+        {
+            horizontalInput *= -1f;
+        }
         // TODO: 킥보드로 바꾸고 나서는 킥보드 애니메이션으로 바꾸기
 
         if (Mathf.Abs(horizontalInput) > 0.01f)

@@ -17,6 +17,7 @@ public class PlayerStatus : MonoBehaviour
     private float slowRateAgg = 0f;
     public bool isSlow { get; private set; } = false;
     public bool isStun { get; private set; } = false;
+    public bool isReverseControl { get; private set; } = false;
 
     public int level { get; private set; } = 1;
 
@@ -82,5 +83,10 @@ public class PlayerStatus : MonoBehaviour
         yield return new WaitForSeconds(stunTime);
         moveSpeed = tempSpeed;
         isStun = false;
+    }
+
+    public void SetReverseControl(bool isReverse)
+    {
+        isReverseControl = isReverse;
     }
 }
