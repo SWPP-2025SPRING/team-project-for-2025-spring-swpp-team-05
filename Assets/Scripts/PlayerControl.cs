@@ -63,6 +63,29 @@ public class PlayerControl : MonoBehaviour
                 TrySolveStun(inputChar);
             }
         }
+
+        // TODO: UI, player 테스트용, 후에 지우기 
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            PlayerStatus.instance.IncreaseSpeed();
+        }
+
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            PlayerStatus.instance.DecreaseSpeed();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            PlayerStatus.instance.IncreaseAttackPower();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            PlayerStatus.instance.IncreaseAttackRange();
+        }
+
+
     }
 
     void FixedUpdate()
