@@ -1,0 +1,81 @@
+name: Auto Merge on PR Approval
+
+on:
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  auto-merge:
+    if: |
+      github.event.review.state == 'approved' &&
+      github.event.pull_request.base.ref == 'develop'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
+
+    steps:
+      - name: Auto Merge PR if Approved
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const prNumber = context.payload.pull_request.number || context.payload.review.pull_request_number;
+
+            try {
+              // PR 정보 가져오기
+              const pr = await github.rest.pulls.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber
+              });
+
+              if (pr.data.merged) {
+                console.log('PR이 이미 머지되었습니다.');
+                return;
+              }
+
+              // 머지 가능 상태 확인 (mergeable: true = 충돌 없음)
+              if (!pr.data.mergeable) {
+                console.log('PR에 충돌이 있습니다. 수동 확인이 필요합니다.');
+                core.setFailed('PR에 충돌이 있어 자동 머지를 진행할 수 없습니다.');
+                return;
+              }
+
+              // 머지 가능 상태가 계산 중이면 기다렸다가 다시 시도
+              if (pr.data.mergeable_state === 'unknown') {
+                console.log('mergeable 상태가 아직 계산되지 않았습니다. 다시 시도해주세요.');
+                core.setFailed('mergeable_state: unknown');
+                return;
+              }
+
+              // 모든 리뷰 확인
+              const reviews = await github.rest.pulls.listReviews({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber
+              });
+
+              // 각 리뷰어의 최신 리뷰 상태만 확인
+              const latestReviews = new Map();
+              reviews.data.forEach(review => {
+                latestReviews.set(review.user.login, review.state);
+              });
+
+              const hasRejection = Array.from(latestReviews.values()).includes('CHANGES_REQUESTED');
+              const approvalCount = Array.from(latestReviews.values()).filter(state => state === 'APPROVED').length;
+
+              if (!hasRejection && approvalCount >= 1) {
+                console.log('✅ 승인됨. 자동 머지를 진행합니다...');
+                await github.rest.pulls.merge({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: prNumber,
+                  merge_method: 'squash' // 또는 'merge', 'rebase'
+                });
+              } else {
+                console.log('🙅 승인되지 않았거나 CHANGES_REQUESTED가 있습니다.');
+              }
+            } catch (error) {
+              console.error('❌ 오류 발생:', error);
+              core.setFailed(error.message);
+            }
