@@ -70,7 +70,7 @@ jobs:
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   pull_number: prNumber,
-                  merge_method: 'squash' // 또는 'merge', 'rebase'
+                  merge_method: 'merge' // 'squash'는 hotfix일때만
                 });
               } else {
                 console.log('🙅 승인되지 않았거나 CHANGES_REQUESTED가 있습니다.');
