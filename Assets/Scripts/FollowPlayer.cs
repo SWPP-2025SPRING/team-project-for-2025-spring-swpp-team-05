@@ -9,6 +9,11 @@ public class FollowPlayer : MonoBehaviour
     private Vector3 leftViewOffset = new Vector3(-4f, 5f, -13f);          // 1번 - 왼쪽, 위, 앞
     private Vector3 rightViewOffset = new Vector3(4f, 5f, -13f);          // 3번 - 오른쪽, 위, 앞
 
+    public float followSpeed = 5f; // 카메라가 따라가는 속도
+    public float rotationSpeed = 5f; // 카메라가 회전하는 속도
+
+    private Vector3 velocity = Vector3.zero; // SmoothDamp를 위한 속도 변수
+
     private Vector3 currentOffset;
     private Quaternion fixedRotation;
 
@@ -43,7 +48,13 @@ public class FollowPlayer : MonoBehaviour
 
     void LateUpdate()
     {
-        transform.position = player.transform.TransformPoint(currentOffset);
-        transform.LookAt(player.transform.position + Vector3.up * 2f);
+        if (player == null) return;
+
+        Vector3 targetPosition = player.transform.TransformPoint(currentOffset);
+        transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, 1f / followSpeed);
+
+        Quaternion lookRotation = Quaternion.LookRotation(player.transform.position - transform.position);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
+
     }
 }
