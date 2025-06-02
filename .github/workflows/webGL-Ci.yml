@@ -2,13 +2,13 @@ name: Build and Deploy WebGL
 
 on:
   pull_request:
-    branches: [develop]
-  push:
-    branches: [main, develop]
+    types: [labeled]
+    branches: [develop]  
 
 jobs:
   build:
-    name: Build WebGL with GameCI
+    name: Build WebGL only when label is BuildTest
+    if: contains(github.event.label.name, '⚙️ BuildTest')
     runs-on: ubuntu-latest
 
     steps:
