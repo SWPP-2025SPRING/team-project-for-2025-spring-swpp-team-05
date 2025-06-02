@@ -11,6 +11,6 @@ jobs:
       - name: Enforce Branch Name
         uses: finleyfamily/action-enforce-branch-name@v1.0.1
         with:
-          allowed_prefixes: feature,asset,main,develop
+          allowed_prefixes: feature,asset,hotfix,test,refactor,main,develop
           exclude: main,develop
-          regex: '^(feature|asset)\/[a-zA-Z0-9\-_]+$'
+          regex: '^(feature|asset|hotfix|test|refactor)\/[a-zA-Z0-9\-_]+$'
