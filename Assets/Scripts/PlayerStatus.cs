@@ -23,6 +23,14 @@ public class PlayerStatus : MonoBehaviour
     //public int exp { get; private set; } = 0;
     //public int nextExp { get; private set; } = 100;
 
+    // 🔐 고정 상수 (외부 수정 방지)
+    public static readonly float maxAttackPower = 100f;
+    public static readonly float maxAttackRange = 10f;
+    public static readonly float minMoveSpeed = 3f;
+    public static readonly float maxMoveSpeed = 30f;
+    public static readonly float speedStep = 2f;
+    public static readonly float attackStep = 1f;
+
     private void Awake()
     {
         if (instance != null && instance != this)

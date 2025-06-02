@@ -101,15 +101,15 @@ public class UIManager : MonoBehaviour
     }
 
     // Player ATK / RANGE Update
-    public void UpdateStats(float speed, int atk, float range)
+    public void UpdateStats(float speed, float atkRatio, float rangeRatio)
     {
         UpdateSpeed(speed);
 
         if (atkBar != null)
-            atkBar.fillAmount = Mathf.Clamp01((float)atk / maxAtk);
+            atkBar.fillAmount = atkRatio;
 
         if (rangeBar != null)
-            rangeBar.fillAmount = Mathf.Clamp01(range / maxRange);
+            rangeBar.fillAmount = rangeRatio;
     }
 }
 

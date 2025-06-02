@@ -9,7 +9,6 @@ public class GameManager : MonoBehaviour
     public PlayerControl playerControl;
     public UIManager uiManager;
     // Game Stat
-    public bool isGameActive = true;
     private float elapsedTime = 0f;
 
     public bool isGameActive;
