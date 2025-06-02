@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4843337717855880374}
   - component: {fileID: 3750911829501590242}
+  - component: {fileID: 6259169207156119511}
+  - component: {fileID: 2344826101673873607}
   m_Layer: 0
   m_Name: StraightPad
   m_TagString: Untagged
@@ -40,8 +42,40 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5217001545217987246}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 84.77616, y: 1.3090314, z: 11.883835}
   m_Center: {x: 2.583622, y: -1.9078238, z: 3.5691605}
+--- !u!114 &6259169207156119511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5217001545217987246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fede05a6349649ac864004e3b00bb54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  barrels:
+  - {fileID: 1768879365925868589, guid: 4bf46c726987e47bcbbdd6235beb253f, type: 3}
+  spawnInterval: 2
+  yOffset: 0.5
+  summonCount: 3
+--- !u!114 &2344826101673873607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5217001545217987246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b26d3f8778da3ab49a214f11fa447c99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 5
+  radius: 0.25
+  rotationSpeed: 100
