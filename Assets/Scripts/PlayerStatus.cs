@@ -24,6 +24,7 @@ public class PlayerStatus : MonoBehaviour
     //public int nextExp { get; private set; } = 100;
 
     // 🔐 고정 상수 (외부 수정 방지)
+    // TODO: 공격 스탯 필요없다는 결론 나오면 다 삭제
     public static readonly float maxAttackPower = 100f;
     public static readonly float maxAttackRange = 10f;
     public static readonly float minMoveSpeed = 3f;

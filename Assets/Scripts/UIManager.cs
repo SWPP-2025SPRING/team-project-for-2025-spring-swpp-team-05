@@ -10,11 +10,10 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI speedText;
     public TextMeshProUGUI timerText;
 
+    // TODO: 공격 스탯 필요없다는 결론 나오면 다 삭제
     [Header("Stat Bars")]
     public Image atkBar;
     public Image rangeBar;
-    public int maxAtk = 100;
-    public float maxRange = 10f;
 
     [Header("Speed Feedback")]
     private float lastSpeed;
@@ -53,7 +52,7 @@ public class UIManager : MonoBehaviour
     // 2. Speed Update (+Color)
     public void UpdateSpeed(float speed)
     {
-        speedText.text = $"<size=48>{speed:F1}</size><size=24> km/h</size>";
+        speedText.text = $"<size=96>{speed:F1}</size><size=40> km/h</size>";
 
         if (speed > lastSpeed)
         {
@@ -101,6 +100,7 @@ public class UIManager : MonoBehaviour
     }
 
     // Player ATK / RANGE Update
+    // TODO: 공격 스탯 필요없다는 결론 나오면 다 삭제
     public void UpdateStats(float speed, float atkRatio, float rangeRatio)
     {
         UpdateSpeed(speed);
