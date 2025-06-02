@@ -9,7 +9,7 @@ public class ReportController : MonoBehaviour
     private Rigidbody reportRigidbody;
     private Animator reportAnimator;
 
-    public float launchForce = 7f;
+    public float launchForce = 70f;
     public float horizontalForce = 3f;
     public float homingSpeed = 5f;
     public float detectionRadius = 5f;
@@ -21,6 +21,11 @@ public class ReportController : MonoBehaviour
     private bool isAttatched = false;
     private Vector3 attachOffset;
 
+    // Stun Player
+    public float stunRate = 10f;
+    public int codeLength = 6;
+    private SolveCode solveCode;
+
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +33,7 @@ public class ReportController : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         reportRigidbody = GetComponent<Rigidbody>();
         reportAnimator = GetComponentInChildren<Animator>();
+        solveCode = new SolveCode(gameObject, codeLength, stunRate);
     }
 
     // Update is called once per frame
@@ -61,8 +67,6 @@ public class ReportController : MonoBehaviour
         {
             ChasePlayer();
         }
-
-
     }
 
 
@@ -71,7 +75,7 @@ public class ReportController : MonoBehaviour
         isLaunched = true;
         reportAnimator.SetBool("Prepare_b", true);
         Vector3 direction = (player.transform.position - transform.position).normalized;
-        direction.y = 0; // y축 방향 제거
+        //direction.y = 0; // y축 방향 제거
         Vector3 force = direction * launchForce + Vector3.up * launchForce;
         reportRigidbody.velocity = Vector3.zero; // 초기 속도 초기화
         reportRigidbody.AddForce(force, ForceMode.VelocityChange);
@@ -80,11 +84,13 @@ public class ReportController : MonoBehaviour
 
     void AttackStart()
     {
+        Debug.Log("Attached");
         isAttatched = true;
-        reportRigidbody.isKinematic = true; // 물리 엔진 비활성화
         reportRigidbody.velocity = Vector3.zero; // 속도 초기화
         attachOffset = transform.position - player.transform.position; // 플레이어와의 상대 위치 저장
         transform.SetParent(player.transform); // 플레이어의 자식으로 설정
+        Destroy(reportRigidbody);
+        player.GetComponent<PlayerControl>().StunPlayer(solveCode);
     }
 
     void ChasePlayer()
@@ -101,5 +107,10 @@ public class ReportController : MonoBehaviour
         Quaternion correction = Quaternion.Euler(0, 90, 0); // 임시 조치
 
         transform.rotation = targetRotation * correction;
+    }
+
+    public void KnockOut()
+    {
+        Destroy(gameObject);
     }
 }
