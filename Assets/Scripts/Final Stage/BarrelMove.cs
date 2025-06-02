@@ -30,6 +30,7 @@ public class BarrelMove : MonoBehaviour
             Rigidbody rb = other.GetComponent<Rigidbody>();
             if (rb != null)
             {
+                other.transform.position += Vector3.up * 0.05f;
                 rb.velocity = direction * speed; // Set the velocity of the barrel
                 float omega = speed / radius; // Calculate angular velocity
                 Vector3 rotAxis = Vector3.Cross(Vector3.up, direction); // Calculate rotation axis

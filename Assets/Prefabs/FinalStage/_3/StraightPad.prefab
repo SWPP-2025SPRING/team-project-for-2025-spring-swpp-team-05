@@ -62,7 +62,7 @@ MonoBehaviour:
   barrels:
   - {fileID: 1768879365925868589, guid: 4bf46c726987e47bcbbdd6235beb253f, type: 3}
   spawnInterval: 2
-  yOffset: 0.5
+  yOffset: 1
   summonCount: 3
 --- !u!114 &2344826101673873607
 MonoBehaviour:

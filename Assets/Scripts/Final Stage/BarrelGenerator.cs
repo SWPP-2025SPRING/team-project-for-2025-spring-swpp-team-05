@@ -32,7 +32,8 @@ public class BarrelGenerator : MonoBehaviour
             isXMajor = Mathf.Abs(forward.x) > Mathf.Abs(forward.z);
             isPositiveDirection = (isXMajor && forward.x > 0) || (!isXMajor && forward.z > 0);
 
-            Vector3 startPoint = center - (transform.right * (size.x / 2f)) + (transform.forward * (size.z / 2f * (Vector3.Dot(forward, transform.forward) > 0 ? -1 : 1)));
+            Vector3 margin = transform.forward * (3 * (Vector3.Dot(forward, transform.forward) > 0 ? -1 : 1));
+            Vector3 startPoint = center - (transform.right * (size.x / 2f)) + (transform.forward * (size.z / 2f * (Vector3.Dot(forward, transform.forward) > 0 ? -1 : 1))) - margin;
 
             for (int i = 0; i < summonCount; i++)
             {
