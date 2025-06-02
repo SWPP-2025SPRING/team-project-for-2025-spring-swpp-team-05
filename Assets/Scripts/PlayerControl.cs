@@ -63,6 +63,8 @@ public class PlayerControl : MonoBehaviour
                 TrySolveStun(inputChar);
             }
         }
+
+
     }
 
     void FixedUpdate()
