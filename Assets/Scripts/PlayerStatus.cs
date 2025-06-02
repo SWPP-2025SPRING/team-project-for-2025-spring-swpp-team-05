@@ -83,4 +83,34 @@ public class PlayerStatus : MonoBehaviour
         moveSpeed = tempSpeed;
         isStun = false;
     }
+
+    public void IncreaseAttackPower()
+    {
+        attackPower = Mathf.Min(attackPower + attackStep, maxAttackPower);
+    }
+
+    public void IncreaseAttackRange()
+    {
+        attackRange = Mathf.Min(attackRange + attackStep, maxAttackRange);
+    }
+
+    public float GetAttackPowerRatio()
+    {
+        return Mathf.Clamp01(attackPower / maxAttackPower);
+    }
+
+    public float GetAttackRangeRatio()
+    {
+        return Mathf.Clamp01(attackRange / maxAttackRange);
+    }
+
+    public void IncreaseSpeed()
+    {
+        moveSpeed = Mathf.Min(moveSpeed + speedStep, maxMoveSpeed);
+    }
+
+    public void DecreaseSpeed()
+    {
+        moveSpeed = Mathf.Max(moveSpeed - speedStep, minMoveSpeed);
+    }
 }
