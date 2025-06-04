@@ -36,8 +36,8 @@ public class PlayerControl : MonoBehaviour
     private bool isOnIce = false;
     private bool justEnteredIce = false;
     private Vector3 iceMomentum = Vector3.zero;
-    private float iceBoostMultiplier = 1.5f;
-    private float iceLerpFactor = 0.03f;
+    private float iceBoostMultiplier = 3f;
+    private float iceLerpFactor = 0.02f;
 
 
     // Start is called before the first frame update
@@ -108,16 +108,27 @@ public class PlayerControl : MonoBehaviour
 
     void MovePlayerForward()
     {
-        Vector3 moveDirection = transform.forward;
 
+        Vector3 velocity;
         if (isOnIce)
         {
-            moveDirection = HandleIceMovement(moveDirection);
+            velocity = HandleIceMovement(transform.forward);
+        }
+        else
+        {
+            velocity = transform.forward * PlayerStatus.instance.moveSpeed;
         }
 
-        playerAnimator.SetFloat("Speed_f", PlayerStatus.instance.moveSpeed / PlayerStatus.instance.defaultMoveSpeed);
-        Vector3 newPosition = transform.position + moveDirection * PlayerStatus.instance.moveSpeed * Time.deltaTime;
+        Vector3 newPosition = transform.position + velocity * Time.deltaTime;
         playerRb.MovePosition(newPosition);
+
+        // 애니메이션 속도 조절
+        playerAnimator.speed = isOnIce ? 0.2f : 1.0f;
+
+        // 애니메이션 동작 결정
+        float animationSpeed = PlayerStatus.instance.moveSpeed / PlayerStatus.instance.defaultMoveSpeed;
+        playerAnimator.SetFloat("Speed_f", animationSpeed);
+
     }
 
     public void StunPlayer(SolveCode code)
@@ -240,6 +251,6 @@ public class PlayerControl : MonoBehaviour
             iceMomentum = Vector3.Lerp(iceMomentum, target, iceLerpFactor);
         }
 
-        return iceMomentum.normalized;
+        return iceMomentum;
     }
 }
