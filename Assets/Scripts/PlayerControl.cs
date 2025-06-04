@@ -31,6 +31,14 @@ public class PlayerControl : MonoBehaviour
     private char nextCode = ' ';
     private char nextNextCode = ' ';
 
+    // Ice Obstacle Interaction
+
+    private bool isOnIce = false;
+    private bool justEnteredIce = false;
+    private Vector3 iceMomentum = Vector3.zero;
+    private float iceBoostMultiplier = 1.5f;
+    private float iceLerpFactor = 0.03f;
+
 
     // Start is called before the first frame update
     void Start()
@@ -48,7 +56,7 @@ public class PlayerControl : MonoBehaviour
         horizontalInput = Input.GetAxis("Horizontal");
         // TODO: 킥보드로 바꾸고 나서는 킥보드 애니메이션으로 바꾸기
 
-        if (Mathf.Abs(horizontalInput) > 0.01f)
+        if (!isOnIce && Mathf.Abs(horizontalInput) > 0.01f)
         {
             Quaternion turnRotation = Quaternion.Euler(0, horizontalInput * 100 * Time.deltaTime, 0);
             transform.rotation *= turnRotation;
@@ -63,6 +71,7 @@ public class PlayerControl : MonoBehaviour
                 TrySolveStun(inputChar);
             }
         }
+
 
         // TODO: UI, player 테스트용, 후에 지우기 
         if (Input.GetKeyDown(KeyCode.UpArrow))
@@ -92,17 +101,23 @@ public class PlayerControl : MonoBehaviour
     {
         if (gameManager.isGameActive)
         {
+
             MovePlayerForward();
         }
     }
 
     void MovePlayerForward()
     {
-        playerAnimator.SetFloat("Speed_f", PlayerStatus.instance.moveSpeed / PlayerStatus.instance.defaultMoveSpeed);
         Vector3 moveDirection = transform.forward;
+
+        if (isOnIce)
+        {
+            moveDirection = HandleIceMovement(moveDirection);
+        }
+
+        playerAnimator.SetFloat("Speed_f", PlayerStatus.instance.moveSpeed / PlayerStatus.instance.defaultMoveSpeed);
         Vector3 newPosition = transform.position + moveDirection * PlayerStatus.instance.moveSpeed * Time.deltaTime;
         playerRb.MovePosition(newPosition);
-
     }
 
     public void StunPlayer(SolveCode code)
@@ -196,5 +211,35 @@ public class PlayerControl : MonoBehaviour
         {
             codeText.gameObject.SetActive(false);
         }
+    }
+
+    public void EnterIceZone()
+    {
+        isOnIce = true;
+        justEnteredIce = true;
+        iceMomentum = Vector3.zero;
+    }
+
+    public void ExitIceZone()
+    {
+        isOnIce = false;
+        justEnteredIce = false;
+        iceMomentum = Vector3.zero;
+    }
+
+    private Vector3 HandleIceMovement(Vector3 baseDirection)
+    {
+        if (justEnteredIce)
+        {
+            iceMomentum = baseDirection * PlayerStatus.instance.moveSpeed * iceBoostMultiplier;
+            justEnteredIce = false;
+        }
+        else
+        {
+            Vector3 target = baseDirection * PlayerStatus.instance.moveSpeed;
+            iceMomentum = Vector3.Lerp(iceMomentum, target, iceLerpFactor);
+        }
+
+        return iceMomentum.normalized;
     }
 }
