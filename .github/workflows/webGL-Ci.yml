@@ -55,4 +55,4 @@ jobs:
 
       - name: Upload WebGL build to S3
         run: |
-          aws s3 sync ./build/WebGL s3://${{ secrets.S3_BUCKET_NAME }} --delete --acl public-read
+          aws s3 sync ./build/WebGL s3://${{ secrets.S3_BUCKET_NAME }} --delete
