@@ -3,7 +3,7 @@ name: Build and Deploy WebGL
 on:
   pull_request:
     types: [labeled]
-    branches: [develop]  
+    branches: [develop]
 
 jobs:
   build:
@@ -46,10 +46,13 @@ jobs:
           sudo chmod -R u+rwX ./build/WebGL
           echo "" | sudo tee ./build/WebGL/.nojekyll > /dev/null
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build/WebGL
-          publish_branch: gh-pages
-          force_orphan: true
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Upload WebGL build to S3
+        run: |
+          aws s3 sync ./build/WebGL s3://${{ secrets.S3_BUCKET_NAME }} --delete
