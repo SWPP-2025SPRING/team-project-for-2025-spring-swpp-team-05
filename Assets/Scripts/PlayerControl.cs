@@ -113,17 +113,16 @@ public class PlayerControl : MonoBehaviour
         if (isOnIce)
         {
             velocity = HandleIceMovement(transform.forward);
+            playerAnimator.speed = 0.2f;
         }
         else
         {
             velocity = transform.forward * PlayerStatus.instance.moveSpeed;
+            playerAnimator.speed = 1.0f;
         }
 
         Vector3 newPosition = transform.position + velocity * Time.deltaTime;
         playerRb.MovePosition(newPosition);
-
-        // 애니메이션 속도 조절
-        playerAnimator.speed = isOnIce ? 0.2f : 1.0f;
 
         // 애니메이션 동작 결정
         float animationSpeed = PlayerStatus.instance.moveSpeed / PlayerStatus.instance.defaultMoveSpeed;
