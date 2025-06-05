@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class DebuffHandler : MonoBehaviour
@@ -22,7 +24,7 @@ public class DebuffHandler : MonoBehaviour
 
         public void ResetTimer()
         {
-            timer = duration; 
+            timer = duration;
         }
 
         public IEnumerator Run(Action onEnd)

@@ -1,4 +1,5 @@
-use UnityEngine;
+using UnityEngine;
+using System;
 
 public class ReverseControlDebuff : IDebuff
 {
