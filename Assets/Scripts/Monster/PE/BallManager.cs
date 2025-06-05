@@ -51,7 +51,7 @@ public class BallManager : MonoBehaviour
             case BallType.BeachBall:
                 return "big_throw_trig";
             case BallType.BowlingBall:
-                return "bowling_ball_trig";
+                return "bowling_trig";
             case BallType.TennisBall:
                 return "small_throw_trig";
             default:

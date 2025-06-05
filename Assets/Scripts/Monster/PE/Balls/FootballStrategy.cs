@@ -52,9 +52,9 @@ public class FootballStrategy : BallStrategy
     public override IEnumerator OnAction(Animator animator, Vector3[] ballTransform, Vector3[] force)
     {
         SetAnimation(animator);
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
         OnBatched(ballTransform);
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(4f);
         OnThrow(force);
         yield return new WaitForSeconds(3f);
     }

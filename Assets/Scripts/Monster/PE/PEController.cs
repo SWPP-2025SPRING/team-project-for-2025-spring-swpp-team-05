@@ -2,12 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+enum AttackType
+{
+    FootballConverge,
+    FootballDiverge,
+    BowlingBall,
+}
+
 public class PEController : MonoBehaviour
 {
     private GameObject player;
     private Animator animator;
 
-    public float force = 100f;
+    public float footballForce = 10f;
+    public float bowlingForce = 20000f;
     public float summonInterval = 10f;
     private float cooldownTimer = 0f;
 
@@ -37,7 +45,7 @@ public class PEController : MonoBehaviour
         if (cooldownTimer <= 0f)
         {
             cooldownTimer = summonInterval;
-            summonBall();
+            SummonRandom();
         }
         else if (cooldownTimer > 0f)
         {
@@ -45,7 +53,28 @@ public class PEController : MonoBehaviour
         }
     }
 
-    void summonBall()
+    void SummonRandom()
+    {
+        int count = Random.Range(1, 10);
+        AttackType attackType = (AttackType)Random.Range(0, System.Enum.GetValues(typeof(AttackType)).Length);
+        switch (attackType)
+        {
+            case AttackType.FootballConverge:
+                SummonFootBallConverge(count);
+                break;
+            case AttackType.FootballDiverge:
+                SummonFootBallDiverge(count);
+                break;
+            case AttackType.BowlingBall:
+                SummonBowlingBall();
+                break;
+            default:
+                Debug.LogWarning("Unknown attack type summoned: " + attackType);
+                break;
+        }
+    }
+
+    void SummonFootBallConverge(int count = 7)
     {
         if (player == null)
         {
@@ -53,19 +82,72 @@ public class PEController : MonoBehaviour
             return;
         }
 
-        Vector3[] ballTransforms = new Vector3[7];
-        Vector3[] forces = new Vector3[7];
+        Vector3[] ballTransforms = new Vector3[count];
+        Vector3[] forces = new Vector3[count];
         for (int i = 0; i < ballTransforms.Length; i++)
         {
             // Assuming you want to position the balls around the player
-            ballTransforms[i] = transform.position + new Vector3(i * 0.5f, 0, 0); // Adjust the position as needed
+            ballTransforms[i] = transform.position + transform.forward * 2f + ((i - count / 2) * transform.right);
 
-            Vector3 direction = (player.transform.position - ballTransforms[i]).normalized + Vector3.up * 0.1f;
-            forces[i] = direction * force; // Apply the force in the direction away from the player
+            Vector3 direction = (player.transform.position - ballTransforms[i]).normalized + Vector3.up * 0.5f;
+            forces[i] = direction * footballForce; // Apply the force in the direction away from the player
         }
 
         IBallStrategy ballStrategy = new FootballStrategy(); // Replace with the desired ball strategy
         StartCoroutine(ballStrategy.OnAction(animator, ballTransforms, forces));
-        Debug.Log("Summoned balls with force: " + force);
+        Debug.Log("Summoned balls with force: " + footballForce);
     }
+
+    void SummonFootBallDiverge(int count = 7)
+    {
+        if (player == null)
+        {
+            Debug.LogError("Player object is not set. Cannot summon ball.");
+            return;
+        }
+
+        Vector3 origin = transform.position + transform.forward * 2f;
+
+        Vector3[] ballPositions = new Vector3[count];
+        Vector3[] forces = new Vector3[count];
+
+        float angleStep = 360f / count;
+        float radius = 0.5f;
+
+        for (int i = 0; i < count; i++)
+        {
+            float angle = i * angleStep * Mathf.Deg2Rad;
+            Vector3 offset = new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle)) * radius;
+
+            ballPositions[i] = origin + offset;
+
+            Vector3 dir = (offset).normalized + Vector3.up * 0.3f;
+            forces[i] = dir * footballForce;
+        }
+
+        IBallStrategy ballStrategy = new FootballStrategy();
+        StartCoroutine(ballStrategy.OnAction(animator, ballPositions, forces));
+        Debug.Log("Diverged balls with force: " + footballForce);
+    }
+
+    void SummonBowlingBall()
+    {
+        if (player == null)
+        {
+            Debug.LogError("Player object is not set. Cannot summon ball.");
+            return;
+        }
+
+        Vector3[] ballTransforms = new Vector3[1];
+        Vector3[] forces = new Vector3[1];
+
+        ballTransforms[0] = transform.position + transform.forward * 2f;
+        Vector3 direction = (player.transform.position - ballTransforms[0]).normalized;
+        forces[0] = direction * bowlingForce;
+
+        IBallStrategy ballStrategy = new BowlingStrategy(); // Replace with the desired ball strategy
+        StartCoroutine(ballStrategy.OnAction(animator, ballTransforms, forces));
+        Debug.Log("Summoned bowling ball with force: " + bowlingForce);
+    }
+
 }
