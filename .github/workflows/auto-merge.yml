@@ -64,7 +64,7 @@ jobs:
               const hasRejection = Array.from(latestReviews.values()).includes('CHANGES_REQUESTED');
               const approvalCount = Array.from(latestReviews.values()).filter(state => state === 'APPROVED').length;
 
-              if (!hasRejection && approvalCount >= 1) {
+              if (!hasRejection && approvalCount >= 2) {
                 console.log('✅ 승인됨. 자동 머지를 진행합니다...');
                 await github.rest.pulls.merge({
                   owner: context.repo.owner,
