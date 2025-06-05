@@ -5,7 +5,7 @@ using System.Collections;
 public interface IBallStrategy
 {
     void SetAnimation(Animator animator);
-    void OnBatched(Transform[] ballTransform);
+    void OnBatched(Vector3[] ballTransform);
     void OnThrow(Vector3[] force);
-    IEnumerator OnAction(Animator animator, Transform[] ballTransform, Vector3[] force);
+    IEnumerator OnAction(Animator animator, Vector3[] ballTransform, Vector3[] force);
 }

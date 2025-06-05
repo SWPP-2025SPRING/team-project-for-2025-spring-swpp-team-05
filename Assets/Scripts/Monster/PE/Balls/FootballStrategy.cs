@@ -4,11 +4,10 @@ using System.Collections;
 
 public class FootballStrategy : BallStrategy
 {
-    private BallType ballType = BallType.Football;
-    private GameObject ballPrefab;
+    protected override BallType ballType => BallType.Football;
     private GameObject[] ballInstances;
 
-    public override void OnBatched(Transform[] ballTransform)
+    public override void OnBatched(Vector3[] ballTransform)
     {
         base.OnBatched(ballTransform);
         ballInstances = new GameObject[ballTransform.Length];
@@ -20,7 +19,7 @@ public class FootballStrategy : BallStrategy
                 continue;
             }
 
-            ballInstances[i] = Object.Instantiate(ballPrefab, ballTransform[i].position, ballTransform[i].rotation);
+            ballInstances[i] = Object.Instantiate(ballPrefab, ballTransform[i], Quaternion.identity);
         }
     }
 
@@ -50,13 +49,13 @@ public class FootballStrategy : BallStrategy
         }
     }
 
-    public override IEnumerator OnAction(Animator animator, Transform[] ballTransform, Vector3[] force)
+    public override IEnumerator OnAction(Animator animator, Vector3[] ballTransform, Vector3[] force)
     {
         SetAnimation(animator);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(3f);
         OnBatched(ballTransform);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(3f);
         OnThrow(force);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(3f);
     }
 }

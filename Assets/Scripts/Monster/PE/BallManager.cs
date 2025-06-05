@@ -7,8 +7,7 @@ public class BallManager : MonoBehaviour
 {
     public static BallManager Instance { get; private set; }
     public List<GameObject> balls; // List to hold all the balls
-
-    private Dictionary<BallType, GameObject> ballPrefabs; // Dictionary to hold ball prefabs by type
+    public GameObject defaultBall;
 
     void Awake()
     {
@@ -22,35 +21,18 @@ public class BallManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject); // 선택사항: 씬 전환 시 유지하고 싶을 때
-
-        if (balls == null || balls.Count != 7)
-        {
-            Debug.LogError("Ball list is not initialized or empty!");
-            return;
-        }
-
-        ballPrefabs = new Dictionary<BallType, GameObject>
-        {
-            { BallType.Football, balls[0] },
-            { BallType.Basketball, balls[1] },
-            { BallType.AmericanFootball, balls[2] },
-            { BallType.Volleyball, balls[3] },
-            { BallType.BeachBall, balls[4] },
-            { BallType.BowlingBall, balls[5] },
-            { BallType.TennisBall, balls[6] }
-        };
     }
 
     public GameObject GetBallPrefab(BallType type)
     {
-        if (ballPrefabs.TryGetValue(type, out GameObject prefab))
+        if (balls != null && (int)type >= 0 && (int)type < balls.Count && balls[(int)type] != null)
         {
-            return prefab;
+            return balls[(int)type];
         }
         else
         {
-            Debug.LogError($"Ball type {type} not found in the dictionary!");
-            return null;
+            Debug.LogWarning($"Ball at index {type} is missing or null. Using defaultBallPrefab.");
+            return defaultBall;
         }
     }
 
@@ -59,7 +41,7 @@ public class BallManager : MonoBehaviour
         switch (type)
         {
             case BallType.Football:
-                return "power_throw_trig";
+                return "kick_trig";
             case BallType.Basketball:
                 return "power_throw_trig";
             case BallType.AmericanFootball:

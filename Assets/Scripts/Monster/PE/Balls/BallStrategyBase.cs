@@ -4,8 +4,8 @@ using System.Collections;
 
 public abstract class BallStrategy : IBallStrategy
 {
-    private readonly BallType ballType = BallType.None;
-    private GameObject ballPrefab;
+    protected abstract BallType ballType { get; }
+    protected GameObject ballPrefab;
     public virtual void SetAnimation(Animator animator)
     {
         if (animator == null)
@@ -24,10 +24,10 @@ public abstract class BallStrategy : IBallStrategy
         animator.SetTrigger(trigger);
     }
 
-    public virtual void OnBatched(Transform[] ballTransform)
+    public virtual void OnBatched(Vector3[] ballTransform)
     {
         ballPrefab = BallManager.Instance.GetBallPrefab(ballType);
     }
     public abstract void OnThrow(Vector3[] force);
-    public abstract IEnumerator OnAction(Animator animator, Transform[] ballTransform, Vector3[] force);
+    public abstract IEnumerator OnAction(Animator animator, Vector3[] ballTransform, Vector3[] force);
 }
