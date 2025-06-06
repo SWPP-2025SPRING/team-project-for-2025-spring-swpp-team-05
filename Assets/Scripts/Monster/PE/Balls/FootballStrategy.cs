@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using System;
+using Object = UnityEngine.Object;
 
 public class FootballStrategy : BallStrategy
 {
@@ -49,7 +51,7 @@ public class FootballStrategy : BallStrategy
         }
     }
 
-    public override IEnumerator OnAction(Animator animator, Vector3[] ballTransform, Vector3[] force)
+    public override IEnumerator OnAction(Animator animator, Vector3[] ballTransform, Vector3[] force, Action onComplete = null)
     {
         SetAnimation(animator);
         yield return new WaitForSeconds(2f);
@@ -57,5 +59,6 @@ public class FootballStrategy : BallStrategy
         yield return new WaitForSeconds(4f);
         OnThrow(force);
         yield return new WaitForSeconds(3f);
+        onComplete?.Invoke();
     }
 }

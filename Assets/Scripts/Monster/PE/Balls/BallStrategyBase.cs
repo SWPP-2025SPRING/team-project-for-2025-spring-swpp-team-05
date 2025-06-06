@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using System;
 
 public abstract class BallStrategy : IBallStrategy
 {
@@ -29,5 +30,5 @@ public abstract class BallStrategy : IBallStrategy
         ballPrefab = BallManager.Instance.GetBallPrefab(ballType);
     }
     public abstract void OnThrow(Vector3[] force);
-    public abstract IEnumerator OnAction(Animator animator, Vector3[] ballTransform, Vector3[] force);
+    public abstract IEnumerator OnAction(Animator animator, Vector3[] ballTransform, Vector3[] force, Action onComplete = null);
 }

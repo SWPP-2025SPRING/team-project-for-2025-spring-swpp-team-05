@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using System;
 
 public class BowlingStrategy : BallStrategy
 {
@@ -15,7 +16,7 @@ public class BowlingStrategy : BallStrategy
             Debug.LogError("Ball transform array is null or does not contain exactly one transform.");
             return;
         }
-        ballInstances = Object.Instantiate(ballPrefab, ballTransform[0], Quaternion.identity);
+        ballInstances = UnityEngine.Object.Instantiate(ballPrefab, ballTransform[0], Quaternion.identity);
     }
 
     public override void OnThrow(Vector3[] force)
@@ -42,12 +43,13 @@ public class BowlingStrategy : BallStrategy
         rb.AddForce(force[0], ForceMode.Force);
     }
 
-    public override IEnumerator OnAction(Animator animator, Vector3[] ballTransform, Vector3[] force)
+    public override IEnumerator OnAction(Animator animator, Vector3[] ballTransform, Vector3[] force, Action onComplete = null)
     {
         SetAnimation(animator);
         yield return new WaitForSeconds(1.8f);
         OnBatched(ballTransform);
         OnThrow(force);
         yield return new WaitForSeconds(3f);
+        onComplete?.Invoke();
     }
 }

@@ -239,8 +239,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   footballForce: 100
   bowlingForce: 20000
-  summonInterval: 100
-  maxRotationSpeed: 50
+  summonInterval: 10
+  maxRotationSpeed: 100
 --- !u!114 &255454570
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Random = UnityEngine.Random;
 
 enum AttackType
 {
@@ -21,7 +23,7 @@ public class PEController : MonoBehaviour
     public float maxRotationSpeed = 10f;
     private float cooldownTimer = 0f;
     private bool isAttacking = false;
-
+    private Action onComplete;
     // Start is called before the first frame update
     void Start()
     {
@@ -40,6 +42,11 @@ public class PEController : MonoBehaviour
         {
             Debug.Log("Player object found: " + player.name);
         }
+        onComplete = () =>
+        {
+            isAttacking = false;
+            Debug.Log("Attack completed.");
+        };
     }
 
     // Update is called once per frame
@@ -48,16 +55,18 @@ public class PEController : MonoBehaviour
         if (cooldownTimer <= 0f)
         {
             cooldownTimer = summonInterval;
+            isAttacking = true;
             SummonRandom();
         }
-        else if (cooldownTimer > 0f)
+
+        if (!isAttacking)
         {
-            cooldownTimer -= Time.deltaTime;
             RotateTowardsPlayer();
         }
-        else
+
+        if (cooldownTimer > 0f)
         {
-            RotateTowardsPlayer();
+            cooldownTimer -= Time.deltaTime;
         }
     }
 
@@ -76,8 +85,8 @@ public class PEController : MonoBehaviour
         Vector3 forward = transform.forward;
         float angle = Vector3.SignedAngle(forward, direction, Vector3.up);
         Debug.Log("Angle to player: " + angle);
-        //transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, maxRotationSpeed * Time.deltaTime);
-        animator.SetFloat("turnSpeed_f", angle / 180f);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, maxRotationSpeed * Time.deltaTime);
+        //animator.SetFloat("turnSpeed_f", angle / 180f);
     }
 
     void SummonRandom()
@@ -121,7 +130,7 @@ public class PEController : MonoBehaviour
         }
 
         IBallStrategy ballStrategy = new FootballStrategy(); // Replace with the desired ball strategy
-        StartCoroutine(ballStrategy.OnAction(animator, ballTransforms, forces));
+        StartCoroutine(ballStrategy.OnAction(animator, ballTransforms, forces, onComplete));
         Debug.Log("Summoned balls with force: " + footballForce);
     }
 
@@ -153,7 +162,7 @@ public class PEController : MonoBehaviour
         }
 
         IBallStrategy ballStrategy = new FootballStrategy();
-        StartCoroutine(ballStrategy.OnAction(animator, ballPositions, forces));
+        StartCoroutine(ballStrategy.OnAction(animator, ballPositions, forces, onComplete));
         Debug.Log("Diverged balls with force: " + footballForce);
     }
 
@@ -173,7 +182,7 @@ public class PEController : MonoBehaviour
         forces[0] = direction * bowlingForce;
 
         IBallStrategy ballStrategy = new BowlingStrategy(); // Replace with the desired ball strategy
-        StartCoroutine(ballStrategy.OnAction(animator, ballTransforms, forces));
+        StartCoroutine(ballStrategy.OnAction(animator, ballTransforms, forces, onComplete));
         Debug.Log("Summoned bowling ball with force: " + bowlingForce);
     }
 
