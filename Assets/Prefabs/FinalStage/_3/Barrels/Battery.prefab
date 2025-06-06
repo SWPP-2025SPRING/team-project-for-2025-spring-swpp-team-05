@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6967813023649140189}
   - component: {fileID: -7803200019449402979}
   - component: {fileID: 8505939716746752308}
+  - component: {fileID: 6282235089526127244}
   m_Layer: 0
   m_Name: Battery
   m_TagString: Barrel
@@ -117,6 +118,18 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -2159965483007997719, guid: 75ad8de4669484348921eddfba13f146, type: 3}
+--- !u!114 &6282235089526127244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6967813023649140178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25aba60d00da2e14fb7a5eb5f0e2ece2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6967813024819632013
 GameObject:
   m_ObjectHideFlags: 0

@@ -96,6 +96,7 @@ GameObject:
   - component: {fileID: 5115243340319951167}
   - component: {fileID: -6624775443962264055}
   - component: {fileID: 3235578831389356570}
+  - component: {fileID: -6264794038420242410}
   m_Layer: 0
   m_Name: MegaForceSugarFree
   m_TagString: Barrel
@@ -200,3 +201,15 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4104334860154697755, guid: 75ad8de4669484348921eddfba13f146, type: 3}
+--- !u!114 &-6264794038420242410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5115243340319951166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25aba60d00da2e14fb7a5eb5f0e2ece2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
