@@ -239,7 +239,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   footballForce: 100
   bowlingForce: 20000
-  summonInterval: 10
+  summonInterval: 100
+  maxRotationSpeed: 50
 --- !u!114 &255454570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -338,7 +339,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 445688765}
   m_LocalRotation: {x: 0.39996633, y: -0, z: -0, w: 0.9165299}
-  m_LocalPosition: {x: 83.15, y: 23.7, z: -171.4}
+  m_LocalPosition: {x: 83.15, y: 25.22, z: -182.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -427,7 +428,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 2f8d00bf5057f624e949aef802595da9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 81.92
+      value: 55.3
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 2f8d00bf5057f624e949aef802595da9, type: 3}
       propertyPath: m_LocalPosition.y
@@ -479,7 +480,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 864492202}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72a65ffa023b44dd992d2a82ccfcc323, type: 3}
   m_Name: 
@@ -720,6 +721,7 @@ GameObject:
   - component: {fileID: 1444523051}
   - component: {fileID: 1444523050}
   - component: {fileID: 1444523049}
+  - component: {fileID: 1444523052}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -755,7 +757,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1444523048}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3a8ee303809944fe7b96e64f49643cc6, type: 3}
   m_Name: 
@@ -778,3 +780,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1444523052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1444523048}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00d2765887d7b4599a3b59172dff8ba3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultMoveSpeed: 10
+  defaultAttackPower: 10
+  defaultAttackRange: 3

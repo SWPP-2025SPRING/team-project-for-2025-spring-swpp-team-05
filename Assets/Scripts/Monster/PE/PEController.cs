@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 enum AttackType
 {
@@ -16,8 +17,10 @@ public class PEController : MonoBehaviour
 
     public float footballForce = 10f;
     public float bowlingForce = 20000f;
-    public float summonInterval = 10f;
+    public float summonInterval = 100f;
+    public float maxRotationSpeed = 10f;
     private float cooldownTimer = 0f;
+    private bool isAttacking = false;
 
     // Start is called before the first frame update
     void Start()
@@ -50,7 +53,31 @@ public class PEController : MonoBehaviour
         else if (cooldownTimer > 0f)
         {
             cooldownTimer -= Time.deltaTime;
+            RotateTowardsPlayer();
         }
+        else
+        {
+            RotateTowardsPlayer();
+        }
+    }
+
+    void RotateTowardsPlayer()
+    {
+        if (player == null)
+        {
+            Debug.LogError("Player object is not set. Cannot rotate towards player.");
+            return;
+        }
+
+        Vector3 direction = (player.transform.position - transform.position).normalized;
+        direction.y = 0; // Keep the rotation on the horizontal plane
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+
+        Vector3 forward = transform.forward;
+        float angle = Vector3.SignedAngle(forward, direction, Vector3.up);
+        Debug.Log("Angle to player: " + angle);
+        //transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, maxRotationSpeed * Time.deltaTime);
+        animator.SetFloat("turnSpeed_f", angle / 180f);
     }
 
     void SummonRandom()
