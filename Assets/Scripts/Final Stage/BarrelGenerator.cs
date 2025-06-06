@@ -2,11 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-
 public class BarrelGenerator : MonoBehaviour
 {
-    public GameObject[] barrels; // Array of barrel prefabs
     public float spawnInterval = 2f; // Time interval between spawns
     public float yOffset = 0.5f; // Y offset for spawn position
     public int summonCount = 3; // Number of barrels
@@ -32,13 +29,13 @@ public class BarrelGenerator : MonoBehaviour
             isXMajor = Mathf.Abs(forward.x) > Mathf.Abs(forward.z);
             isPositiveDirection = (isXMajor && forward.x > 0) || (!isXMajor && forward.z > 0);
 
-            Vector3 margin = transform.forward * (3 * (Vector3.Dot(forward, transform.forward) > 0 ? -1 : 1));
+            Vector3 margin = transform.forward * 3 * (Vector3.Dot(forward, transform.forward) > 0 ? -1 : 1);
             Vector3 startPoint = center - (transform.right * (size.x / 2f)) + (transform.forward * (size.z / 2f * (Vector3.Dot(forward, transform.forward) > 0 ? -1 : 1))) - margin;
 
             for (int i = 0; i < summonCount; i++)
             {
                 float spacing = size.x / summonCount;
-                Vector3 offset = transform.right * (spacing * (i + 0.5f));
+                Vector3 offset = transform.right * spacing * i;
                 Vector3 spawnPos = startPoint + offset + Vector3.up * yOffset;
                 spawnPositions[i] = spawnPos;
             }
@@ -56,24 +53,34 @@ public class BarrelGenerator : MonoBehaviour
             int[] barrelIndex = new int[summonCount]; // Array to store random barrel indices
             for (int i = 0; i < summonCount; i++)
             {
-                barrelIndex[i] = Random.Range(0, barrels.Length); // Generate random barrel index
+                bool empty = Random.Range(0f, 1f) < 0.5f; // 20% chance to skip summoning a barrel
+                if (empty)
+                {
+                    barrelIndex[i] = -1; // Set to -1 to indicate no barrel
+                }
+                else
+                {
+                    int randomIndex = Random.Range(0, Barrels.Instance.GetBarrelCount()); // Get a random barrel index
+                    barrelIndex[i] = randomIndex; // Store the index in the array
+                }
             }
-            summonBarrel(barrelIndex); // Call the method to summon barrels
+            SummonBarrel(barrelIndex); // Call the method to summon barrels
         }
     }
 
-    void summonBarrel(int[] barrelIndex)
+    void SummonBarrel(int[] barrelIndex)
     {
         for (int i = 0; i < summonCount; i++)
         {
-            Debug.Log("Summon barrel: " + barrelIndex[i]);
+            if (barrelIndex[i] == -1)
+                continue; // Skip if the index is -1
 
             // 목표: barrel의 local right == 부모의 forward
             Vector3 forward = transform.forward;
             Vector3 up = Vector3.up;
             Quaternion rotation = Quaternion.LookRotation(Vector3.Cross(up, forward), up);
 
-            GameObject barrel = Instantiate(barrels[barrelIndex[i]], spawnPositions[i], rotation);
+            GameObject barrel = Instantiate(Barrels.Instance.GetBarrelPrefab(barrelIndex[i]), spawnPositions[i], rotation);
             barrel.transform.parent = transform; // Set the parent of the barrel to this object
             spawnedBarrels.Add(barrel); // Add the barrel to the list of spawned barrels
         }
