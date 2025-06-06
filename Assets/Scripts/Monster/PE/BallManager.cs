@@ -43,13 +43,13 @@ public class BallManager : MonoBehaviour
             case BallType.Football:
                 return "kick_trig";
             case BallType.Basketball:
-                return "power_throw_trig";
+                return "big_throw_trig";
             case BallType.AmericanFootball:
                 return "big_throw_trig";
             case BallType.Volleyball:
                 return "big_throw_trig";
             case BallType.BeachBall:
-                return "big_throw_trig";
+                return "power_throw_trig";
             case BallType.BowlingBall:
                 return "bowling_trig";
             case BallType.TennisBall:

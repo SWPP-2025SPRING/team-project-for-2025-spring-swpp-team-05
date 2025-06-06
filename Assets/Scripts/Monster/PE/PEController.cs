@@ -10,6 +10,9 @@ enum AttackType
     FootballConverge,
     FootballDiverge,
     BowlingBall,
+    Basketball,
+    BeachBall,
+    TennisBall
 }
 
 public class PEController : MonoBehaviour
@@ -17,8 +20,13 @@ public class PEController : MonoBehaviour
     private GameObject player;
     private Animator animator;
 
+    [Header("Attack Force Settings")]
     public float footballForce = 10f;
     public float bowlingForce = 20000f;
+    public float basketballForce = 10f;
+    public float beachBallForce = 7f;
+    public float tennisBallForce = 5f;
+
     public float summonInterval = 100f;
     public float maxRotationSpeed = 10f;
     private float cooldownTimer = 0f;
@@ -45,7 +53,7 @@ public class PEController : MonoBehaviour
         onComplete = () =>
         {
             isAttacking = false;
-            Debug.Log("Attack completed.");
+            Debug.Log("Attack completed .");
         };
     }
 
@@ -56,7 +64,7 @@ public class PEController : MonoBehaviour
         {
             cooldownTimer = summonInterval;
             isAttacking = true;
-            SummonRandom();
+            SummonTennisBall(); // Summon a tennis ball as the default attack
         }
 
         if (!isAttacking)
@@ -91,18 +99,29 @@ public class PEController : MonoBehaviour
 
     void SummonRandom()
     {
-        int count = Random.Range(1, 10);
+        int count;
         AttackType attackType = (AttackType)Random.Range(0, System.Enum.GetValues(typeof(AttackType)).Length);
         switch (attackType)
         {
             case AttackType.FootballConverge:
+                count = Random.Range(1, 10); // Randomize the number of footballs
                 SummonFootBallConverge(count);
                 break;
             case AttackType.FootballDiverge:
+                count = Random.Range(3, 10); // Randomize the number of footballs
                 SummonFootBallDiverge(count);
                 break;
             case AttackType.BowlingBall:
                 SummonBowlingBall();
+                break;
+            case AttackType.Basketball:
+                SummonBasketBall();
+                break;
+            case AttackType.BeachBall:
+                SummonBeachBall();
+                break;
+            case AttackType.TennisBall:
+                SummonTennisBall();
                 break;
             default:
                 Debug.LogWarning("Unknown attack type summoned: " + attackType);
@@ -112,12 +131,6 @@ public class PEController : MonoBehaviour
 
     void SummonFootBallConverge(int count = 7)
     {
-        if (player == null)
-        {
-            Debug.LogError("Player object is not set. Cannot summon ball.");
-            return;
-        }
-
         Vector3[] ballTransforms = new Vector3[count];
         Vector3[] forces = new Vector3[count];
         for (int i = 0; i < ballTransforms.Length; i++)
@@ -136,14 +149,7 @@ public class PEController : MonoBehaviour
 
     void SummonFootBallDiverge(int count = 7)
     {
-        if (player == null)
-        {
-            Debug.LogError("Player object is not set. Cannot summon ball.");
-            return;
-        }
-
         Vector3 origin = transform.position + transform.forward * 2f;
-
         Vector3[] ballPositions = new Vector3[count];
         Vector3[] forces = new Vector3[count];
 
@@ -168,12 +174,6 @@ public class PEController : MonoBehaviour
 
     void SummonBowlingBall()
     {
-        if (player == null)
-        {
-            Debug.LogError("Player object is not set. Cannot summon ball.");
-            return;
-        }
-
         Vector3[] ballTransforms = new Vector3[1];
         Vector3[] forces = new Vector3[1];
 
@@ -186,4 +186,45 @@ public class PEController : MonoBehaviour
         Debug.Log("Summoned bowling ball with force: " + bowlingForce);
     }
 
+    void SummonBasketBall()
+    {
+        Vector3[] ballTransforms = new Vector3[1];
+        Vector3[] forces = new Vector3[1];
+
+        ballTransforms[0] = transform.position + transform.forward * 2f + Vector3.up * 3f;
+        Vector3 direction = (player.transform.position - ballTransforms[0]).normalized; // Add some upward force to simulate a basketball throw
+        forces[0] = direction * basketballForce;
+
+        IBallStrategy ballStrategy = new SingleBallStrategy(BallType.Basketball, ForceMode.Impulse, 0.5f, 1f, 1f); // Replace with the desired ball strategy
+        StartCoroutine(ballStrategy.OnAction(animator, ballTransforms, forces, onComplete));
+        Debug.Log("Summoned basketball with force: " + footballForce);
+    }
+
+    void SummonBeachBall()
+    {
+        Vector3[] ballTransforms = new Vector3[1];
+        Vector3[] forces = new Vector3[1];
+
+        ballTransforms[0] = transform.position + transform.forward * 2f + Vector3.up * 3f;
+        Vector3 direction = (player.transform.position - ballTransforms[0]).normalized; // Add some upward force to simulate a basketball throw
+        forces[0] = direction * beachBallForce;
+
+        IBallStrategy ballStrategy = new SingleBallStrategy(BallType.BeachBall, ForceMode.Impulse, 0.5f, 1f, 1f); // Replace with the desired ball strategy
+        StartCoroutine(ballStrategy.OnAction(animator, ballTransforms, forces, onComplete));
+        Debug.Log("Summoned beachball with force: " + footballForce);
+    }
+
+    void SummonTennisBall()
+    {
+        Vector3[] ballTransforms = new Vector3[1];
+        Vector3[] forces = new Vector3[1];
+
+        ballTransforms[0] = transform.position + transform.forward * 2f + Vector3.up * 3f;
+        Vector3 direction = (player.transform.position - ballTransforms[0]).normalized; // Add some upward force to simulate a basketball throw
+        forces[0] = direction * tennisBallForce;
+
+        IBallStrategy ballStrategy = new SingleBallStrategy(BallType.TennisBall, ForceMode.Impulse, 2.8f, 0f, 2f); // Replace with the desired ball strategy
+        StartCoroutine(ballStrategy.OnAction(animator, ballTransforms, forces, onComplete));
+        Debug.Log("Summoned tennisball with force: " + footballForce);
+    }
 }

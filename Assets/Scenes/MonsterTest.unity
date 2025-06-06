@@ -239,6 +239,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   footballForce: 100
   bowlingForce: 20000
+  basketballForce: 100
+  beachBallForce: 70
+  tennisBallForce: 30
   summonInterval: 10
   maxRotationSpeed: 100
 --- !u!114 &255454570
@@ -260,7 +263,7 @@ MonoBehaviour:
   - {fileID: 5918204948540114256, guid: cc0e77b55336aee409429ee6cd1862fc, type: 3}
   - {fileID: 1197219622356541440, guid: fca392d276a242f4aab238b653257174, type: 3}
   - {fileID: 1388489846497119046, guid: bee39803173061443a819c8ed6b87a5a, type: 3}
-  - {fileID: 5918204948540114256, guid: cc0e77b55336aee409429ee6cd1862fc, type: 3}
+  - {fileID: 4186378214774759808, guid: c9a6d7b3e8c6f6c43ac242a30e7831d9, type: 3}
   defaultBall: {fileID: 4437379321653709331, guid: 12dfbf9de968b4b4d90ab6e01f05244c, type: 3}
 --- !u!1 &445688765
 GameObject:
@@ -792,6 +795,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00d2765887d7b4599a3b59172dff8ba3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultMoveSpeed: 10
+  defaultMoveSpeed: 0
   defaultAttackPower: 10
   defaultAttackRange: 3
+--- !u!1001 &3212504824190760887
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1817580404026160738, guid: c9a6d7b3e8c6f6c43ac242a30e7831d9, type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817580404026160738, guid: c9a6d7b3e8c6f6c43ac242a30e7831d9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 56.82137
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817580404026160738, guid: c9a6d7b3e8c6f6c43ac242a30e7831d9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.044835
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817580404026160738, guid: c9a6d7b3e8c6f6c43ac242a30e7831d9, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -144.19928
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817580404026160738, guid: c9a6d7b3e8c6f6c43ac242a30e7831d9, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.54688305
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817580404026160738, guid: c9a6d7b3e8c6f6c43ac242a30e7831d9, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.6412409
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817580404026160738, guid: c9a6d7b3e8c6f6c43ac242a30e7831d9, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.4926197
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817580404026160738, guid: c9a6d7b3e8c6f6c43ac242a30e7831d9, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.21692148
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817580404026160738, guid: c9a6d7b3e8c6f6c43ac242a30e7831d9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817580404026160738, guid: c9a6d7b3e8c6f6c43ac242a30e7831d9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817580404026160738, guid: c9a6d7b3e8c6f6c43ac242a30e7831d9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4186378214774759808, guid: c9a6d7b3e8c6f6c43ac242a30e7831d9, type: 3}
+      propertyPath: m_Name
+      value: Tennis
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c9a6d7b3e8c6f6c43ac242a30e7831d9, type: 3}
