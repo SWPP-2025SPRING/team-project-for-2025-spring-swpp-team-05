@@ -5,8 +5,6 @@ using UnityEngine;
 public interface IMonsterController
 {
     void SetLevel(int level);
-    IEnumerator StartMonster();
-    IEnumerator EndMonster();
+    void EndMonster();
     void OnAttack();
-    void OnAttacked();
 }
