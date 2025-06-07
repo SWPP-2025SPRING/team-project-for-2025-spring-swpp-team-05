@@ -57,7 +57,14 @@ public class CinematicCamera : MonoBehaviour
             yield return null;
         }
 
-        StartCoroutine(eventCoroutine);
+        if (eventCoroutine != null)
+        {
+            yield return StartCoroutine(eventCoroutine);
+        }
+        else
+        {
+            yield return null;
+        }
 
         elapsedTime = 0f;
         while (elapsedTime < duration2)
