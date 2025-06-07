@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: fb571ac747ffd5d43936d22db43ef953
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - reportMonsterPrefab: {fileID: 4471061022533775355, guid: 6e0e4bde8e0f2144f9b26b33b687c001, type: 3}
+  - professorMonsterPrefab: {instanceID: 0}
+  - pythonMonsterPrefab: {instanceID: 0}
+  - peMonsterPrefab: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

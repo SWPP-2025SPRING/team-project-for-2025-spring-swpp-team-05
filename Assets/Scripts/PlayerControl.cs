@@ -158,7 +158,7 @@ public class PlayerControl : MonoBehaviour
                 (GameObject enemy, float rate, float duration) = solveCode.GetEnemy();
                 PlayerStatus.instance.ReviveSlow(rate);
                 // 몬스터 퇴치
-                enemy.GetComponent<ReportController>().KnockOut();
+                enemy.GetComponent<ReportController>().EndMonster();
 
                 // 다음 코드로 넘어가기
                 stunQ.Dequeue();
