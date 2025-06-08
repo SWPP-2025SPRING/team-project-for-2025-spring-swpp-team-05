@@ -52,7 +52,7 @@ public class PlayerControl : MonoBehaviour
         }
         // TODO: 킥보드로 바꾸고 나서는 킥보드 애니메이션으로 바꾸기
 
-        if (Mathf.Abs(horizontalInput) > 0.01f)
+        if (!isOnIce && Mathf.Abs(horizontalInput) > 0.01f)
         {
             Quaternion turnRotation = Quaternion.Euler(0, horizontalInput * 100 * Time.deltaTime, 0);
             transform.rotation *= turnRotation;
@@ -79,10 +79,25 @@ public class PlayerControl : MonoBehaviour
 
     void MovePlayerForward()
     {
-        playerAnimator.SetFloat("Speed_f", PlayerStatus.instance.moveSpeed / PlayerStatus.instance.defaultMoveSpeed);
-        Vector3 moveDirection = transform.forward;
-        Vector3 newPosition = transform.position + moveDirection * PlayerStatus.instance.moveSpeed * Time.deltaTime;
+
+        Vector3 velocity;
+        if (isOnIce)
+        {
+            velocity = HandleIceMovement(transform.forward);
+            playerAnimator.speed = 0.2f;
+        }
+        else
+        {
+            velocity = transform.forward * PlayerStatus.instance.moveSpeed;
+            playerAnimator.speed = 1.0f;
+        }
+
+        Vector3 newPosition = transform.position + velocity * Time.deltaTime;
         playerRb.MovePosition(newPosition);
+
+        // 애니메이션 동작 결정
+        float animationSpeed = PlayerStatus.instance.moveSpeed / PlayerStatus.instance.defaultMoveSpeed;
+        playerAnimator.SetFloat("Speed_f", animationSpeed);
 
     }
 
