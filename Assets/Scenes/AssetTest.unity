@@ -277,8 +277,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 2056576383}
-  followSpeed: 5
-  rotationSpeed: 5
 --- !u!1 &1698242053
 GameObject:
   m_ObjectHideFlags: 0
@@ -347,7 +345,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerControl: {fileID: 2056576384}
-  uiManager: {fileID: 0}
   isGameActive: 0
 --- !u!4 &1698242057
 Transform:
@@ -362,7 +359,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2056576382
 PrefabInstance:
@@ -569,63 +566,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
---- !u!1001 &2099941865
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: -4216859302048453862, guid: 844a1816776cf9347a229f2854756284, type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: 844a1816776cf9347a229f2854756284, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 92.37219
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: 844a1816776cf9347a229f2854756284, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: 844a1816776cf9347a229f2854756284, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -34.03125
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: 844a1816776cf9347a229f2854756284, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: 844a1816776cf9347a229f2854756284, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: 844a1816776cf9347a229f2854756284, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: 844a1816776cf9347a229f2854756284, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: 844a1816776cf9347a229f2854756284, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: 844a1816776cf9347a229f2854756284, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: 844a1816776cf9347a229f2854756284, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 844a1816776cf9347a229f2854756284, type: 3}
-      propertyPath: m_Name
-      value: ElectricScooter
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 844a1816776cf9347a229f2854756284, type: 3}
 --- !u!1001 &776790737864087825
 PrefabInstance:
   m_ObjectHideFlags: 0
