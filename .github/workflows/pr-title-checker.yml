@@ -1,0 +1,15 @@
+name: PR Title Checker
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  title-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: naveenk1223/action-pr-title@master
+        with:
+          allowed_prefixes: 'Feature,Bug,Assets,Documentation,Refactor,[Feature],[Bug],[Assets],[Documentation],[Refactor]'
+          prefix_case_sensitive: false
+          min_length: 10

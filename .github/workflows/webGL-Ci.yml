@@ -1,0 +1,58 @@
+name: Build and Deploy WebGL
+
+on:
+  pull_request:
+    types: [labeled]
+    branches: [develop]
+
+jobs:
+  build:
+    name: Build WebGL only when label is BuildTest
+    if: contains(github.event.label.name, '⚙️ BuildTest')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+          fetch-depth: 0
+
+      - name: Cache Library
+        uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-${{ runner.os }}-${{ hashFiles('**/*.cs') }}
+          restore-keys: |
+            Library-${{ runner.os }}-
+
+      - name: Build WebGL
+        uses: game-ci/unity-builder@v4.4.0
+        with:
+          targetPlatform: WebGL
+          unityVersion: 2021.3.45f1
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          ALLOW_DIRTY_BUILD: true
+
+      - name: Fix WebGL path and set permissions
+        run: |
+          if [ -d "./build/WebGL/WebGL" ]; then
+            sudo mv ./build/WebGL/WebGL/* ./build/WebGL/
+            sudo rm -rf ./build/WebGL/WebGL
+          fi
+          sudo chmod -R u+rwX ./build/WebGL
+          echo "" | sudo tee ./build/WebGL/.nojekyll > /dev/null
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Upload WebGL build to S3
+        run: |
+          aws s3 sync ./build/WebGL s3://${{ secrets.S3_BUCKET_NAME }} --delete
