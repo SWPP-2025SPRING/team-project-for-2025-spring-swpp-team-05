@@ -63,14 +63,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf613d5a8e6f0064fa0529701fd7abd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
-  launchForce: 20
-  horizontalForce: 3
-  homingSpeed: 30
+  speed: 1
+  launchForce: 1
+  horizontalForce: 1
+  homingSpeed: 1
   detectionRadius: 10
   attatchDistance: 3
   stunRate: 0.5
-  codeLength: 6
+  codeLength: 2
 --- !u!65 &4158691759673839687
 BoxCollider:
   m_ObjectHideFlags: 0

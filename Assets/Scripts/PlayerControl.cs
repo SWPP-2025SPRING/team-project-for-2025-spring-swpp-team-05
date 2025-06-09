@@ -84,7 +84,7 @@ public class PlayerControl : MonoBehaviour
 
     public void StunPlayer(SolveCode code)
     {
-        if (PlayerStatus.instance.isSlow)
+        if (!PlayerStatus.instance.isSlow)
         {
             prevCode = ' ';
             currentCode = code.GetNext();
