@@ -252,4 +252,20 @@ public class PlayerControl : MonoBehaviour
 
         return iceMomentum;
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("Collision with: " + collision.gameObject.name);
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            StartCoroutine(TriggerAttacked());
+        }
+    }
+
+    private IEnumerator TriggerAttacked()
+    {
+        playerAnimator.SetBool("Attacked", true);
+        yield return null; // 다음 프레임까지 대기
+        playerAnimator.SetBool("Attacked", false);
+    }
 }

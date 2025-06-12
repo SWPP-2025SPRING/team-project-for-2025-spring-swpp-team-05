@@ -8,6 +8,7 @@ TagManager:
   - Bomb
   - Ground
   - Barrel
+  - Enemy
   layers:
   - Default
   - TransparentFX
