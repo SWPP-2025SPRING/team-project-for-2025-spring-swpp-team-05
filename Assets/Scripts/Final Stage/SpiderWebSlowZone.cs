@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpiderWebSlowZone : MonoBehaviour
 {
-    public float knockbackDistance = 12f;
+    public float knockbackDistance = 15f;
     public float knockbackDuration = 0.2f;
 
     public int maxHitCount = 3;
@@ -18,6 +18,7 @@ public class SpiderWebSlowZone : MonoBehaviour
         {
             currentHitCount++;
             StartCoroutine(Knockback(collision.collider.gameObject));
+            StartCoroutine(ShakeWeb());
 
             if (currentHitCount >= maxHitCount)
             {
@@ -31,7 +32,7 @@ public class SpiderWebSlowZone : MonoBehaviour
         isCooldown = true;
 
         Vector3 dir = (player.transform.position - transform.position).normalized;
-        dir.z = -2.0f;
+        dir.z = -3.0f;
         dir.y = 0.02f;
         dir.Normalize();
 
@@ -57,6 +58,41 @@ public class SpiderWebSlowZone : MonoBehaviour
 
         yield return new WaitForSeconds(0.2f); // 짧은 쿨타임
         isCooldown = false;
+    }
+
+    private IEnumerator ShakeWeb()
+    {
+        float duration = 0.6f;
+        float frequency = 60f;
+        float scaleXIntensity = 0.04f;
+        float scaleYIntensity = 0.03f;
+        float positionXIntensity = 0.03f;
+
+        Vector3 originalScale = transform.localScale;
+        Vector3 originalPos = transform.localPosition;
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            float pulse = Mathf.Sin(elapsed * frequency);
+
+            // Scale: 좌우 / 상하로 튀는 느낌
+            float scaleX = originalScale.x + pulse * scaleXIntensity;
+            float scaleY = originalScale.y + pulse * scaleYIntensity;
+
+            // Position: 좌우 떨림
+            float posX = originalPos.x + pulse * positionXIntensity;
+
+            transform.localScale = new Vector3(scaleX, scaleY, originalScale.z);
+            transform.localPosition = new Vector3(posX, originalPos.y, originalPos.z);
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        // 원래대로 복구
+        transform.localScale = originalScale;
+        transform.localPosition = originalPos;
     }
 
 }
