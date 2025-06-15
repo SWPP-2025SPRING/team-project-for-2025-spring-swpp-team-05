@@ -22,8 +22,8 @@ public class PythonMonsterDebuffTests
         playerObj.AddComponent<BoxCollider>().isTrigger = true;
         playerObj.AddComponent<Rigidbody>().isKinematic = true;
 
-        playerStatus.defaultMoveSpeed = 10f;
-        playerStatus.moveSpeed = 10f;
+        //playerStatus.defaultMoveSpeed = 10f;
+        //playerStatus.moveSpeed = 10f;
 
         // 몬스터 오브젝트 및 컴포넌트 준비
         monsterObj = new GameObject("PythonMonster");

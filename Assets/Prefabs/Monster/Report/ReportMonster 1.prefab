@@ -43,7 +43,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4471061022533775355}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -63,14 +63,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf613d5a8e6f0064fa0529701fd7abd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
-  launchForce: 20
-  horizontalForce: 3
-  homingSpeed: 30
+  speed: 10
+  launchForce: 30
+  horizontalForce: 10
+  homingSpeed: 2
   detectionRadius: 10
   attatchDistance: 3
-  stunRate: 0.5
-  codeLength: 6
+  stunRate: 0.1
+  codeLength: 4
 --- !u!65 &4158691759673839687
 BoxCollider:
   m_ObjectHideFlags: 0
