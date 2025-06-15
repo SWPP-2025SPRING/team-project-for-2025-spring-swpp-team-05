@@ -3365,6 +3365,10 @@ PrefabInstance:
       propertyPath: roomLevel
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4031851751285455341, guid: df1a519f8d56ab74cb0ab4f8d8aede21, type: 3}
+      propertyPath: monsterType
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 6352600048148477649, guid: df1a519f8d56ab74cb0ab4f8d8aede21, type: 3}
       propertyPath: m_Name
       value: RoomSection (20)
@@ -4649,6 +4653,10 @@ PrefabInstance:
     - target: {fileID: 4031851751285455341, guid: df1a519f8d56ab74cb0ab4f8d8aede21, type: 3}
       propertyPath: roomLevel
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4031851751285455341, guid: df1a519f8d56ab74cb0ab4f8d8aede21, type: 3}
+      propertyPath: monsterType
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6352600048148477649, guid: df1a519f8d56ab74cb0ab4f8d8aede21, type: 3}
       propertyPath: m_Name
@@ -6983,6 +6991,10 @@ PrefabInstance:
       propertyPath: roomLevel
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4031851751285455341, guid: df1a519f8d56ab74cb0ab4f8d8aede21, type: 3}
+      propertyPath: monsterType
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 6352600048148477649, guid: df1a519f8d56ab74cb0ab4f8d8aede21, type: 3}
       propertyPath: m_Name
       value: RoomSection (3)
@@ -7636,7 +7648,7 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 875775634}
     m_Modifications:
-    - target: {fileID: -6176797614152652557, guid: ddf6551e87b52474d8e1c73f3c281aad, type: 3}
+    - target: {fileID: 0}
       propertyPath: roomLevel
       value: 5
       objectReference: {fileID: 0}
@@ -9216,6 +9228,10 @@ PrefabInstance:
     - target: {fileID: 4031851751285455341, guid: df1a519f8d56ab74cb0ab4f8d8aede21, type: 3}
       propertyPath: roomLevel
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4031851751285455341, guid: df1a519f8d56ab74cb0ab4f8d8aede21, type: 3}
+      propertyPath: monsterType
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6352600048148477649, guid: df1a519f8d56ab74cb0ab4f8d8aede21, type: 3}
       propertyPath: m_Name
@@ -10851,7 +10867,7 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 875775634}
     m_Modifications:
-    - target: {fileID: -6176797614152652557, guid: ddf6551e87b52474d8e1c73f3c281aad, type: 3}
+    - target: {fileID: 0}
       propertyPath: roomLevel
       value: 5
       objectReference: {fileID: 0}
@@ -11577,6 +11593,10 @@ PrefabInstance:
     - target: {fileID: 4031851751285455341, guid: df1a519f8d56ab74cb0ab4f8d8aede21, type: 3}
       propertyPath: roomLevel
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4031851751285455341, guid: df1a519f8d56ab74cb0ab4f8d8aede21, type: 3}
+      propertyPath: monsterType
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6352600048148477649, guid: df1a519f8d56ab74cb0ab4f8d8aede21, type: 3}
       propertyPath: m_Name

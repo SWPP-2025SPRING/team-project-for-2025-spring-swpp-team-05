@@ -48,7 +48,10 @@ public class RoomSpawnManager : MonoBehaviour
         if (other.CompareTag("Player") && !isSpawned)
         {
             isSpawned = true; // Set the flag to true to prevent multiple spawns
-            StartCoroutine(SpawnCoroutine());
+            if (monsterType != MonsterType.None)
+            {
+                StartCoroutine(SpawnCoroutine());
+            }
         }
     }
 
