@@ -12,6 +12,10 @@ public class RoomSpawnManager : MonoBehaviour
     public int monsterCoefficient = 2; // Monster Tier Coefficient
     public static float growthRate = 0.2f;
 
+    [Header("Room Spawn Options")]
+    public bool isStaticSpawn = true; // If true, monsters will spawn at fixed positions
+    public Vector3[] staticSpawnPositions; // Fixed spawn positions for monsters
+
     private BoxCollider roomCollider;
     private Vector3 roomCenter;
     private float roomXSize;
@@ -70,7 +74,14 @@ public class RoomSpawnManager : MonoBehaviour
     public IEnumerator SpawnEventCoroutine()
     {
         yield return new WaitForSecondsRealtime(0.5f); // Wait for a moment before spawning monsters
-        SpawnMonsters();
+        if (isStaticSpawn)
+        {
+            SpawnMonstersAtFixedPositions();
+        }
+        else
+        {
+            SpawnMonsters();
+        }
         yield return new WaitForSecondsRealtime(0.5f); // Wait for a moment after spawning
     }
 
@@ -95,6 +106,19 @@ public class RoomSpawnManager : MonoBehaviour
                 Quaternion spawnRot = Quaternion.Euler(0, Random.Range(0, 360), 0);
                 GameObject monster = monsterFactory.CreateMonster(monsterType, roomLevel, spawnPos, spawnRot, transform);
             }
+        }
+    }
+
+    public void SpawnMonstersAtFixedPositions()
+    {
+        monsterFactory = new MonsterFactory();
+        remainMonsterCount = staticSpawnPositions.Length;
+
+        for (int i = 0; i < staticSpawnPositions.Length; i++)
+        {
+            Vector3 spawnPos = staticSpawnPositions[i] + roomCenter;
+            Quaternion spawnRot = Quaternion.Euler(0, Random.Range(0, 360), 0);
+            GameObject monster = monsterFactory.CreateMonster(monsterType, roomLevel, spawnPos, spawnRot, transform);
         }
     }
 

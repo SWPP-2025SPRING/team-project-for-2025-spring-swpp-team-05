@@ -15,7 +15,7 @@ enum AttackType
     TennisBall
 }
 
-public class PEController : MonoBehaviour
+public class PEController : MonoBehaviour, IMonsterController
 {
     private GameObject player;
     private Animator animator;
@@ -32,6 +32,26 @@ public class PEController : MonoBehaviour
     private float cooldownTimer = 0f;
     private bool isAttacking = false;
     private Action onComplete;
+
+    public void SetLevel(int level)
+    {
+        // --- Growth Rates ---
+        float footballForceGrowth = 0.05f;
+        float bowlingForceGrowth = 0.1f;
+        float basketballForceGrowth = 0.05f;
+        float beachBallForceGrowth = 0.03f;
+        float tennisBallForceGrowth = 0.02f;
+
+        float summonIntervalGrowth = 0.05f; // Adjust the growth rate for summon interval
+
+        // --- Apply Growth ---
+        footballForce += footballForce * footballForceGrowth * level;
+        bowlingForce += bowlingForce * bowlingForceGrowth * level;
+        basketballForce += basketballForce * basketballForceGrowth * level;
+        beachBallForce += beachBallForce * beachBallForceGrowth * level;
+        tennisBallForce += tennisBallForce * tennisBallForceGrowth * level;
+        summonInterval -= summonInterval * summonIntervalGrowth * level; // Decrease interval as level increases
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -64,7 +84,7 @@ public class PEController : MonoBehaviour
         {
             cooldownTimer = summonInterval;
             isAttacking = true;
-            SummonTennisBall(); // Summon a tennis ball as the default attack
+            OnAttack(); // Summon a tennis ball as the default attack
         }
 
         if (!isAttacking)
@@ -97,7 +117,7 @@ public class PEController : MonoBehaviour
         //animator.SetFloat("turnSpeed_f", angle / 180f);
     }
 
-    void SummonRandom()
+    public void OnAttack()
     {
         int count;
         AttackType attackType = (AttackType)Random.Range(0, System.Enum.GetValues(typeof(AttackType)).Length);
@@ -226,5 +246,12 @@ public class PEController : MonoBehaviour
         IBallStrategy ballStrategy = new SingleBallStrategy(BallType.TennisBall, ForceMode.Impulse, 2.8f, 0f, 2f); // Replace with the desired ball strategy
         StartCoroutine(ballStrategy.OnAction(animator, ballTransforms, forces, onComplete));
         Debug.Log("Summoned tennisball with force: " + footballForce);
+    }
+
+    public void EndMonster()
+    {
+        // Implement any cleanup or end logic for the monster here
+        Debug.Log("PEController EndMonster called.");
+        Destroy(gameObject); // Example: destroy the monster GameObject
     }
 }
