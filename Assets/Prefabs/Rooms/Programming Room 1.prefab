@@ -64,6 +64,8 @@ MonoBehaviour:
   monsterCoefficient: 2
   isStaticSpawn: 0
   staticSpawnPositions: []
+  roomName: "\uD504\uB85C\uADF8\uB798\uBC0D\uC758 \uBC29"
+  roomDescription: "\uB514\uBC84\uAE45\uC758 \uB2AA\uC5D0 \uBE60\uC9C0\uC9C0 \uB9D0\uC790!"
 --- !u!1 &8560068426552764042
 GameObject:
   m_ObjectHideFlags: 0

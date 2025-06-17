@@ -65,6 +65,8 @@ MonoBehaviour:
   isStaticSpawn: 1
   staticSpawnPositions:
   - {x: 0, y: 10, z: 0}
+  roomName: "\uAD50\uC218\uC2E4"
+  roomDescription: "\uBB34\uC5C7\uC744 \uD558\uB7EC \uB4E4\uC5B4\uC654\uC9C0 \uD559\uC0DD?"
 --- !u!1 &8314695587811127113
 GameObject:
   m_ObjectHideFlags: 0
