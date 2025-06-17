@@ -138,6 +138,7 @@ public class PlayerControl : MonoBehaviour
         isOnIce = true;
         justEnteredIce = true;
         iceMomentum = Vector3.zero;
+        DebufManager.Instance.UpdateDebufText(DebufType.Slip);
     }
 
     public void ExitIceZone()
@@ -145,6 +146,7 @@ public class PlayerControl : MonoBehaviour
         isOnIce = false;
         justEnteredIce = false;
         iceMomentum = Vector3.zero;
+        DebufManager.Instance.UpdateDebufText(DebufType.None);
     }
 
     private Vector3 HandleIceMovement(Vector3 baseDirection)

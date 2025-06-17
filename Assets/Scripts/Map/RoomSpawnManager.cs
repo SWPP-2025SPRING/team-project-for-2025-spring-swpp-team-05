@@ -27,6 +27,11 @@ public class RoomSpawnManager : MonoBehaviour
     private MonsterFactory monsterFactory;
     private bool isSpawned = false;
 
+
+    [Header("About Room")]
+    public string roomName = "Default Room"; // Name of the room for debugging
+    public string roomDescription = "This is a default room for monster spawning."; // Description of the room for debugging
+
     // Start is called before the first frame update
     void Start()
     {
@@ -76,6 +81,7 @@ public class RoomSpawnManager : MonoBehaviour
 
     public IEnumerator SpawnEventCoroutine()
     {
+        TitleManager.Instance.ShowTitle(roomName, Color.white, FlashPreset.StandardFlash);
         yield return new WaitForSecondsRealtime(0.5f); // Wait for a moment before spawning monsters
         if (isStaticSpawn)
         {
@@ -85,6 +91,7 @@ public class RoomSpawnManager : MonoBehaviour
         {
             SpawnMonsters();
         }
+        TitleManager.Instance.ShowSubtitle(roomDescription, Color.white, FlashPreset.StandardFlash);
         yield return new WaitForSecondsRealtime(0.5f); // Wait for a moment after spawning
     }
 
