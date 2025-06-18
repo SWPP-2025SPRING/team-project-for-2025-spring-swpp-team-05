@@ -9,6 +9,8 @@ public class UIManager : MonoBehaviour
     [Header("UI Texts")]
     public TextMeshProUGUI speedText;
     public TextMeshProUGUI timerText;
+    public TextMeshProUGUI levelText;
+    public TextMeshProUGUI levelUpText;
 
     // TODO: 공격 스탯 필요없다는 결론 나오면 다 삭제
     [Header("Stat Bars")]
@@ -27,9 +29,28 @@ public class UIManager : MonoBehaviour
     // light pink
     private static readonly Color SpeedDownColor = new Color(1f, 0.6f, 0.6f);
 
+    [Header("Level UI Feedback")]
+    public float flashDuration = 0.1f;
+    public float fadeDuration = 1.0f;
+    public Color levelUpColor = new Color(1f, 0.8f, 0.2f); // light yellow
+
     void Start()
     {
         lastSpeed = defaultSpeed;
+        levelUpText.alpha = 0f; // Start with level up text hidden
+    }
+
+    public void UpdateLevel(int level)
+    {
+        levelText.text = $"Lv: {level}";
+        levelUpText.text = $"+{level}";
+
+        if (levelUpText.alpha > 0f)
+        {
+            StopCoroutine(FlashLevelUpText());
+        }
+
+        StartCoroutine(FlashLevelUpText());
     }
 
     // 1. Timer Update
@@ -97,6 +118,26 @@ public class UIManager : MonoBehaviour
         }
 
         speedText.color = defaultColor;
+    }
+
+    IEnumerator FlashLevelUpText()
+    {
+        levelText.color = levelUpColor;
+        levelUpText.alpha = 1f;
+        yield return new WaitForSeconds(flashDuration);
+
+        float elapsed = 0f;
+        while (elapsed < fadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            levelUpText.alpha = Mathf.Lerp(1f, 0f, elapsed / fadeDuration);
+            levelText.color = Color.Lerp(levelUpColor, defaultColor, elapsed / fadeDuration);
+            yield return null;
+        }
+
+        Debug.Log("Level up text faded out.");
+        levelUpText.alpha = 0f;
+        levelText.color = defaultColor; // Reset color after fading out
     }
 
     // Player ATK / RANGE Update

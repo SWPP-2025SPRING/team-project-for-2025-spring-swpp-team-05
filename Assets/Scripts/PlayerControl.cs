@@ -5,7 +5,6 @@ using TMPro;
 
 public class PlayerControl : MonoBehaviour
 {
-
     // Inspector: connect
     public GameManager gameManager;
 
@@ -55,7 +54,10 @@ public class PlayerControl : MonoBehaviour
     {
         horizontalInput = Input.GetAxis("Horizontal");
         // TODO: 킥보드로 바꾸고 나서는 킥보드 애니메이션으로 바꾸기
-
+        if (PlayerStatus.instance.isReverseControl)
+        {
+            horizontalInput *= -1f;
+        }
         if (!isOnIce && Mathf.Abs(horizontalInput) > 0.01f)
         {
             Quaternion turnRotation = Quaternion.Euler(0, horizontalInput * 100 * Time.deltaTime, 0);
@@ -158,7 +160,7 @@ public class PlayerControl : MonoBehaviour
                 (GameObject enemy, float rate, float duration) = solveCode.GetEnemy();
                 PlayerStatus.instance.ReviveSlow(rate);
                 // 몬스터 퇴치
-                enemy.GetComponent<ReportController>().KnockOut();
+                enemy.GetComponent<ReportController>().EndMonster();
 
                 // 다음 코드로 넘어가기
                 stunQ.Dequeue();
