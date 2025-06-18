@@ -64,7 +64,7 @@ public class PEController : MonoBehaviour
         {
             cooldownTimer = summonInterval;
             isAttacking = true;
-            SummonTennisBall(); // Summon a tennis ball as the default attack
+            SummonRandom(); // Summon a tennis ball as the default attack
         }
 
         if (!isAttacking)
