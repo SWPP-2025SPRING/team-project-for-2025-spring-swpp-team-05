@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class PythonMonster : MonoBehaviour
+public class PythonMonster : MonoBehaviour, IMonsterController
 {
 
     public float moveSpeed = 5f;
@@ -25,6 +25,18 @@ public class PythonMonster : MonoBehaviour
     {
         float offsetX = Mathf.PingPong(Time.time * moveSpeed, moveRange * 2) - moveRange;
         transform.position = startPosition + transform.right * offsetX;
+    }
+
+    public void SetLevel(int level)
+    {
+        // Example growth rates, adjust as needed
+        float slowRateGrowth = 0.05f;
+        float slowDurationGrowth = 0.1f;
+        float reverseDurationGrowth = 0.1f;
+
+        slowRate += slowRate * slowRateGrowth * level;
+        slowDuration += slowDuration * slowDurationGrowth * level;
+        reverseDuration += reverseDuration * reverseDurationGrowth * level;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -69,5 +81,18 @@ public class PythonMonster : MonoBehaviour
             // TODO: Add a sound effect, particle effect
             Destroy(gameObject);
         }
+    }
+
+    public void OnAttack()
+    {
+        // PythonMonster does not have an attack method
+        Debug.LogWarning("[PythonMonster] Attack method is not implemented.");
+    }
+
+    public void EndMonster()
+    {
+        // PythonMonster does not have an end method
+        Debug.LogWarning("[PythonMonster] EndMonster method is not implemented.");
+        Destroy(gameObject);
     }
 }

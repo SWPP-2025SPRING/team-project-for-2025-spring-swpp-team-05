@@ -21,14 +21,8 @@ public class PlayerControl : MonoBehaviour
     private float horizontalInput;
     private Vector3 moveDirection;
 
-
-    // Report Moster Interaction Variable
-    public TextMeshProUGUI[] codeTexts;
-    private Queue<SolveCode> stunQ = new Queue<SolveCode>();
-    private char prevCode = ' ';
-    private char currentCode = ' ';
-    private char nextCode = ' ';
-    private char nextNextCode = ' ';
+    // Code Interaction
+    private CodeFactory codeFactory;
 
     // Ice Obstacle Interaction
 
@@ -46,7 +40,9 @@ public class PlayerControl : MonoBehaviour
         playerAnimator = GetComponent<Animator>();
         playerAudio = GetComponent<AudioSource>();
         Physics.gravity *= 1;
-        deactivateCodeText();
+
+        // Initialize Code Factory
+        codeFactory = new CodeFactory();
     }
 
     // Update is called once per frame
@@ -70,7 +66,7 @@ public class PlayerControl : MonoBehaviour
             if (input.Length > 0)
             {
                 char inputChar = input[0];
-                TrySolveStun(inputChar);
+                codeFactory.TrySolveCode(inputChar);
             }
         }
 
@@ -134,102 +130,15 @@ public class PlayerControl : MonoBehaviour
 
     public void StunPlayer(SolveCode code)
     {
-        if (PlayerStatus.instance.isSlow)
-        {
-            prevCode = ' ';
-            currentCode = code.GetNext();
-            nextCode = code.GetNextNext();
-            nextNextCode = code.GetNextNextNext();
-            activateCodeText();
-            UpdateCodeText();
-        }
-
-        stunQ.Enqueue(code);
+        codeFactory.AddCode(code);
         PlayerStatus.instance.SlowPlayer(code.GetStunRate());
     }
-
-    public void TrySolveStun(char code)
-    {
-        try
-        {
-            SolveCode solveCode = stunQ.Peek();
-            bool isSolved = solveCode.Solve(code);
-            if (isSolved)
-            {
-                // 이번 코드 해결
-                (GameObject enemy, float rate, float duration) = solveCode.GetEnemy();
-                PlayerStatus.instance.ReviveSlow(rate);
-                // 몬스터 퇴치
-                enemy.GetComponent<ReportController>().EndMonster();
-
-                // 다음 코드로 넘어가기
-                stunQ.Dequeue();
-
-                // 다음 로직 결정
-                if (stunQ.Count > 0)
-                {
-                    SolveCode nextSolveCode = stunQ.Peek();
-                    prevCode = ' ';
-                    currentCode = nextSolveCode.GetNext();
-                    nextCode = nextSolveCode.GetNextNext();
-                    nextNextCode = nextSolveCode.GetNextNextNext();
-                }
-                else
-                {
-                    // 더 이상 해결할 코드가 없음
-                    prevCode = ' ';
-                    currentCode = ' ';
-                    nextCode = ' ';
-                    nextNextCode = ' ';
-                    deactivateCodeText();
-                }
-            }
-            else
-            {
-                // 아직 코드 남아있음
-                prevCode = currentCode;
-                currentCode = nextCode;
-                nextCode = nextNextCode;
-                nextNextCode = solveCode.GetNextNextNext();
-            }
-            UpdateCodeText();
-        }
-        catch (SolveError e)
-        {
-            // 코드 풀기 실패
-            Debug.Log("Code solving failed: " + e.Message);
-        }
-    }
-
-    private void UpdateCodeText()
-    {
-        codeTexts[0].text = prevCode.ToString();
-        codeTexts[1].text = currentCode.ToString();
-        codeTexts[2].text = nextCode.ToString();
-        codeTexts[3].text = nextNextCode.ToString();
-    }
-
-    private void activateCodeText()
-    {
-        foreach (TextMeshProUGUI codeText in codeTexts)
-        {
-            codeText.gameObject.SetActive(true);
-        }
-    }
-
-    private void deactivateCodeText()
-    {
-        foreach (TextMeshProUGUI codeText in codeTexts)
-        {
-            codeText.gameObject.SetActive(false);
-        }
-    }
-
     public void EnterIceZone()
     {
         isOnIce = true;
         justEnteredIce = true;
         iceMomentum = Vector3.zero;
+        DebufManager.Instance.UpdateDebufText(DebufType.Slip);
     }
 
     public void ExitIceZone()
@@ -237,6 +146,7 @@ public class PlayerControl : MonoBehaviour
         isOnIce = false;
         justEnteredIce = false;
         iceMomentum = Vector3.zero;
+        DebufManager.Instance.UpdateDebufText(DebufType.None);
     }
 
     private Vector3 HandleIceMovement(Vector3 baseDirection)

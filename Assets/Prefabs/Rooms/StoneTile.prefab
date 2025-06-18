@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4706977165390226204}
   - component: {fileID: 3862638893287463939}
   - component: {fileID: 5413211904754525567}
-  - component: {fileID: -6176797614152652557}
   m_Layer: 0
   m_Name: StoneTile
   m_TagString: Untagged
@@ -60,24 +59,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd43bdf9a6c7eeb43870aab1bff6cd21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomPrefab: {fileID: 4471061022533775355, guid: 6e0e4bde8e0f2144f9b26b33b687c001, type: 3}
+  monsterType: 1
   roomLevel: 10
   monsterCoefficient: 2
---- !u!114 &-6176797614152652557
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1384698119316551610}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd43bdf9a6c7eeb43870aab1bff6cd21, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roomPrefab: {fileID: 4471061022533775355, guid: 6e0e4bde8e0f2144f9b26b33b687c001, type: 3}
-  roomLevel: 10
-  monsterCoefficient: 2
+  isStaticSpawn: 1
+  staticSpawnPositions:
+  - {x: 0, y: 10, z: 0}
+  roomName: "\uAD50\uC218\uC2E4"
+  roomDescription: "\uBB34\uC5C7\uC744 \uD558\uB7EC \uB4E4\uC5B4\uC654\uC9C0 \uD559\uC0DD?"
 --- !u!1 &8314695587811127113
 GameObject:
   m_ObjectHideFlags: 0
