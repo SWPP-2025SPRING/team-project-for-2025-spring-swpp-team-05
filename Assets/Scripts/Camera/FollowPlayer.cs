@@ -17,6 +17,10 @@ public class FollowPlayer : MonoBehaviour
     private Vector3 currentOffset;
     private Quaternion fixedRotation;
 
+    // for Python Monster Error
+    private bool isFlipped = false;
+    private float externalTiltAngle = 0f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -54,7 +58,24 @@ public class FollowPlayer : MonoBehaviour
         transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, 1f / followSpeed);
 
         Quaternion lookRotation = Quaternion.LookRotation(player.transform.position - transform.position);
+        lookRotation *= Quaternion.Euler(0, 0, externalTiltAngle);
+
+        if (isFlipped)
+        {
+            lookRotation *= Quaternion.Euler(0, 0, 180);
+        }
+
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
 
+    }
+
+    public void SetFlipped(bool flip)
+    {
+        isFlipped = flip;
+    }
+
+    public void SetTiltAngle(float angle)
+    {
+        externalTiltAngle = angle;
     }
 }
