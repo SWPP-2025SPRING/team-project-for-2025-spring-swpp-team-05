@@ -72,6 +72,7 @@ public class PlayerStatus : MonoBehaviour
         if (!isSlow)
         {
             isSlow = true;
+            DebufManager.Instance.UpdateDebufText(DebufType.Stun);
         }
         slowRateAgg += slowRate;
         moveSpeed = defaultMoveSpeed * (1 - slowRateAgg);
@@ -96,6 +97,7 @@ public class PlayerStatus : MonoBehaviour
         if (slowRateAgg < 0.01f)
         {
             isSlow = false;
+            DebufManager.Instance.UpdateDebufText(DebufType.None);
         }
     }
 
@@ -117,6 +119,14 @@ public class PlayerStatus : MonoBehaviour
     public void SetReverseControl(bool isReverse)
     {
         isReverseControl = isReverse;
+        if (isReverse)
+        {
+            DebufManager.Instance.UpdateDebufText(DebufType.ControlInversion);
+        }
+        else
+        {
+            DebufManager.Instance.UpdateDebufText(DebufType.None);
+        }
     }
 
     public void IncreaseAttackPower()
