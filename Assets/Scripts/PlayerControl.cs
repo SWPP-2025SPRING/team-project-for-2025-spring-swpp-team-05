@@ -70,6 +70,22 @@ public class PlayerControl : MonoBehaviour
             }
         }
 
+        if (horizontalInput == 1f)
+        {
+            playerAnimator.SetBool("TurnRight", true);
+            playerAnimator.SetBool("TurnLeft", false);
+        }
+        else if (horizontalInput == -1f)
+        {
+            playerAnimator.SetBool("TurnLeft", true);
+            playerAnimator.SetBool("TurnRight", false);
+        }
+        else
+        {
+            playerAnimator.SetBool("TurnLeft", false);
+            playerAnimator.SetBool("TurnRight", false);
+        }
+
 
         // TODO: UI, player 테스트용, 후에 지우기 
         if (Input.GetKeyDown(KeyCode.UpArrow))
