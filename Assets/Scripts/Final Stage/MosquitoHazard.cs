@@ -11,6 +11,8 @@ public class MosquitoHazard : MonoBehaviour
         {
             // PlayerStatus.instance.SlowPlayer(0.3f);
             Debug.Log("🦟 Mosquito!!");
+
+            Camera.main.GetComponent<CameraBlurEffect>()?.TriggerMosquitoBlur();
         }
     }
 }
