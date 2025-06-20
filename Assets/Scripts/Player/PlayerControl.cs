@@ -96,7 +96,7 @@ public class PlayerControl : MonoBehaviour
         {
             isBraking = true;
         }
-        else if (verticalInput > 0f && isBraking)
+        else if (verticalInput >= 0f && isBraking)
         {
             isBraking = false;
         }

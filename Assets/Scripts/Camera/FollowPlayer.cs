@@ -20,12 +20,25 @@ public class FollowPlayer : MonoBehaviour
     // for Python Monster Error
     private bool isFlipped = false;
     private float externalTiltAngle = 0f;
+    private Camera cam;
 
     // Start is called before the first frame update
     void Start()
     {
         currentOffset = rearViewOffset; // 기본은 2번 시점
         fixedRotation = transform.rotation;
+
+        cam = Camera.main;
+        if (cam == null)
+        {
+            Debug.LogError("Main Camera not found. Please ensure there is a camera tagged as 'MainCamera'.");
+            return;
+        }
+        float[] distances = new float[32];
+        distances[LayerMask.NameToLayer("Props")] = 100f; // Props 레이어는 100m 거리
+        distances[LayerMask.NameToLayer("Default")] = 1000f; // Default 레이어는 100m 거리
+        distances[LayerMask.NameToLayer("Building")] = 1000f; // Player 레
+        cam.layerCullDistances = distances;
     }
 
     // Update is called once per frame

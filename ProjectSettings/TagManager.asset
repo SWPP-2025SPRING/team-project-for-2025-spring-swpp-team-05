@@ -9,16 +9,17 @@ TagManager:
   - Ground
   - Barrel
   - Enemy
+  - Terrain
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Props
+  - Building
+  - Monster
   - 
   - 
   - 
