@@ -7,12 +7,8 @@ public class PlayerStatus : MonoBehaviour
     public static PlayerStatus instance { get; private set; }
 
     public float moveSpeed { get; private set; }
-    public float attackPower { get; private set; }
-    public float attackRange { get; private set; }
 
     public float defaultMoveSpeed = 10.0f;
-    public float defaultAttackPower = 10;
-    public float defaultAttackRange = 3.0f;
 
     private float slowRateAgg = 0f;
     public bool isSlow { get; private set; } = false;
@@ -23,21 +19,16 @@ public class PlayerStatus : MonoBehaviour
     public int maxLevel { get; private set; } = 50;
 
     public float speedGrowthRate = 1.2f; // 속도 성장률
-    public float attackGrowthRate = 1.1f; // 공격력 성장률
-    public float attackRangeGrowthRate = 1.1f; // 공격 범위 성장률
+
 
 
     //public int exp { get; private set; } = 0;
     //public int nextExp { get; private set; } = 100;
 
     // 🔐 고정 상수 (외부 수정 방지)
-    // TODO: 공격 스탯 필요없다는 결론 나오면 다 삭제
-    public static readonly float maxAttackPower = 100f;
-    public static readonly float maxAttackRange = 10f;
     public static readonly float minMoveSpeed = 3f;
     public static readonly float maxMoveSpeed = 30f;
     public static readonly float speedStep = 2f;
-    public static readonly float attackStep = 1f;
 
     private void Awake()
     {
@@ -48,8 +39,6 @@ public class PlayerStatus : MonoBehaviour
         }
         instance = this;
         moveSpeed = defaultMoveSpeed;
-        attackPower = defaultAttackPower;
-        attackRange = defaultAttackRange;
         DontDestroyOnLoad(gameObject);
     }
 
@@ -61,8 +50,6 @@ public class PlayerStatus : MonoBehaviour
             level = maxLevel;
         }
         moveSpeed = GetSpeed(level);
-        attackPower = GetAttackPower(level);
-        attackRange = GetAttackRange(level);
         GameManager.Instance.uiManager.UpdateLevel(level);
 
     }
@@ -129,25 +116,6 @@ public class PlayerStatus : MonoBehaviour
         }
     }
 
-    public void IncreaseAttackPower()
-    {
-        attackPower = Mathf.Min(attackPower + attackStep, maxAttackPower);
-    }
-
-    public void IncreaseAttackRange()
-    {
-        attackRange = Mathf.Min(attackRange + attackStep, maxAttackRange);
-    }
-
-    public float GetAttackPowerRatio()
-    {
-        return Mathf.Clamp01(attackPower / maxAttackPower);
-    }
-
-    public float GetAttackRangeRatio()
-    {
-        return Mathf.Clamp01(attackRange / maxAttackRange);
-    }
 
     public void IncreaseSpeed()
     {
@@ -164,13 +132,4 @@ public class PlayerStatus : MonoBehaviour
         return Mathf.Clamp(defaultMoveSpeed * Mathf.Pow(speedGrowthRate, level - 1), minMoveSpeed, maxMoveSpeed);
     }
 
-    private float GetAttackPower(int level)
-    {
-        return Mathf.Clamp(defaultAttackPower * Mathf.Pow(attackGrowthRate, level - 1), 0, maxAttackPower);
-    }
-
-    private float GetAttackRange(int level)
-    {
-        return Mathf.Clamp(defaultAttackRange * Mathf.Pow(attackRangeGrowthRate, level - 1), 0, maxAttackRange);
-    }
 }

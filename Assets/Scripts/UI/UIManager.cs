@@ -12,10 +12,6 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI levelUpText;
 
-    // TODO: 공격 스탯 필요없다는 결론 나오면 다 삭제
-    [Header("Stat Bars")]
-    public Image atkBar;
-    public Image rangeBar;
 
     [Header("Speed Feedback")]
     private float lastSpeed;
@@ -141,16 +137,10 @@ public class UIManager : MonoBehaviour
     }
 
     // Player ATK / RANGE Update
-    // TODO: 공격 스탯 필요없다는 결론 나오면 다 삭제
-    public void UpdateStats(float speed, float atkRatio, float rangeRatio)
+    public void UpdateStats(float speed)
     {
         UpdateSpeed(speed);
 
-        if (atkBar != null)
-            atkBar.fillAmount = atkRatio;
-
-        if (rangeBar != null)
-            rangeBar.fillAmount = rangeRatio;
     }
 }
 
