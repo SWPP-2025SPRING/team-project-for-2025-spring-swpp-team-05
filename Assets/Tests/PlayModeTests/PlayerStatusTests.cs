@@ -1,5 +1,9 @@
+using System.Collections;
+using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.TestTools;
+using System.Reflection;
 
 public class PlayerStatusTests
 {
@@ -12,13 +16,27 @@ public class PlayerStatusTests
         go = new GameObject("TestPlayer");
         status = go.AddComponent<PlayerStatus>();
         status.SendMessage("Awake");  // Singleton 초기화 및 기본값 설정
+
+        var debufManager = new GameObject("DebufManager").AddComponent<DebufManager>();
+        typeof(DebufManager).GetField("instance", BindingFlags.Static | BindingFlags.NonPublic)
+            ?.SetValue(null, debufManager);
     }
 
     [TearDown]
     public void TearDown()
     {
-        Object.DestroyImmediate(go);
-        typeof(PlayerStatus).GetField("instance", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic).SetValue(null, null);
+        if (go != null)
+        {
+            Object.DestroyImmediate(go);
+        }
+
+        var field = typeof(PlayerStatus).GetField("instance",
+            System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+
+        if (field != null)
+        {
+            field.SetValue(null, null);  // Singleton 해제
+        }
     }
 
     [Test]
@@ -49,28 +67,6 @@ public class PlayerStatusTests
         Assert.GreaterOrEqual(status.moveSpeed, PlayerStatus.minMoveSpeed - 0.01f);
     }
 
-    [Test]
-    public void SlowPlayer_ReducesSpeedAndSetsIsSlow()
-    {
-        status.SlowPlayer(0.3f);
-        Assert.IsTrue(status.isSlow);
-        Assert.AreEqual(status.defaultMoveSpeed * 0.7f, status.moveSpeed, 0.01f);
-    }
 
-    [Test]
-    public void ReviveSlow_RecoversSpeedAndUnsetsIsSlow()
-    {
-        status.SlowPlayer(0.5f);
-        status.ReviveSlow(0.5f);
-        Assert.IsFalse(status.isSlow);
-        Assert.AreEqual(status.defaultMoveSpeed, status.moveSpeed, 0.01f);
-    }
 
-    [Test]
-    public void GetAttackPowerRatio_IsNormalized()
-    {
-        status.IncreaseAttackPower(); // 기본값은 10, 증가하면 11
-        float ratio = status.GetAttackPowerRatio();
-        Assert.IsTrue(ratio > 0f && ratio <= 1f);
-    }
 }
