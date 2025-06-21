@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class ProfessorController : MonoBehaviour
+public class ProfessorController : MonoBehaviour, IMonsterController
 {
     private bool facingForward = true;
     public float rotateDuration = 0.2f;
@@ -18,6 +18,17 @@ public class ProfessorController : MonoBehaviour
 
     private Vector3 lastPlayerPosition;
 
+    public void SetLevel(int level)
+    {
+        // Example growth rates, adjust as needed
+        float facingForwardTimeGrowth = 0.05f;
+        float facingBackwardTimeGrowth = 0.03f;
+        float stunTimeGrowth = 0.1f;
+
+        facingForwardTime += facingForwardTime * facingForwardTimeGrowth * level;
+        facingBackwardTime += facingBackwardTime * facingBackwardTimeGrowth * level;
+        stunTime += stunTime * stunTimeGrowth * level;
+    }
 
     void Start()
     {
@@ -128,4 +139,11 @@ public class ProfessorController : MonoBehaviour
         return angleToPlayer < fieldOfView / 2f;
     }
     // ...existing code...
+
+    public void EndMonster()
+    {
+        // Implement any cleanup or end logic for the monster here
+        Debug.Log("ProfessorController EndMonster called.");
+        Destroy(gameObject); // Example: destroy the monster GameObject
+    }
 }

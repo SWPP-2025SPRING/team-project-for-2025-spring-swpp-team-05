@@ -6,5 +6,4 @@ public interface IMonsterController
 {
     void SetLevel(int level);
     void EndMonster();
-    void OnAttack();
 }
