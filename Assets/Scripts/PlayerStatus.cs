@@ -5,10 +5,10 @@ using UnityEngine;
 public class PlayerStatus : MonoBehaviour
 {
     public static PlayerStatus instance { get; private set; }
-
     public float moveSpeed { get; private set; }
     public float attackPower { get; private set; }
     public float attackRange { get; private set; }
+
 
     public float defaultMoveSpeed = 10.0f;
     public float defaultAttackPower = 10;

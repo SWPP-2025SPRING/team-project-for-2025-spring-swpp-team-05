@@ -50,6 +50,18 @@ public class PlayerControl : MonoBehaviour
     {
         horizontalInput = Input.GetAxis("Horizontal");
         // TODO: 킥보드로 바꾸고 나서는 킥보드 애니메이션으로 바꾸기
+        if (PlayerStatus.instance.isStun)
+        {
+            horizontalInput = 0f; // 스턴 상태에서는 이동 입력을 무시
+            playerAnimator.SetBool("Stunned", true);
+            return; // 스턴 상태에서는 다른 입력을 무시
+        }
+        else
+        {
+            playerAnimator.SetBool("Stunned", false);
+        }
+
+
         if (PlayerStatus.instance.isReverseControl)
         {
             horizontalInput *= -1f;
