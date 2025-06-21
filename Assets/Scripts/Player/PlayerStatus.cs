@@ -26,6 +26,7 @@ public class PlayerStatus : MonoBehaviour
     public bool isSlow { get; private set; } = false;
     public bool isStun { get; private set; } = false;
     public bool isReverseControl { get; private set; } = false;
+    public bool isStop { get; private set; } = false;
 
     public int level { get; private set; } = 1;
     public int maxLevel { get; private set; } = 50;
@@ -145,6 +146,7 @@ public class PlayerStatus : MonoBehaviour
 
     public void Accelerate(float factor, float dt)
     {
+        if (isStop) return; // 가속 중지 상태면 가속하지 않음
         float targetSpeed = maxSpeed * factor;
         if (moveSpeed < targetSpeed)
         {
@@ -209,5 +211,16 @@ public class PlayerStatus : MonoBehaviour
     private float GetAttackRange(int level)
     {
         return Mathf.Clamp(defaultAttackRange * Mathf.Pow(attackRangeGrowthRate, level - 1), 0, maxAttackRange);
+    }
+
+    public void StopPlayer()
+    {
+        isStop = true;
+        moveSpeed = 0;
+    }
+
+    public void ResumePlayer()
+    {
+        isStop = false;
     }
 }

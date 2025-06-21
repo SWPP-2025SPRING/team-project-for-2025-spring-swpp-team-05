@@ -65,7 +65,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   launchForce: 30
-  horizontalForce: 10
+  horizontalForce: 0
   homingSpeed: 2
   detectionRadius: 10
   attatchDistance: 3

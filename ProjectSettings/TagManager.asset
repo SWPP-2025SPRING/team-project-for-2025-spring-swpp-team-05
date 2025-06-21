@@ -10,6 +10,7 @@ TagManager:
   - Barrel
   - Enemy
   - Terrain
+  - Key
   layers:
   - Default
   - TransparentFX
