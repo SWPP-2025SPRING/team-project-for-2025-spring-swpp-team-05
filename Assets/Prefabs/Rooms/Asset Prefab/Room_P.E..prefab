@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 293967142855822578}
   - component: {fileID: 156902008356638200}
   - component: {fileID: 8078886219740662500}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Box15550
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 4524870475483590845}
   - component: {fileID: 1549801784227062207}
   - component: {fileID: 4675038443776305447}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: street_light_008
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -179,7 +179,7 @@ GameObject:
   - component: {fileID: 1627132809904127397}
   - component: {fileID: 896497236848379347}
   - component: {fileID: 2438384222237034641}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Box14954
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -262,7 +262,7 @@ GameObject:
   - component: {fileID: 6031472559091702880}
   - component: {fileID: 9158115170419107902}
   - component: {fileID: 1270683252583383476}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Box15546
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -345,7 +345,7 @@ GameObject:
   - component: {fileID: 7107971715470998969}
   - component: {fileID: 7084962267580998511}
   - component: {fileID: 1871934738585591105}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Box15545
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -428,7 +428,7 @@ GameObject:
   - component: {fileID: 1331278272626110976}
   - component: {fileID: 9065304788490943887}
   - component: {fileID: 5976516890728317877}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Box14969
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -512,7 +512,7 @@ GameObject:
   - component: {fileID: 363285708564113617}
   - component: {fileID: 965292261532581112}
   - component: {fileID: 1866993070947021337}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Box15554
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -596,7 +596,7 @@ GameObject:
   - component: {fileID: 1506995292019934871}
   - component: {fileID: 7659715152474678758}
   - component: {fileID: 4039146718819511647}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: street_light_011
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -680,7 +680,7 @@ GameObject:
   - component: {fileID: 3986635379651394353}
   - component: {fileID: 7866241529838858704}
   - component: {fileID: 8530945840717262958}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Plane1292
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -763,7 +763,7 @@ GameObject:
   - component: {fileID: 4890384191263307995}
   - component: {fileID: 7516855656766449192}
   - component: {fileID: 1490860801799877574}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Box15555
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -847,7 +847,7 @@ GameObject:
   - component: {fileID: 5852481974352375470}
   - component: {fileID: 2273546039156047981}
   - component: {fileID: 6377081348616901678}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Object283
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -934,7 +934,7 @@ GameObject:
   - component: {fileID: 2896871885030461133}
   - component: {fileID: 1928775535653749753}
   - component: {fileID: 3901269597411561837}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Box15536
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1017,7 +1017,7 @@ GameObject:
   - component: {fileID: 4041494497210790348}
   - component: {fileID: 8863505491630386846}
   - component: {fileID: 279869178564783130}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Box14976
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1100,7 +1100,7 @@ GameObject:
   - component: {fileID: 1465585868461340521}
   - component: {fileID: 7632520709718125929}
   - component: {fileID: 6397779369974667848}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Box15542
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1183,7 +1183,7 @@ GameObject:
   - component: {fileID: 1964748490934517095}
   - component: {fileID: 3766841277812048878}
   - component: {fileID: 668151968588002347}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Rectangle004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1266,7 +1266,7 @@ GameObject:
   - component: {fileID: 1910115088678370826}
   - component: {fileID: 4448669396438545006}
   - component: {fileID: 5851991415800468374}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Box15538
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1349,7 +1349,7 @@ GameObject:
   - component: {fileID: 613635955424057829}
   - component: {fileID: 3710104735650456519}
   - component: {fileID: 8805605781950099862}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: street_light_010
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1433,7 +1433,7 @@ GameObject:
   - component: {fileID: 4757970899613969530}
   - component: {fileID: 3585403556542523990}
   - component: {fileID: 3414993710094980698}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: street_light_009
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1517,7 +1517,7 @@ GameObject:
   - component: {fileID: 2864962940434464514}
   - component: {fileID: 7049180954416809844}
   - component: {fileID: 1121911328225121571}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Box15549
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1600,7 +1600,7 @@ GameObject:
   - component: {fileID: 7715817659272566566}
   - component: {fileID: 7413492655053423554}
   - component: {fileID: 3251474509557885410}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Box15551
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1684,7 +1684,7 @@ GameObject:
   - component: {fileID: 2307285265649314132}
   - component: {fileID: 8364337906680324658}
   - component: {fileID: 3202493818513054679}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Box14890
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1767,7 +1767,7 @@ GameObject:
   - component: {fileID: 7848401239362797339}
   - component: {fileID: 2882497632533907041}
   - component: {fileID: 882410267033102476}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Box15537
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1904,7 +1904,7 @@ GameObject:
   - component: {fileID: 1919967332995689244}
   - component: {fileID: 773070357664508041}
   - component: {fileID: 4075103224320560150}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Box15553
   m_TagString: Untagged
   m_Icon: {fileID: 0}

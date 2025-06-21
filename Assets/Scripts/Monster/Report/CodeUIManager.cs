@@ -11,7 +11,7 @@ public class CodeUIManager : MonoBehaviour
     public TextMeshProUGUI nextCodeText;
     public TextMeshProUGUI nextNextCodeText;
 
-    private bool isActive = false;
+    private bool isActive = true;
 
     void Awake()
     {
