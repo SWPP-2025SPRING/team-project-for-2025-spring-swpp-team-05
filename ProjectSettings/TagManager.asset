@@ -8,16 +8,19 @@ TagManager:
   - Bomb
   - Ground
   - Barrel
+  - Enemy
+  - Terrain
+  - Key
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Props
+  - Building
+  - Monster
   - 
   - 
   - 

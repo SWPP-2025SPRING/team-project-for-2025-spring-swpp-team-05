@@ -32,21 +32,13 @@ public class ReportController : MonoBehaviour, IMonsterController
     {
         // --- Growth Rates ---
         float speedGrowth = 0.05f;
-        float launchForceGrowth = 2f;
-        float horizontalForceGrowth = 0.3f;
         float homingSpeedGrowth = 2f;          // applies to log growth
-        float detectionRadiusGrowth = 0.2f;
-        float attachDistanceReduction = 0.03f; // 줄어드는 값
-        float stunRateGrowth = 2f;
+        float stunRateGrowth = 0.05f;
         int codeLengthGrowth = 1;
 
         // --- Apply Growth ---
         speed += speed * speedGrowth * level;
-        launchForce += launchForce * launchForceGrowth * level;
-        horizontalForce += horizontalForce * horizontalForceGrowth * level;
         homingSpeed += homingSpeed * homingSpeedGrowth * level;
-        detectionRadius += detectionRadius * detectionRadiusGrowth * level;
-        attatchDistance -= attachDistanceReduction * level; // 줄어드는 값
         stunRate += stunRateGrowth * level;
         codeLength += codeLengthGrowth * level;
     }

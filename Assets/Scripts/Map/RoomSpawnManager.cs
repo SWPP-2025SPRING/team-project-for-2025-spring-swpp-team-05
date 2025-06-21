@@ -12,6 +12,10 @@ public class RoomSpawnManager : MonoBehaviour
     public int monsterCoefficient = 2; // Monster Tier Coefficient
     public static float growthRate = 0.2f;
 
+    [Header("Room Spawn Options")]
+    public bool isStaticSpawn = true; // If true, monsters will spawn at fixed positions
+    public Vector3[] staticSpawnPositions; // Fixed spawn positions for monsters
+
     private BoxCollider roomCollider;
     private Vector3 roomCenter;
     private float roomXSize;
@@ -22,6 +26,11 @@ public class RoomSpawnManager : MonoBehaviour
 
     private MonsterFactory monsterFactory;
     private bool isSpawned = false;
+
+
+    [Header("About Room")]
+    public string roomName = "Default Room"; // Name of the room for debugging
+    public string roomDescription = "This is a default room for monster spawning."; // Description of the room for debugging
 
     // Start is called before the first frame update
     void Start()
@@ -44,7 +53,10 @@ public class RoomSpawnManager : MonoBehaviour
         if (other.CompareTag("Player") && !isSpawned)
         {
             isSpawned = true; // Set the flag to true to prevent multiple spawns
-            StartCoroutine(SpawnCoroutine());
+            if (monsterType != MonsterType.None)
+            {
+                StartCoroutine(SpawnCoroutine());
+            }
         }
     }
 
@@ -59,7 +71,7 @@ public class RoomSpawnManager : MonoBehaviour
 
     public IEnumerator SpawnCoroutine()
     {
-        Vector3 cameraFocusPosition = roomCenter + new Vector3(0, 20, 20);
+        Vector3 cameraFocusPosition = roomCenter + new Vector3(0, 30, 30);
         GameObject target = gameObject;
         IEnumerator spawnEvent = SpawnEventCoroutine();
         yield return StartCoroutine(CinematicCamera.Instance.StartCinematic(
@@ -69,8 +81,17 @@ public class RoomSpawnManager : MonoBehaviour
 
     public IEnumerator SpawnEventCoroutine()
     {
+        TitleManager.Instance.ShowTitle(roomName, Color.white, FlashPreset.StandardFlash);
         yield return new WaitForSecondsRealtime(0.5f); // Wait for a moment before spawning monsters
-        SpawnMonsters();
+        if (isStaticSpawn)
+        {
+            SpawnMonstersAtFixedPositions();
+        }
+        else
+        {
+            SpawnMonsters();
+        }
+        TitleManager.Instance.ShowSubtitle(roomDescription, Color.white, FlashPreset.StandardFlash);
         yield return new WaitForSecondsRealtime(0.5f); // Wait for a moment after spawning
     }
 
@@ -95,6 +116,19 @@ public class RoomSpawnManager : MonoBehaviour
                 Quaternion spawnRot = Quaternion.Euler(0, Random.Range(0, 360), 0);
                 GameObject monster = monsterFactory.CreateMonster(monsterType, roomLevel, spawnPos, spawnRot, transform);
             }
+        }
+    }
+
+    public void SpawnMonstersAtFixedPositions()
+    {
+        monsterFactory = new MonsterFactory();
+        remainMonsterCount = staticSpawnPositions.Length;
+
+        for (int i = 0; i < staticSpawnPositions.Length; i++)
+        {
+            Vector3 spawnPos = staticSpawnPositions[i] + roomCenter;
+            Quaternion spawnRot = Quaternion.Euler(0, Random.Range(0, 360), 0);
+            GameObject monster = monsterFactory.CreateMonster(monsterType, roomLevel, spawnPos, spawnRot, transform);
         }
     }
 
