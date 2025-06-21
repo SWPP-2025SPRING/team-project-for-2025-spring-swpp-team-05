@@ -109,10 +109,8 @@ public class PlayerStatus : MonoBehaviour
 
     IEnumerator StunPlayerCoroutine(float stunTime)
     {
-        float tempSpeed = moveSpeed;
         moveSpeed = 0;
         yield return new WaitForSeconds(stunTime);
-        moveSpeed = tempSpeed;
         isStun = false;
     }
 
