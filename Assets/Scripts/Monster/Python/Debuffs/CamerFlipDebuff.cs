@@ -35,6 +35,7 @@ public class CameraFlipDebuff : IDebuff
         if (followScript != null)
         {
             followScript.SetFlipped(true);
+            DebufManager.Instance.UpdateDebufText(DebufType.CameraFlip);
         }
 
         yield return new WaitForSeconds(Duration);
@@ -42,6 +43,7 @@ public class CameraFlipDebuff : IDebuff
         if (followScript != null)
         {
             followScript.SetFlipped(false); // 👈 원복
+            DebufManager.Instance.UpdateDebufText(DebufType.None);
         }
     }
 }

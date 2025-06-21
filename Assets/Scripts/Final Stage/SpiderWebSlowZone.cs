@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class SpiderWebSlowZone : MonoBehaviour
 {
-    public float knockbackDistance = 15f;
-    public float knockbackDuration = 0.2f;
+    public float knockbackForce = 32f; // 밀려나는 힘
+    public float upwardForce = 9f;     // 살짝 위로 튕기는 느낌
+    public float cooldownTime = 0.5f;
 
     public int maxHitCount = 3;
 
@@ -16,47 +17,38 @@ public class SpiderWebSlowZone : MonoBehaviour
     {
         if (collision.collider.CompareTag("Player") && !isCooldown)
         {
-            currentHitCount++;
-            StartCoroutine(Knockback(collision.collider.gameObject));
-            StartCoroutine(ShakeWeb());
-
-            if (currentHitCount >= maxHitCount)
+            Rigidbody playerRb = collision.collider.GetComponent<Rigidbody>();
+            if (playerRb != null)
             {
-                Destroy(gameObject); // 거미줄 제거
+                // Debug.Log("💥 거미줄 충돌!");
+                currentHitCount++;
+
+                // 1. 방향은 수평(xz 평면) 기준으로 계산
+                Vector3 horizontalDir = collision.collider.transform.position - transform.position;
+                horizontalDir.y = 0f; // 위 방향 제거
+                horizontalDir.Normalize();
+
+                // 2. 수평 + 위로 살짝 힘 분리
+                Vector3 knockback = horizontalDir * knockbackForce + Vector3.up * upwardForce;
+
+                // Debug.Log("📦 최종 knockback force: " + knockback);
+                playerRb.AddForce(knockback, ForceMode.Impulse);
+
+                StartCoroutine(CooldownCoroutine());
+                StartCoroutine(ShakeWeb());
+
+                if (currentHitCount >= maxHitCount)
+                {
+                    Destroy(gameObject);
+                }
             }
         }
     }
 
-    private System.Collections.IEnumerator Knockback(GameObject player)
+    private IEnumerator CooldownCoroutine()
     {
         isCooldown = true;
-
-        Vector3 dir = (player.transform.position - transform.position).normalized;
-        dir.z = -3.0f;
-        dir.y = 0.02f;
-        dir.Normalize();
-
-        Vector3 targetPos = player.transform.position + dir * knockbackDistance;
-
-        float elapsed = 0f;
-        float duration = knockbackDuration;
-
-        Vector3 start = player.transform.position;
-
-        while (elapsed < duration)
-        {
-            float t = elapsed / duration;
-            // Ease-out curve: 느리게 끝나도록 조절
-            float easedT = 1f - Mathf.Pow(1f - t, 2f); // (1 - (1-t)^2)
-            player.transform.position = Vector3.Lerp(start, targetPos, easedT);
-
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
-        player.transform.position = targetPos;
-
-        yield return new WaitForSeconds(0.2f); // 짧은 쿨타임
+        yield return new WaitForSeconds(cooldownTime);
         isCooldown = false;
     }
 
