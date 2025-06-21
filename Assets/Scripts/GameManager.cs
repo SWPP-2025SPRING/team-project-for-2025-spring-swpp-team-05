@@ -43,9 +43,12 @@ public class GameManager : MonoBehaviour
             elapsedTime += Time.deltaTime;
 
             float speed = PlayerStatus.instance.moveSpeed * 3.6f;
+            // TODO: 공격 스탯 필요없다는 결론 나오면 다 삭제
+            float atkRatio = PlayerStatus.instance.GetAttackPowerRatio();
+            float rangeRatio = PlayerStatus.instance.GetAttackRangeRatio();
 
             uiManager.UpdateTimer(elapsedTime);
-            uiManager.UpdateStats(speed);
+            uiManager.UpdateStats(speed, atkRatio, rangeRatio);
         }
     }
 
