@@ -71,7 +71,7 @@ public class RoomSpawnManager : MonoBehaviour
 
     public IEnumerator SpawnCoroutine()
     {
-        Vector3 cameraFocusPosition = roomCenter + new Vector3(0, 20, 20);
+        Vector3 cameraFocusPosition = roomCenter + new Vector3(0, 30, 30);
         GameObject target = gameObject;
         IEnumerator spawnEvent = SpawnEventCoroutine();
         yield return StartCoroutine(CinematicCamera.Instance.StartCinematic(
