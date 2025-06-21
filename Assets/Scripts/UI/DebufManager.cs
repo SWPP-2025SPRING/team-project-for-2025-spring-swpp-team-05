@@ -13,7 +13,8 @@ public enum DebufType
     Slip,
     Mosquito,
     CameraTilt,
-    CameraBlur
+    CameraBlur,
+    CameraFlip
 }
 
 public class DebufManager : MonoBehaviour
