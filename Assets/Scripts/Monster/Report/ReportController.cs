@@ -2,30 +2,46 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ReportController : MonoBehaviour
+public class ReportController : MonoBehaviour, IMonsterController
 {
-    public float speed = 0.5f;
+    [Header("Report Settings")]
     private GameObject player;
     private Rigidbody reportRigidbody;
     private Animator reportAnimator;
 
+    [Header("Report Status Settings(Base)")]
+    public float speed = 0.5f;
     public float launchForce = 70f;
     public float horizontalForce = 3f;
     public float homingSpeed = 5f;
     public float detectionRadius = 5f;
+
+    [Header("Report Attack Settings")]
     public float attatchDistance = 0.3f;
-
-
-
-    private bool isLaunched = false;
-    private bool isAttatched = false;
-    private Vector3 attachOffset;
-
-    // Stun Player
     public float stunRate = 10f;
     public int codeLength = 6;
     private SolveCode solveCode;
 
+
+    [Header("Flags & Temps")]
+    private bool isLaunched = false;
+    private bool isAttatched = false;
+    private Vector3 attachOffset;
+
+    public void SetLevel(int level)
+    {
+        // --- Growth Rates ---
+        float speedGrowth = 0.05f;
+        float homingSpeedGrowth = 2f;          // applies to log growth
+        float stunRateGrowth = 0.05f;
+        int codeLengthGrowth = 1;
+
+        // --- Apply Growth ---
+        speed += speed * speedGrowth * level;
+        homingSpeed += homingSpeed * homingSpeedGrowth * level;
+        stunRate += stunRateGrowth * level;
+        codeLength += codeLengthGrowth * level;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -60,7 +76,7 @@ public class ReportController : MonoBehaviour
 
             if (distance < attatchDistance)
             {
-                AttackStart();
+                OnAttack();
             }
         }
         if (!isLaunched && !isAttatched)
@@ -82,7 +98,7 @@ public class ReportController : MonoBehaviour
     }
 
 
-    void AttackStart()
+    public void OnAttack()
     {
         Debug.Log("Attached");
         isAttatched = true;
@@ -109,7 +125,7 @@ public class ReportController : MonoBehaviour
         transform.rotation = targetRotation * correction;
     }
 
-    public void KnockOut()
+    public void EndMonster()
     {
         Destroy(gameObject);
     }

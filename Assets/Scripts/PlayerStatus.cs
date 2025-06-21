@@ -17,8 +17,15 @@ public class PlayerStatus : MonoBehaviour
     private float slowRateAgg = 0f;
     public bool isSlow { get; private set; } = false;
     public bool isStun { get; private set; } = false;
+    public bool isReverseControl { get; private set; } = false;
 
     public int level { get; private set; } = 1;
+    public int maxLevel { get; private set; } = 50;
+
+    public float speedGrowthRate = 1.2f; // 속도 성장률
+    public float attackGrowthRate = 1.1f; // 공격력 성장률
+    public float attackRangeGrowthRate = 1.1f; // 공격 범위 성장률
+
 
     //public int exp { get; private set; } = 0;
     //public int nextExp { get; private set; } = 100;
@@ -46,11 +53,26 @@ public class PlayerStatus : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    public void LevelUp(int levelIncrement = 1)
+    {
+        level += levelIncrement;
+        if (level > maxLevel)
+        {
+            level = maxLevel;
+        }
+        moveSpeed = GetSpeed(level);
+        attackPower = GetAttackPower(level);
+        attackRange = GetAttackRange(level);
+        GameManager.Instance.uiManager.UpdateLevel(level);
+
+    }
+
     public void SlowPlayer(float slowRate)
     {
         if (!isSlow)
         {
             isSlow = true;
+            DebufManager.Instance.UpdateDebufText(DebufType.Stun);
         }
         slowRateAgg += slowRate;
         moveSpeed = defaultMoveSpeed * (1 - slowRateAgg);
@@ -75,6 +97,7 @@ public class PlayerStatus : MonoBehaviour
         if (slowRateAgg < 0.01f)
         {
             isSlow = false;
+            DebufManager.Instance.UpdateDebufText(DebufType.None);
         }
     }
 
@@ -91,6 +114,19 @@ public class PlayerStatus : MonoBehaviour
         yield return new WaitForSeconds(stunTime);
         moveSpeed = tempSpeed;
         isStun = false;
+    }
+
+    public void SetReverseControl(bool isReverse)
+    {
+        isReverseControl = isReverse;
+        if (isReverse)
+        {
+            DebufManager.Instance.UpdateDebufText(DebufType.ControlInversion);
+        }
+        else
+        {
+            DebufManager.Instance.UpdateDebufText(DebufType.None);
+        }
     }
 
     public void IncreaseAttackPower()
@@ -121,5 +157,20 @@ public class PlayerStatus : MonoBehaviour
     public void DecreaseSpeed()
     {
         moveSpeed = Mathf.Max(moveSpeed - speedStep, minMoveSpeed);
+    }
+
+    private float GetSpeed(int level)
+    {
+        return Mathf.Clamp(defaultMoveSpeed * Mathf.Pow(speedGrowthRate, level - 1), minMoveSpeed, maxMoveSpeed);
+    }
+
+    private float GetAttackPower(int level)
+    {
+        return Mathf.Clamp(defaultAttackPower * Mathf.Pow(attackGrowthRate, level - 1), 0, maxAttackPower);
+    }
+
+    private float GetAttackRange(int level)
+    {
+        return Mathf.Clamp(defaultAttackRange * Mathf.Pow(attackRangeGrowthRate, level - 1), 0, maxAttackRange);
     }
 }

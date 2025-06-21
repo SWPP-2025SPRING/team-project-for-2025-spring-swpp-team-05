@@ -4,11 +4,17 @@ using UnityEngine;
 
 public class RoomSpawnManager : MonoBehaviour
 {
-    public GameObject roomPrefab;
+    [Header("Monster Spawn Settings")]
+    public MonsterType monsterType = MonsterType.Report;
+
+    [Header("Room Level Settings")]
     public int roomLevel = 2;
     public int monsterCoefficient = 2; // Monster Tier Coefficient
+    public static float growthRate = 0.2f;
 
-    private static float growthRate = 0.2f;
+    [Header("Room Spawn Options")]
+    public bool isStaticSpawn = true; // If true, monsters will spawn at fixed positions
+    public Vector3[] staticSpawnPositions; // Fixed spawn positions for monsters
 
     private BoxCollider roomCollider;
     private Vector3 roomCenter;
@@ -18,7 +24,13 @@ public class RoomSpawnManager : MonoBehaviour
     private int monsterCount;
     private int remainMonsterCount;
 
-    private List<GameObject> summonedMonsters;
+    private MonsterFactory monsterFactory;
+    private bool isSpawned = false;
+
+
+    [Header("About Room")]
+    public string roomName = "Default Room"; // Name of the room for debugging
+    public string roomDescription = "This is a default room for monster spawning."; // Description of the room for debugging
 
     // Start is called before the first frame update
     void Start()
@@ -38,9 +50,13 @@ public class RoomSpawnManager : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !isSpawned)
         {
-            SpawnMonsters();
+            isSpawned = true; // Set the flag to true to prevent multiple spawns
+            if (monsterType != MonsterType.None)
+            {
+                StartCoroutine(SpawnCoroutine());
+            }
         }
     }
 
@@ -48,15 +64,42 @@ public class RoomSpawnManager : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            DestroyMonsters();
+            monsterFactory?.DestroyMonsters();
+            PlayerStatus.instance.LevelUp(roomLevel);
         }
+    }
+
+    public IEnumerator SpawnCoroutine()
+    {
+        Vector3 cameraFocusPosition = roomCenter + new Vector3(0, 20, 20);
+        GameObject target = gameObject;
+        IEnumerator spawnEvent = SpawnEventCoroutine();
+        yield return StartCoroutine(CinematicCamera.Instance.StartCinematic(
+            CinematicCamera.Instance.FocusCinematic(target, cameraFocusPosition, 2f, 2f, spawnEvent)
+        ));
+    }
+
+    public IEnumerator SpawnEventCoroutine()
+    {
+        TitleManager.Instance.ShowTitle(roomName, Color.white, FlashPreset.StandardFlash);
+        yield return new WaitForSecondsRealtime(0.5f); // Wait for a moment before spawning monsters
+        if (isStaticSpawn)
+        {
+            SpawnMonstersAtFixedPositions();
+        }
+        else
+        {
+            SpawnMonsters();
+        }
+        TitleManager.Instance.ShowSubtitle(roomDescription, Color.white, FlashPreset.StandardFlash);
+        yield return new WaitForSecondsRealtime(0.5f); // Wait for a moment after spawning
     }
 
     public void SpawnMonsters()
     {
-        monsterCount = monsterAmount();
+        monsterFactory = new MonsterFactory();
+        monsterCount = ProperMonsterAmount();
         remainMonsterCount = monsterCount;
-        summonedMonsters = new List<GameObject>();
 
         float aspect = roomXSize / roomZSize;
         int col = Mathf.CeilToInt(Mathf.Sqrt(monsterCount * aspect));
@@ -71,23 +114,25 @@ public class RoomSpawnManager : MonoBehaviour
 
                 Vector3 spawnPos = summonPosition(index, row, col);
                 Quaternion spawnRot = Quaternion.Euler(0, Random.Range(0, 360), 0);
-                GameObject monster = Instantiate(roomPrefab, spawnPos, spawnRot);
-                monster.transform.SetParent(transform);
-                summonedMonsters.Add(monster);
+                GameObject monster = monsterFactory.CreateMonster(monsterType, roomLevel, spawnPos, spawnRot, transform);
             }
         }
     }
 
-    public void DestroyMonsters()
+    public void SpawnMonstersAtFixedPositions()
     {
-        foreach (GameObject monster in summonedMonsters)
+        monsterFactory = new MonsterFactory();
+        remainMonsterCount = staticSpawnPositions.Length;
+
+        for (int i = 0; i < staticSpawnPositions.Length; i++)
         {
-            Destroy(monster);
+            Vector3 spawnPos = staticSpawnPositions[i] + roomCenter;
+            Quaternion spawnRot = Quaternion.Euler(0, Random.Range(0, 360), 0);
+            GameObject monster = monsterFactory.CreateMonster(monsterType, roomLevel, spawnPos, spawnRot, transform);
         }
-        summonedMonsters.Clear();
     }
 
-    private int monsterAmount()
+    public int ProperMonsterAmount()
     {
         return Mathf.CeilToInt(monsterCoefficient * Mathf.Exp(roomLevel * growthRate));
     }
