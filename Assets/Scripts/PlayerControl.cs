@@ -31,6 +31,14 @@ public class PlayerControl : MonoBehaviour
     private char nextCode = ' ';
     private char nextNextCode = ' ';
 
+    // Ice Obstacle Interaction
+
+    private bool isOnIce = false;
+    private bool justEnteredIce = false;
+    private Vector3 iceMomentum = Vector3.zero;
+    private float iceBoostMultiplier = 3f;
+    private float iceLerpFactor = 0.02f;
+
 
     // Start is called before the first frame update
     void Start()
@@ -48,7 +56,7 @@ public class PlayerControl : MonoBehaviour
         horizontalInput = Input.GetAxis("Horizontal");
         // TODO: 킥보드로 바꾸고 나서는 킥보드 애니메이션으로 바꾸기
 
-        if (Mathf.Abs(horizontalInput) > 0.01f)
+        if (!isOnIce && Mathf.Abs(horizontalInput) > 0.01f)
         {
             Quaternion turnRotation = Quaternion.Euler(0, horizontalInput * 100 * Time.deltaTime, 0);
             transform.rotation *= turnRotation;
@@ -63,22 +71,62 @@ public class PlayerControl : MonoBehaviour
                 TrySolveStun(inputChar);
             }
         }
+
+
+        // TODO: UI, player 테스트용, 후에 지우기 
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            PlayerStatus.instance.IncreaseSpeed();
+        }
+
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            PlayerStatus.instance.DecreaseSpeed();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            PlayerStatus.instance.IncreaseAttackPower();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            PlayerStatus.instance.IncreaseAttackRange();
+        }
+
+
     }
 
     void FixedUpdate()
     {
         if (gameManager.isGameActive)
         {
+
             MovePlayerForward();
         }
     }
 
     void MovePlayerForward()
     {
-        playerAnimator.SetFloat("Speed_f", PlayerStatus.instance.moveSpeed / PlayerStatus.instance.defaultMoveSpeed);
-        Vector3 moveDirection = transform.forward;
-        Vector3 newPosition = transform.position + moveDirection * PlayerStatus.instance.moveSpeed * Time.deltaTime;
+
+        Vector3 velocity;
+        if (isOnIce)
+        {
+            velocity = HandleIceMovement(transform.forward);
+            playerAnimator.speed = 0.2f;
+        }
+        else
+        {
+            velocity = transform.forward * PlayerStatus.instance.moveSpeed;
+            playerAnimator.speed = 1.0f;
+        }
+
+        Vector3 newPosition = transform.position + velocity * Time.deltaTime;
         playerRb.MovePosition(newPosition);
+
+        // 애니메이션 동작 결정
+        float animationSpeed = PlayerStatus.instance.moveSpeed / PlayerStatus.instance.defaultMoveSpeed;
+        playerAnimator.SetFloat("Speed_f", animationSpeed);
 
     }
 
@@ -110,7 +158,7 @@ public class PlayerControl : MonoBehaviour
                 (GameObject enemy, float rate, float duration) = solveCode.GetEnemy();
                 PlayerStatus.instance.ReviveSlow(rate);
                 // 몬스터 퇴치
-                enemy.GetComponent<ReportController>().KnockOut();
+                enemy.GetComponent<ReportController>().EndMonster();
 
                 // 다음 코드로 넘어가기
                 stunQ.Dequeue();
@@ -173,5 +221,35 @@ public class PlayerControl : MonoBehaviour
         {
             codeText.gameObject.SetActive(false);
         }
+    }
+
+    public void EnterIceZone()
+    {
+        isOnIce = true;
+        justEnteredIce = true;
+        iceMomentum = Vector3.zero;
+    }
+
+    public void ExitIceZone()
+    {
+        isOnIce = false;
+        justEnteredIce = false;
+        iceMomentum = Vector3.zero;
+    }
+
+    private Vector3 HandleIceMovement(Vector3 baseDirection)
+    {
+        if (justEnteredIce)
+        {
+            iceMomentum = baseDirection * PlayerStatus.instance.moveSpeed * iceBoostMultiplier;
+            justEnteredIce = false;
+        }
+        else
+        {
+            Vector3 target = baseDirection * PlayerStatus.instance.moveSpeed;
+            iceMomentum = Vector3.Lerp(iceMomentum, target, iceLerpFactor);
+        }
+
+        return iceMomentum;
     }
 }
