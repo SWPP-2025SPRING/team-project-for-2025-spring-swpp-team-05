@@ -116,7 +116,7 @@ public class ProfessorController : MonoBehaviour
         }
     }
 
-    private bool IsPlayerInView()
+    public bool IsPlayerInView()
     {
         if (player == null) return false;
         Debug.Log("Checking if player is in view...");

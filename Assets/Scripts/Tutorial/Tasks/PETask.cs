@@ -5,25 +5,34 @@ using System.Collections;
 
 public class PETask : MonoBehaviour, ITutorialTask
 {
+    [Header("References")]
     private TutorialRoomManager roomManager;
+
+    [Header("Task Settings")]
+    private int hitCount = 0;
+    [SerializeField] private int requiredHits = 2;
 
     public void Initialize(TutorialRoomManager manager) => roomManager = manager;
 
     public void StartTask()
     {
-        // 몬스터 관련 초기화
+        hitCount = 0;
+        roomManager?.UpdateTaskProgress($"공에 맞은 횟수: {hitCount}/{requiredHits}");
     }
 
     public void Cleanup()
     {
-        // 정리 작업
+
     }
 
-    public string GetTaskDescription() => "던지는 공과 부딛혀 보세요!";
+    public string GetTaskDescription() => "PE 몬스터가 던진 공에 두 번 맞아 보세요!";
 
-    private void OnCollisionEnter(Collision collision)
+    public void NotifyProjectileHit()
     {
-        if (collision.gameObject.CompareTag("Player") && roomManager != null)
+        hitCount++;
+        roomManager?.UpdateTaskProgress($"공에 맞은 횟수: {hitCount}/{requiredHits}");
+
+        if (hitCount >= requiredHits && roomManager != null)
         {
             roomManager.CompleteTask();
         }
