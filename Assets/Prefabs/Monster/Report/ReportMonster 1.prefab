@@ -64,12 +64,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  launchForce: 30
+  launchForce: 5
   horizontalForce: 0
-  homingSpeed: 2
+  homingSpeed: 4
   detectionRadius: 10
   attatchDistance: 3
-  stunRate: 0.1
+  stunRate: 0.2
   codeLength: 4
 --- !u!65 &4158691759673839687
 BoxCollider:

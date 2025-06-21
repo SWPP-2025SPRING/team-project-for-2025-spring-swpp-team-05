@@ -46,7 +46,7 @@ public class PlayerStatus : MonoBehaviour
     // TODO: 공격 스탯 필요없다는 결론 나오면 다 삭제
     public static readonly float maxAttackPower = 100f;
     public static readonly float maxAttackRange = 10f;
-    public static readonly float speedStep = 2f;
+    public static readonly float speedStep = 1.5f;
     public static readonly float attackStep = 1f;
 
     private void Awake()
@@ -222,5 +222,10 @@ public class PlayerStatus : MonoBehaviour
     public void ResumePlayer()
     {
         isStop = false;
+    }
+
+    public void SetSpeedZero()
+    {
+        moveSpeed = 0;
     }
 }

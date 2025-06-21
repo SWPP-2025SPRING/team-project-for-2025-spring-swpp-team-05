@@ -11,6 +11,7 @@ TagManager:
   - Enemy
   - Terrain
   - Key
+  - Road
   layers:
   - Default
   - TransparentFX
@@ -21,7 +22,7 @@ TagManager:
   - Props
   - Building
   - Monster
-  - 
+  - Wall
   - 
   - 
   - 
