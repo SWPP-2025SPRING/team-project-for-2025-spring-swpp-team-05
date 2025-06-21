@@ -12,6 +12,8 @@ public enum DebufType
     ControlInversion,
     Slip,
     Mosquito,
+    CameraTilt,
+    CameraBlur
 }
 
 public class DebufManager : MonoBehaviour
@@ -58,6 +60,14 @@ public class DebufManager : MonoBehaviour
             case DebufType.Mosquito:
                 StartCoroutine(ShakeText(debufText.transform, 0.1f, 10f, cts.Token));
                 debufText.text = "Mosquito Bite!";
+                break;
+            case DebufType.CameraTilt:
+                StartCoroutine(ShakeText(debufText.transform, 0.1f, 8f, cts.Token));
+                debufText.text = "Camera Tilted!";
+                break;
+            case DebufType.CameraBlur:
+                StartCoroutine(PulseText(debufText.transform, 1f, 1.15f, 1.5f, cts.Token));
+                debufText.text = "Camera Blurred!";
                 break;
             default:
                 if (cts != null)
