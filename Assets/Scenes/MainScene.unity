@@ -443,7 +443,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8331534949740886031, guid: 8dd22730f92634c05bf523590515035e, type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 8331534949740886031, guid: 8dd22730f92634c05bf523590515035e, type: 3}
       propertyPath: m_IsActive
@@ -4024,7 +4024,7 @@ MonoBehaviour:
   player: {fileID: 2093303591}
   obstructionMask:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 512
   sphereRadius: 0.5
 --- !u!1001 &560333732
 PrefabInstance:
@@ -4207,7 +4207,7 @@ GameObject:
   - component: {fileID: 578682988}
   - component: {fileID: 578682987}
   - component: {fileID: 578682990}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13039,7 +13039,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!154 &1974194900
 TerrainCollider:
   m_ObjectHideFlags: 0
@@ -13133,15 +13133,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6269944236674215531, guid: 9c45965d8b6ed1e4aa9fad5524f12162, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -10.94
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6269944236674215531, guid: 9c45965d8b6ed1e4aa9fad5524f12162, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 180.46
+      value: 1.28
       objectReference: {fileID: 0}
     - target: {fileID: 6269944236674215531, guid: 9c45965d8b6ed1e4aa9fad5524f12162, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2398.49
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6269944236674215531, guid: 9c45965d8b6ed1e4aa9fad5524f12162, type: 3}
       propertyPath: m_LocalRotation.w
@@ -14359,6 +14359,19 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6269944236674215531, guid: 9c45965d8b6ed1e4aa9fad5524f12162, type: 3}
   m_PrefabInstance: {fileID: 1974458068}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2093303596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2093303578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c21f2e31a518d41888c120561088b608, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trackInterval: 3
 --- !u!1001 &2100116326
 PrefabInstance:
   m_ObjectHideFlags: 0
