@@ -65,9 +65,9 @@ public class DebufManager : MonoBehaviour
                 StartCoroutine(ShakeText(debufText.transform, 0.1f, 8f, cts.Token));
                 debufText.text = "Camera Tilted!";
                 break;
-            case DebufType.CameraBlur:
+            case DebufType.CameraFlip:
                 StartCoroutine(PulseText(debufText.transform, 1f, 1.15f, 1.5f, cts.Token));
-                debufText.text = "Camera Blurred!";
+                debufText.text = "Camera Flipped!";
                 break;
             default:
                 if (cts != null)
