@@ -1,57 +1,147 @@
 using System;
 using UnityEngine;
+using TMPro;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class TutorialManager : MonoBehaviour
 {
+    [Header("UI References")]
+    [SerializeField] private TutorialUI tutorialUI;
+
+    [Header("Room Settings")]
     [SerializeField] private TutorialRoomManager[] rooms;
+
+    [Header("Player Settings")]
+    [SerializeField] private GameObject player;
+
+    [Header("Scene Settings")]
+    [SerializeField] private string mainSceneName = "MainScene"; 
+
+    private TutorialRoomManager currentRoom;
     private int currentRoomIndex = 0;
+    private bool isPaused = true;
+    private bool awaitingRoomStart = false;
+    private bool tutorialStarted = false;
+    private bool isTutorialComplete = false;
+
+    public static TutorialManager Instance { get; private set; }
+
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
 
     void Start()
     {
-        InitializeRooms();
+        InitializeTutorial();
     }
 
-    void InitializeRooms()
+    void InitializeTutorial()
     {
-        if (rooms == null || rooms.Length == 0)
-        {
-            Debug.LogError("Rooms array is not assigned!");
-            return;
-        }
+        tutorialUI.gameObject.SetActive(true);
 
-        for (int i = 0; i < rooms.Length; i++)
-        {
-            if (rooms[i] != null)
-            {
-                rooms[i].onRoomComplete.AddListener(HandleRoomCompletion);
-                rooms[i].gameObject.SetActive(i == 0);
-            }
-            else
-            {
-                Debug.LogWarning($"[Tutorial] Room at index {i} is null!");
-            }
-        }
-    }
+        ShowTutorial("W: 앞으로 이동\nA: 왼쪽 이동\nS: 뒤로 이동\nD: 오른쪽 이동\n\nF 키를 눌러 시작");
 
-    void HandleRoomCompletion()
-    {
-        currentRoomIndex++;
-
-        if (currentRoomIndex >= rooms.Length || rooms[currentRoomIndex] == null)
-        {
-            Debug.Log("[Tutorial] Tutorial finished!");
-            return;
-        }
-
-        rooms[currentRoomIndex].gameObject.SetActive(true);
-        rooms[currentRoomIndex].ActivateRoom();
-    }
-
-    void OnDestroy()
-    {
         foreach (var room in rooms)
         {
-            room?.onRoomComplete.RemoveListener(HandleRoomCompletion);
+            room.gameObject.SetActive(false);
         }
+
+        PauseGame();
+    }
+
+    void Update()
+    {
+        if (isPaused && Input.GetKeyDown(KeyCode.F))
+        {
+            if (isTutorialComplete)
+            {
+                LoadMainScene();
+            }
+            else if (!tutorialStarted)
+            {
+                tutorialStarted = true;
+                HideTutorial();
+                ActivateRoom(rooms[currentRoomIndex]);
+                ResumeGame();
+            }
+            else if (awaitingRoomStart)
+            {
+                awaitingRoomStart = false;
+                HideTutorial();
+                currentRoom.ActivateRoom();
+                ResumeGame();
+            }
+        }
+    }
+
+    private void ActivateRoom(TutorialRoomManager room)
+    {
+        currentRoom = room;
+        room.gameObject.SetActive(true);
+    }
+
+    public void OnRoomEntered(TutorialRoomManager room)
+    {
+        currentRoom = room;
+        PauseGame();
+        ShowTutorial(room.GetRoomDescription() + "\n\nF 키를 눌러 계속 진행합니다.");
+        awaitingRoomStart = true;
+    }
+
+    public void OnRoomCompleted()
+    {
+        currentRoom.CleanupRoom();
+        currentRoom.gameObject.SetActive(false);
+        currentRoomIndex++;
+        
+        if (currentRoomIndex < rooms.Length)
+        {
+            ActivateRoom(rooms[currentRoomIndex]);
+        }
+        else
+        {
+            isTutorialComplete = true;
+            PauseGame();
+            ShowTutorial("튜토리얼 완료!\n게임을 즐겨주세요.\n\nF키를 눌러 메인 게임으로 이동합니다.");
+        }
+    }
+
+    private void LoadMainScene()
+    {
+        SceneManager.LoadScene(mainSceneName);
+    }
+
+    private void PauseGame()
+    {
+        Time.timeScale = 0.0f;
+        isPaused = true;
+    }
+
+    private void ResumeGame()
+    {
+        Time.timeScale = 1.0f;
+        isPaused = false;
+    }
+
+    private void ShowTutorial(string message)
+    {
+        tutorialUI.ShowTutorial(message);
+        PauseGame();
+    }
+
+    private void HideTutorial()
+    {
+        tutorialUI.HideTutorial();
     }
 }

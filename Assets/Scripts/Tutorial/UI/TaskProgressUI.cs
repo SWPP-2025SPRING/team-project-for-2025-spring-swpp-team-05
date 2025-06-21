@@ -7,11 +7,10 @@ public class TaskProgressUI : MonoBehaviour
     [Header("UI Elements")]
     [SerializeField] private TextMeshProUGUI taskDescriptionText;
     [SerializeField] private TextMeshProUGUI progressText;
-    [SerializeField] private Image completionCheckmark;
 
     void Awake()
     {
-        completionCheckmark?.gameObject.SetActive(false);
+
     }
 
     public void SetTask(string description)
@@ -21,9 +20,6 @@ public class TaskProgressUI : MonoBehaviour
         
         if (progressText != null)
             progressText.text = "";
-        
-        if (completionCheckmark != null)
-            completionCheckmark.gameObject.SetActive(false);
     }
 
     public void UpdateProgress(string progress)
@@ -34,6 +30,6 @@ public class TaskProgressUI : MonoBehaviour
 
     public void ShowCompletion()
     {
-        completionCheckmark?.gameObject.SetActive(true);
+        progressText.text += "\n<color=green>클리어!</color>";
     }
 }

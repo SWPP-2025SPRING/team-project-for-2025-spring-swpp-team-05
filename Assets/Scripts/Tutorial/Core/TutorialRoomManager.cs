@@ -14,7 +14,9 @@ public class TutorialRoomManager : MonoBehaviour
     [Header("Room Elements")]
     [SerializeField] private GameObject exitDoor;
 
-    public UnityEvent onRoomComplete;
+    [Header("Description")]
+    [TextArea]
+    [SerializeField] private string roomDescription;
 
     void Awake()
     {
@@ -40,14 +42,14 @@ public class TutorialRoomManager : MonoBehaviour
         }
 
         currentTask.Initialize(this);
-        
+
         if (taskUI != null)
         {
             taskUI.SetTask(currentTask.GetTaskDescription());
         }
         else
         {
-            Debug.LogWarning("[Tutorial] Task UI not allocated.");
+            Debug.LogWarning("[Tutorial] Task UI not allocate.");
         }
 
         currentTask.StartTask();
@@ -61,12 +63,14 @@ public class TutorialRoomManager : MonoBehaviour
     public void CompleteTask()
     {
         taskUI?.ShowCompletion();
-        exitDoor?.SetActive(true);
-        onRoomComplete?.Invoke();
+        exitDoor?.SetActive(false);
+        TutorialManager.Instance.OnRoomCompleted();
     }
 
     public void CleanupRoom()
     {
         currentTask?.Cleanup();
     }
+    
+    public string GetRoomDescription() => roomDescription;
 }
