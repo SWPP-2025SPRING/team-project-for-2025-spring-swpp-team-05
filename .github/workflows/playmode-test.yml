@@ -1,9 +1,8 @@
 name: Unity PlayMode Tests
 
 on:
-  push:
-    branches: [develop]
-  pull_request:
+    pull_request:
+      types: [opened, edited, synchronize, reopened]
 
 jobs:
   playmode-tests:
