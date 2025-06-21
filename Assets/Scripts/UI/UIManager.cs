@@ -12,6 +12,18 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI levelUpText;
 
+    [Header("Speed Settings")]
+    public float maxPossibleSpeed = 100f;    // 전체 바 최대값
+    public float playerMaxSpeed = 60f;       // 현재 레벨 기준 최대 속도
+
+    [Header("Speed Bar UI")]
+    public RectTransform speedBarBackground;
+    public RectTransform speedBarFill;
+    public RectTransform maxSpeedMarker;
+    public Image speedBarFillImage;
+
+    private float barFullWidth;
+
 
     [Header("Speed Feedback")]
     private float lastSpeed;
@@ -25,6 +37,7 @@ public class UIManager : MonoBehaviour
     // light pink
     private static readonly Color SpeedDownColor = new Color(1f, 0.6f, 0.6f);
 
+
     [Header("Level UI Feedback")]
     public float flashDuration = 0.1f;
     public float fadeDuration = 1.0f;
@@ -34,6 +47,8 @@ public class UIManager : MonoBehaviour
     {
         lastSpeed = defaultSpeed;
         levelUpText.alpha = 0f; // Start with level up text hidden
+        barFullWidth = speedBarBackground.sizeDelta.x;
+        UpdateMaxSpeedMarker();
     }
 
     public void UpdateLevel(int level)
@@ -69,8 +84,14 @@ public class UIManager : MonoBehaviour
     // 2. Speed Update (+Color)
     public void UpdateSpeed(float speed)
     {
+        // 1. Update speed text
         speedText.text = $"<size=96>{speed:F1}</size><size=40> km/h</size>";
 
+        // 2.Update speed bar
+        float speedRatio = Mathf.Clamp01(speed / maxPossibleSpeed);
+        speedBarFill.sizeDelta = new Vector2(barFullWidth * speedRatio, speedBarFill.sizeDelta.y);
+
+        // 3. Flash color based on speed change: text & bar
         if (speed > lastSpeed)
         {
             StartColorTransition(SpeedUpColor);
@@ -81,6 +102,22 @@ public class UIManager : MonoBehaviour
         }
 
         lastSpeed = speed;
+
+    }
+
+    // TODO: Level Up과 함께 구현
+    public void UpdateMaxSpeedMarker()
+    {
+        float ratio = Mathf.Clamp01(playerMaxSpeed / maxPossibleSpeed);
+        float markerX = barFullWidth * ratio;
+
+        maxSpeedMarker.anchoredPosition = new Vector2(markerX, maxSpeedMarker.anchoredPosition.y);
+    }
+
+    public void SetPlayerMaxSpeed(float newSpeed)
+    {
+        playerMaxSpeed = newSpeed;
+        UpdateMaxSpeedMarker();
     }
 
     void StartColorTransition(Color targetColor)
@@ -97,11 +134,13 @@ public class UIManager : MonoBehaviour
         while (t < transitionDuration)
         {
             speedText.color = Color.Lerp(startColor, targetColor, t / transitionDuration);
+            speedBarFillImage.color = Color.Lerp(startColor, targetColor, t / transitionDuration);
             t += Time.deltaTime;
             yield return null;
         }
 
         speedText.color = targetColor;
+        speedBarFillImage.color = targetColor;
 
         yield return new WaitForSeconds(0.2f);
 
@@ -109,11 +148,13 @@ public class UIManager : MonoBehaviour
         while (t < transitionDuration)
         {
             speedText.color = Color.Lerp(targetColor, defaultColor, t / transitionDuration);
+            speedBarFillImage.color = Color.Lerp(targetColor, defaultColor, t / transitionDuration);
             t += Time.deltaTime;
             yield return null;
         }
 
         speedText.color = defaultColor;
+        speedBarFillImage.color = defaultColor;
     }
 
     IEnumerator FlashLevelUpText()

@@ -27,7 +27,9 @@ public class PlayerStatus : MonoBehaviour
 
     // 🔐 고정 상수 (외부 수정 방지)
     public static readonly float minMoveSpeed = 3f;
+    // 1. 현재 레벨에 따른 max Speed
     public static readonly float maxMoveSpeed = 30f;
+    // TODO: 레벨 상관없이 최대 Speed도 알아야됨 (uiManager과 일치시키기)
     public static readonly float speedStep = 2f;
 
     private void Awake()
@@ -40,6 +42,7 @@ public class PlayerStatus : MonoBehaviour
         instance = this;
         moveSpeed = defaultMoveSpeed;
         DontDestroyOnLoad(gameObject);
+        // TODO: uiManager.maxPossibleSpeed 설정해주기
     }
 
     public void LevelUp(int levelIncrement = 1)
@@ -51,6 +54,7 @@ public class PlayerStatus : MonoBehaviour
         }
         moveSpeed = GetSpeed(level);
         GameManager.Instance.uiManager.UpdateLevel(level);
+        // TODO: uiManager.SetPlayerMaxSpeed로 스피드별 최대 속도 건네주기
 
     }
 
