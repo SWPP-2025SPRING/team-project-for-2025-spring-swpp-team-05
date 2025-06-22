@@ -12,6 +12,7 @@ TagManager:
   - Terrain
   - Key
   - Road
+  - Plauer2
   layers:
   - Default
   - TransparentFX

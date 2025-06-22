@@ -65,6 +65,14 @@ public class RoomSpawnManager : MonoBehaviour
                 monsterFactory?.DestroyMonsters(); // Clean up monsters when exiting
                 TitleManager.Instance.HideRoomText();
             }
+            if (monsterType == MonsterType.Report)
+            {
+                PlayerControl playerControl = other.GetComponent<PlayerControl>();
+                if (playerControl != null)
+                {
+                    HandleReportExit(playerControl); // Reset code factory when exiting report
+                }
+            }
         }
     }
     public void HandleEnter(Collider other)
@@ -99,6 +107,10 @@ public class RoomSpawnManager : MonoBehaviour
             if (roomLevel > 1)
             {
                 PlayerStatus.instance.LevelUp(monsterType, roomLevel - 1);
+            }
+            if (monsterType == MonsterType.Report)
+            {
+                HandleReportExit(other.GetComponent<PlayerControl>());
             }
             TitleManager.Instance.HideRoomText();
         }
@@ -208,5 +220,10 @@ public class RoomSpawnManager : MonoBehaviour
             basePos.y,
             basePos.z + zOffset
         );
+    }
+
+    private void HandleReportExit(PlayerControl playerControl)
+    {
+        playerControl.ResetCodeFactory(); // Reset the code factory when exiting the report
     }
 }
