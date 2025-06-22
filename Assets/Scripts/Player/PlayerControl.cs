@@ -112,13 +112,11 @@ public class PlayerControl : MonoBehaviour
             if (isBraking)
             {
                 float decelerationFactor = isOnIce ? 0.5f : 1.0f;
-                Debug.Log("Decelerating with factor: " + decelerationFactor + " With speed: " + PlayerStatus.instance.moveSpeed);
                 PlayerStatus.instance.DeAccelerate(decelerationFactor, Time.deltaTime);
             }
             else
             {
                 float accelerationFactor = isOnIce ? 2.0f : 1.0f;
-                Debug.Log("Accelerating with factor: " + accelerationFactor + " With speed: " + PlayerStatus.instance.moveSpeed);
                 PlayerStatus.instance.Accelerate(accelerationFactor, Time.deltaTime);
             }
 
@@ -186,7 +184,6 @@ public class PlayerControl : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Collision with: " + collision.gameObject.name);
         if (collision.gameObject.CompareTag("Enemy"))
         {
             StartCoroutine(TriggerAttacked());

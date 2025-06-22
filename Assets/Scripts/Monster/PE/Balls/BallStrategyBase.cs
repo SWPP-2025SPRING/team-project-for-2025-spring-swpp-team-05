@@ -31,4 +31,5 @@ public abstract class BallStrategy : IBallStrategy
     }
     public abstract void OnThrow(Vector3[] force);
     public abstract IEnumerator OnAction(Animator animator, Vector3[] ballTransform, Vector3[] force, Action onComplete = null);
+    public abstract IEnumerator OnTrackAction(Animator animator, Vector3[] ballTransform, GameObject player, float force, Action onComplete = null);
 }

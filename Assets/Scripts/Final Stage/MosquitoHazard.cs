@@ -10,8 +10,6 @@ public class MosquitoHazard : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             // PlayerStatus.instance.SlowPlayer(0.3f);
-            Debug.Log("🦟 Mosquito!!");
-
             Camera.main.GetComponent<CameraBlurEffect>()?.TriggerMosquitoBlur();
             DebufManager.Instance.UpdateDebufText(DebufType.Mosquito);
         }
@@ -21,7 +19,6 @@ public class MosquitoHazard : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("🦟 Mosquito zone exited");
             DebufManager.Instance.UpdateDebufText(DebufType.None);
         }
     }

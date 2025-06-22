@@ -9,4 +9,5 @@ public interface IBallStrategy
     void OnBatched(Vector3[] ballTransform);
     void OnThrow(Vector3[] force);
     IEnumerator OnAction(Animator animator, Vector3[] ballTransform, Vector3[] force, Action onComplete);
+    IEnumerator OnTrackAction(Animator animator, Vector3[] ballTransform, GameObject player, float force, Action onComplete);
 }

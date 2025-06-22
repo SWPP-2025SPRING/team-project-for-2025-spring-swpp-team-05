@@ -15,6 +15,7 @@ public class RoomSpawnManager : MonoBehaviour
     [Header("Room Spawn Options")]
     public bool isStaticSpawn = true; // If true, monsters will spawn at fixed positions
     public Vector3[] staticSpawnPositions; // Fixed spawn positions for monsters
+    public Vector3 yOffset = Vector3.zero; // Offset to apply to the y-coordinate of spawn positions
 
     private BoxCollider roomCollider;
     private Vector3 roomCenter;
@@ -26,6 +27,10 @@ public class RoomSpawnManager : MonoBehaviour
 
     private MonsterFactory monsterFactory;
     private bool isSpawned = false;
+    private bool isCleared = false;
+    private bool isOnRoom = false;
+
+    private Vector3 playerPosition = Vector3.zero; // Player's position for debugging
 
 
     [Header("About Room")]
@@ -42,21 +47,11 @@ public class RoomSpawnManager : MonoBehaviour
         roomZSize = roomCollider.size.z;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && !isSpawned)
+        if (other.CompareTag("Player"))
         {
-            isSpawned = true; // Set the flag to true to prevent multiple spawns
-            if (monsterType != MonsterType.None)
-            {
-                StartCoroutine(SpawnCoroutine());
-            }
+            isOnRoom = true; // Set the flag to true when player enters the room
         }
     }
 
@@ -64,10 +59,60 @@ public class RoomSpawnManager : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            monsterFactory?.DestroyMonsters();
-            PlayerStatus.instance.LevelUp(roomLevel);
+            isOnRoom = false;
+            if (!isCleared)
+            {
+                monsterFactory?.DestroyMonsters(); // Clean up monsters when exiting
+                TitleManager.Instance.HideRoomText();
+            }
         }
     }
+    public void HandleEnter(Collider other)
+    {
+        if (!isCleared && !isOnRoom)
+        {
+            playerPosition = other.transform.position; // Store player's position for debugging
+            isSpawned = true; // Set the flag to true to prevent multiple spawns
+            isOnRoom = true;
+            if (monsterType != MonsterType.None)
+            {
+                StartCoroutine(SpawnCoroutine());
+            }
+        }
+        else if (isOnRoom) // 입구로 나가려고함
+        {
+            TitleManager.Instance.ShowEventText("입구로 나갈 수 없습니다.", Color.white, FlashPreset.StandardFlash);
+        }
+        else
+        {
+            TitleManager.Instance.ShowEventText("이 방은 이미 클리어되었습니다.", Color.white, FlashPreset.StandardFlash);
+        }
+    }
+
+    public void HandleExit(Collider other)
+    {
+        if (isOnRoom && !isCleared)
+        {
+            isCleared = true;
+            isOnRoom = false; // Reset the flag when exiting
+            monsterFactory?.DestroyMonsters();
+            if (roomLevel > 1)
+            {
+                PlayerStatus.instance.LevelUp(monsterType, roomLevel - 1);
+            }
+            TitleManager.Instance.HideRoomText();
+        }
+        else if (!isOnRoom) // 출구로 들어올려함
+        {
+            TitleManager.Instance.ShowEventText("출구로 들어올 수 없습니다.", Color.white, FlashPreset.StandardFlash);
+        }
+        else
+        {
+            TitleManager.Instance.ShowEventText("이 방은 이미 클리어되었습니다.", Color.white, FlashPreset.StandardFlash);
+        }
+    }
+
+
 
     public IEnumerator SpawnCoroutine()
     {
@@ -100,6 +145,7 @@ public class RoomSpawnManager : MonoBehaviour
         monsterFactory = new MonsterFactory();
         monsterCount = ProperMonsterAmount();
         remainMonsterCount = monsterCount;
+        TitleManager.Instance.ShowRoomText(MonsterManager.Instance.GetMonsterName(monsterType), monsterCount, roomLevel);
 
         float aspect = roomXSize / roomZSize;
         int col = Mathf.CeilToInt(Mathf.Sqrt(monsterCount * aspect));
@@ -112,7 +158,7 @@ public class RoomSpawnManager : MonoBehaviour
                 int index = r * col + c;
                 if (index >= monsterCount) break;
 
-                Vector3 spawnPos = summonPosition(index, row, col);
+                Vector3 spawnPos = summonPosition(index, row, col) + yOffset;
                 Quaternion spawnRot = Quaternion.Euler(0, Random.Range(0, 360), 0);
                 GameObject monster = monsterFactory.CreateMonster(monsterType, roomLevel, spawnPos, spawnRot, transform);
             }
@@ -123,11 +169,13 @@ public class RoomSpawnManager : MonoBehaviour
     {
         monsterFactory = new MonsterFactory();
         remainMonsterCount = staticSpawnPositions.Length;
+        TitleManager.Instance.ShowRoomText(MonsterManager.Instance.GetMonsterName(monsterType), remainMonsterCount, roomLevel);
 
         for (int i = 0; i < staticSpawnPositions.Length; i++)
         {
-            Vector3 spawnPos = staticSpawnPositions[i] + roomCenter;
-            Quaternion spawnRot = Quaternion.Euler(0, Random.Range(0, 360), 0);
+            Vector3 spawnPos = staticSpawnPositions[i] + roomCenter + yOffset;
+            Vector3 direction = (playerPosition - spawnPos).normalized;
+            Quaternion spawnRot = Quaternion.LookRotation(direction, Vector3.up);
             GameObject monster = monsterFactory.CreateMonster(monsterType, roomLevel, spawnPos, spawnRot, transform);
         }
     }
@@ -145,17 +193,15 @@ public class RoomSpawnManager : MonoBehaviour
         float cellWidth = roomXSize / col;
         float cellHeight = roomZSize / row;
 
-        // Base Positin
         Vector3 basePos = new Vector3(
             roomCenter.x - roomXSize / 2 + cellWidth * (c + 0.5f),
             roomCenter.y + 2f,
             roomCenter.z - roomZSize / 2 + cellHeight * (r + 0.5f)
         );
 
+        float xOffset = Random.Range(-cellWidth * 0.3f, cellWidth * 0.3f);
+        float zOffset = Random.Range(-cellHeight * 0.3f, cellHeight * 0.3f);
 
-        // Random Offset
-        float xOffset = Random.Range(-roomXSize / 3, roomXSize / 3);
-        float zOffset = Random.Range(-roomZSize / 3, roomZSize / 3);
         return new Vector3(
             basePos.x + xOffset,
             basePos.y,

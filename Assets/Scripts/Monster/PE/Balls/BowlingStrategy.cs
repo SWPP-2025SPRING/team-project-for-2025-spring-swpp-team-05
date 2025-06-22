@@ -52,4 +52,21 @@ public class BowlingStrategy : BallStrategy
         yield return new WaitForSeconds(3f);
         onComplete?.Invoke();
     }
+
+    public override IEnumerator OnTrackAction(Animator animator, Vector3[] ballTransform, GameObject player, float force, Action onComplete = null)
+    {
+        SetAnimation(animator);
+        yield return new WaitForSeconds(1.8f);
+        OnBatched(ballTransform);
+        Vector3 playerPosition = player.transform.position;
+        Vector3[] forceVector = new Vector3[ballTransform.Length];
+        for (int i = 0; i < ballTransform.Length; i++)
+        {
+            Vector3 direction = (playerPosition - ballTransform[i]).normalized;
+            forceVector[i] = direction * force;
+        }
+        OnThrow(forceVector);
+        yield return new WaitForSeconds(3f);
+        onComplete?.Invoke();
+    }
 }

@@ -28,7 +28,8 @@ public class TitleManager : MonoBehaviour
     public TextMeshProUGUI titleText;
     public TextMeshProUGUI subtitleText;
     public TextMeshProUGUI eventText;
-
+    public TextMeshProUGUI levelText;
+    public TextMeshProUGUI amountText;
     public static TitleManager Instance { get; private set; }
     private void Awake()
     {
@@ -48,6 +49,8 @@ public class TitleManager : MonoBehaviour
         titleText.alpha = 0f; // Start with text invisible
         subtitleText.alpha = 0f; // Start with text invisible
         eventText.alpha = 0f; // Start with text invisible
+        levelText.alpha = 0f; // Start with text invisible
+        amountText.alpha = 0f; // Start with text invisible
     }
 
     public void ShowTitle(string title, Color color, FlashPreset preset = FlashPreset.StandardFlash)
@@ -72,6 +75,20 @@ public class TitleManager : MonoBehaviour
         float duration1, duration2, duration3;
         GetDurations(preset, out duration1, out duration2, out duration3);
         StartCoroutine(FlashText(eventText, color, duration1, duration2, duration3));
+    }
+
+    public void ShowRoomText(string monsterName, int amount, int level)
+    {
+        levelText.text = $"Lv: {level}";
+        amountText.text = $"{monsterName} x{amount}";
+        levelText.alpha = 1f; // Show level text
+        amountText.alpha = 1f; // Show amount text
+    }
+
+    public void HideRoomText()
+    {
+        levelText.alpha = 0f; // Hide level text
+        amountText.alpha = 0f; // Hide amount text
     }
 
     private IEnumerator FlashText(TextMeshProUGUI text, Color color, float duration1, float duration2, float duration3)
