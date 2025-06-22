@@ -37,6 +37,9 @@ public class PlayerControl : MonoBehaviour
     private float currentSpeed = 0f;
     private bool isBraking = false;
 
+    // Tutorial
+    private TutorialManager tutorialManager;
+
 
     // Start is called before the first frame update
     void Start()
@@ -44,6 +47,7 @@ public class PlayerControl : MonoBehaviour
         playerRb = GetComponent<Rigidbody>();
         playerAnimator = GetComponent<Animator>();
         playerAudio = GetComponent<AudioSource>();
+        tutorialManager = TutorialManager.Instance;
         Physics.gravity *= 1;
 
         // Initialize Code Factory
@@ -53,6 +57,9 @@ public class PlayerControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (tutorialManager != null && tutorialManager.IsPaused()) 
+            return;
+
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
         // TODO: 킥보드로 바꾸고 나서는 킥보드 애니메이션으로 바꾸기
@@ -106,6 +113,9 @@ public class PlayerControl : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (tutorialManager != null && tutorialManager.IsPaused()) 
+            return;
+
         if (gameManager.isGameActive)
         {
             MovePlayerForward();

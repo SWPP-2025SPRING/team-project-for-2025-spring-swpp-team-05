@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.Events;
+using System.Collections.Generic;
 
 public class TutorialRoomManager : MonoBehaviour
 {
@@ -17,6 +18,11 @@ public class TutorialRoomManager : MonoBehaviour
     [Header("Description")]
     [TextArea]
     [SerializeField] private string roomDescription;
+
+    [Header("Monster Settings")]
+    [SerializeField] private GameObject monsterPrefab;
+    [SerializeField] private Transform[] spawnPoints;
+    private List<GameObject> spawnedMonsters = new List<GameObject>();
 
     void Awake()
     {
@@ -35,6 +41,8 @@ public class TutorialRoomManager : MonoBehaviour
 
     public void ActivateRoom()
     {
+        SpawnMonsters();
+
         if (currentTask == null)
         {
             Debug.LogError("[Tutorial] Task not initialized.");
@@ -55,6 +63,17 @@ public class TutorialRoomManager : MonoBehaviour
         currentTask.StartTask();
     }
 
+    private void SpawnMonsters()
+    {
+        if (monsterPrefab == null || spawnPoints.Length == 0) return;
+        
+        foreach (Transform spawnPoint in spawnPoints)
+        {
+            GameObject monster = Instantiate(monsterPrefab, spawnPoint.position, spawnPoint.rotation);
+            spawnedMonsters.Add(monster);
+        }
+    }
+
     public void UpdateTaskProgress(string progress)
     {
         taskUI?.UpdateProgress(progress);
@@ -69,6 +88,11 @@ public class TutorialRoomManager : MonoBehaviour
 
     public void CleanupRoom()
     {
+        foreach (var monster in spawnedMonsters)
+        {
+            if (monster != null) Destroy(monster);
+        }
+        spawnedMonsters.Clear();
         currentTask?.Cleanup();
     }
     

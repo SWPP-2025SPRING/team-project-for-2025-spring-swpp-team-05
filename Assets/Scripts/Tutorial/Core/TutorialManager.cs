@@ -18,7 +18,7 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private GameObject player;
 
     [Header("Scene Settings")]
-    [SerializeField] private string mainSceneName = "MainScene"; 
+    [SerializeField] private string mainSceneName = "MainScene";
 
     private TutorialRoomManager currentRoom;
     private int currentRoomIndex = 0;
@@ -28,6 +28,9 @@ public class TutorialManager : MonoBehaviour
     private bool isTutorialComplete = false;
 
     public static TutorialManager Instance { get; private set; }
+
+    [Header("Delay Settings")]
+    [SerializeField] private float startDelay = 1f; // 1초 딜레이
 
     void Awake()
     {
@@ -43,14 +46,16 @@ public class TutorialManager : MonoBehaviour
 
     void Start()
     {
-        InitializeTutorial();
+        StartCoroutine(InitializeWithDelay());
     }
 
-    void InitializeTutorial()
+    IEnumerator InitializeWithDelay()
     {
+        yield return new WaitForSeconds(startDelay);
+
         tutorialUI.gameObject.SetActive(true);
 
-        ShowTutorial("W: 앞으로 이동\nA: 왼쪽 이동\nS: 뒤로 이동\nD: 오른쪽 이동\n\nF 키를 눌러 시작");
+        ShowTutorial("A: 왼쪽 이동\nD: 오른쪽 이동\nS: 감속\n\nF 키를 눌러 시작");
 
         foreach (var room in rooms)
         {
@@ -104,7 +109,7 @@ public class TutorialManager : MonoBehaviour
         currentRoom.CleanupRoom();
         currentRoom.gameObject.SetActive(false);
         currentRoomIndex++;
-        
+
         if (currentRoomIndex < rooms.Length)
         {
             ActivateRoom(rooms[currentRoomIndex]);
@@ -144,4 +149,6 @@ public class TutorialManager : MonoBehaviour
     {
         tutorialUI.HideTutorial();
     }
+
+    public bool IsPaused() => isPaused;
 }
