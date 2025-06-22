@@ -12,6 +12,7 @@ TagManager:
   - Terrain
   - Key
   - Road
+  - Monster
   layers:
   - Default
   - TransparentFX
