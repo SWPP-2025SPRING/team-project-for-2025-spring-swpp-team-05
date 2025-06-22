@@ -28,16 +28,13 @@ public class BGMManager : MonoBehaviour
         audioSource.loop = true;
         audioSource.Play();
     }
-    // Start is called before the first frame update
-    void Start()
+
+    public void StopBGM()
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        if (audioSource.isPlaying)
+        {
+            audioSource.Stop();
+        }
     }
 
     public void PlayFieldBGM()
