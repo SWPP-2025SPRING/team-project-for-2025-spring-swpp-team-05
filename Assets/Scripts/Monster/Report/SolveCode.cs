@@ -106,7 +106,7 @@ public class SolveCode
 
     string GenerateRandomCode(int length)
     {
-        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const string chars = "BCEFGHIJKLMNOPQTUVXYZ4567890";
         System.Random rand = new System.Random();  // Unity Random은 MonoBehaviour밖에 사용 못함
         char[] result = new char[length];
 

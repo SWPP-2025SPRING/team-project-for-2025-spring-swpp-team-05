@@ -25,7 +25,6 @@ public class Barrels : MonoBehaviour
 
     public int GetBarrelCount()
     {
-        Debug.Log($"Barrel count: {barrels?.Length ?? 0}");
         return barrels?.Length ?? 0;
     }
 

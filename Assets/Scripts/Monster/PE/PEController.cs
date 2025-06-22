@@ -31,6 +31,8 @@ public class PEController : MonoBehaviour, IMonsterController
     public float maxRotationSpeed = 10f;
     private float cooldownTimer = 0f;
     private bool isAttacking = false;
+    private bool isDynamicAttack = false;
+
     private Action onComplete;
 
     public void SetLevel(int level)
@@ -73,6 +75,7 @@ public class PEController : MonoBehaviour, IMonsterController
         onComplete = () =>
         {
             isAttacking = false;
+            isDynamicAttack = false; // Reset dynamic attack flag after attack
             Debug.Log("Attack completed .");
         };
     }
@@ -87,7 +90,7 @@ public class PEController : MonoBehaviour, IMonsterController
             OnAttack(); // Summon a tennis ball as the default attack
         }
 
-        if (!isAttacking)
+        if (!isAttacking || isDynamicAttack)
         {
             RotateTowardsPlayer();
         }
@@ -112,7 +115,6 @@ public class PEController : MonoBehaviour, IMonsterController
 
         Vector3 forward = transform.forward;
         float angle = Vector3.SignedAngle(forward, direction, Vector3.up);
-        Debug.Log("Angle to player: " + angle);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, maxRotationSpeed * Time.deltaTime);
         //animator.SetFloat("turnSpeed_f", angle / 180f);
     }
@@ -132,15 +134,19 @@ public class PEController : MonoBehaviour, IMonsterController
                 SummonFootBallDiverge(count);
                 break;
             case AttackType.BowlingBall:
+                isDynamicAttack = true; // Set dynamic attack flag for bowling ball
                 SummonBowlingBall();
                 break;
             case AttackType.Basketball:
+                isDynamicAttack = true; // Set dynamic attack flag for basketball
                 SummonBasketBall();
                 break;
             case AttackType.BeachBall:
+                isDynamicAttack = true; // Set dynamic attack flag for beach ball
                 SummonBeachBall();
                 break;
             case AttackType.TennisBall:
+                isDynamicAttack = true; // Set dynamic attack flag for tennis ball
                 SummonTennisBall();
                 break;
             default:
@@ -158,13 +164,12 @@ public class PEController : MonoBehaviour, IMonsterController
             // Assuming you want to position the balls around the player
             ballTransforms[i] = transform.position + transform.forward * 2f + ((i - count / 2) * transform.right);
 
-            Vector3 direction = (player.transform.position - ballTransforms[i]).normalized + Vector3.up * 0.5f;
+            Vector3 direction = (player.transform.position - ballTransforms[i]).normalized + Vector3.up * 0.2f;
             forces[i] = direction * footballForce; // Apply the force in the direction away from the player
         }
 
         IBallStrategy ballStrategy = new FootballStrategy(); // Replace with the desired ball strategy
         StartCoroutine(ballStrategy.OnAction(animator, ballTransforms, forces, onComplete));
-        Debug.Log("Summoned balls with force: " + footballForce);
     }
 
     void SummonFootBallDiverge(int count = 7)
@@ -189,63 +194,38 @@ public class PEController : MonoBehaviour, IMonsterController
 
         IBallStrategy ballStrategy = new FootballStrategy();
         StartCoroutine(ballStrategy.OnAction(animator, ballPositions, forces, onComplete));
-        Debug.Log("Diverged balls with force: " + footballForce);
     }
 
     void SummonBowlingBall()
     {
         Vector3[] ballTransforms = new Vector3[1];
-        Vector3[] forces = new Vector3[1];
-
         ballTransforms[0] = transform.position + transform.forward * 2f;
-        Vector3 direction = (player.transform.position - ballTransforms[0]).normalized;
-        forces[0] = direction * bowlingForce;
-
         IBallStrategy ballStrategy = new BowlingStrategy(); // Replace with the desired ball strategy
-        StartCoroutine(ballStrategy.OnAction(animator, ballTransforms, forces, onComplete));
-        Debug.Log("Summoned bowling ball with force: " + bowlingForce);
+        StartCoroutine(ballStrategy.OnTrackAction(animator, ballTransforms, player, bowlingForce, onComplete));
     }
 
     void SummonBasketBall()
     {
         Vector3[] ballTransforms = new Vector3[1];
-        Vector3[] forces = new Vector3[1];
-
         ballTransforms[0] = transform.position + transform.forward * 2f + Vector3.up * 3f;
-        Vector3 direction = (player.transform.position - ballTransforms[0]).normalized; // Add some upward force to simulate a basketball throw
-        forces[0] = direction * basketballForce;
-
         IBallStrategy ballStrategy = new SingleBallStrategy(BallType.Basketball, ForceMode.Impulse, 0.5f, 1f, 1f); // Replace with the desired ball strategy
-        StartCoroutine(ballStrategy.OnAction(animator, ballTransforms, forces, onComplete));
-        Debug.Log("Summoned basketball with force: " + footballForce);
+        StartCoroutine(ballStrategy.OnTrackAction(animator, ballTransforms, player, basketballForce, onComplete));
     }
 
     void SummonBeachBall()
     {
         Vector3[] ballTransforms = new Vector3[1];
-        Vector3[] forces = new Vector3[1];
-
         ballTransforms[0] = transform.position + transform.forward * 2f + Vector3.up * 3f;
-        Vector3 direction = (player.transform.position - ballTransforms[0]).normalized; // Add some upward force to simulate a basketball throw
-        forces[0] = direction * beachBallForce;
-
         IBallStrategy ballStrategy = new SingleBallStrategy(BallType.BeachBall, ForceMode.Impulse, 0.5f, 1f, 1f); // Replace with the desired ball strategy
-        StartCoroutine(ballStrategy.OnAction(animator, ballTransforms, forces, onComplete));
-        Debug.Log("Summoned beachball with force: " + footballForce);
+        StartCoroutine(ballStrategy.OnTrackAction(animator, ballTransforms, player, beachBallForce, onComplete));
     }
 
     void SummonTennisBall()
     {
         Vector3[] ballTransforms = new Vector3[1];
-        Vector3[] forces = new Vector3[1];
-
         ballTransforms[0] = transform.position + transform.forward * 2f + Vector3.up * 3f;
-        Vector3 direction = (player.transform.position - ballTransforms[0]).normalized; // Add some upward force to simulate a basketball throw
-        forces[0] = direction * tennisBallForce;
-
         IBallStrategy ballStrategy = new SingleBallStrategy(BallType.TennisBall, ForceMode.Impulse, 2.8f, 0f, 2f); // Replace with the desired ball strategy
-        StartCoroutine(ballStrategy.OnAction(animator, ballTransforms, forces, onComplete));
-        Debug.Log("Summoned tennisball with force: " + footballForce);
+        StartCoroutine(ballStrategy.OnTrackAction(animator, ballTransforms, player, tennisBallForce, onComplete));
     }
 
     public void EndMonster()

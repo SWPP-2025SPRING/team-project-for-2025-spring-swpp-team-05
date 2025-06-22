@@ -31,7 +31,6 @@ public class FollowPlayer : MonoBehaviour
         cam = Camera.main;
         if (cam == null)
         {
-            Debug.LogError("Main Camera not found. Please ensure there is a camera tagged as 'MainCamera'.");
             return;
         }
         float[] distances = new float[32];
