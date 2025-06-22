@@ -66,6 +66,11 @@ public class PlayerControl : MonoBehaviour
             transform.rotation *= turnRotation;
         }
 
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            PlayerStatus.instance.Booster();
+        }
+
         if (PlayerStatus.instance.isSlow)
         {
             string input = Input.inputString;
@@ -100,8 +105,6 @@ public class PlayerControl : MonoBehaviour
         {
             isBraking = false;
         }
-
-
     }
 
     void FixedUpdate()
@@ -164,6 +167,11 @@ public class PlayerControl : MonoBehaviour
         justEnteredIce = false;
         iceMomentum = Vector3.zero;
         DebufManager.Instance.UpdateDebufText(DebufType.None);
+    }
+
+    public void ResetCodeFactory()
+    {
+        codeFactory.Reset();
     }
 
     private Vector3 HandleIceMovement(Vector3 baseDirection)

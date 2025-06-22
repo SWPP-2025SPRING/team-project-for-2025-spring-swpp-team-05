@@ -97,8 +97,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a130245ce81943f0964834472ab501a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  knockbackDistance: 5
-  knockbackDuration: 0.2
+  webCollisionSound: {fileID: 8300000, guid: 19f89c6e740e7447f9e12a8310d3e973, type: 3}
+  knockbackForce: 20
+  upwardForce: 9
+  cooldownTime: 0.5
   maxHitCount: 3
 --- !u!65 &8324085686258955940
 BoxCollider:

@@ -10,6 +10,7 @@ public class CodeUIManager : MonoBehaviour
     public TextMeshProUGUI currentCodeText;
     public TextMeshProUGUI nextCodeText;
     public TextMeshProUGUI nextNextCodeText;
+    public GameObject panel;
 
     private bool isActive = true;
 
@@ -60,6 +61,7 @@ public class CodeUIManager : MonoBehaviour
         {
             return; // 이미 활성화되어 있으면 아무 작업도 하지 않음
         }
+        panel.SetActive(true); // 패널 활성화
         prevCodeText.gameObject.SetActive(true);
         currentCodeText.gameObject.SetActive(true);
         nextCodeText.gameObject.SetActive(true);
@@ -73,6 +75,7 @@ public class CodeUIManager : MonoBehaviour
         {
             return; // 이미 비활성화되어 있으면 아무 작업도 하지 않음
         }
+        panel.SetActive(false); // 패널 비활성화
         prevCodeText.gameObject.SetActive(false);
         currentCodeText.gameObject.SetActive(false);
         nextCodeText.gameObject.SetActive(false);
