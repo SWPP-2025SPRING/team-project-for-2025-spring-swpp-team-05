@@ -55,7 +55,7 @@ public class TutorialManager : MonoBehaviour
 
         tutorialUI.gameObject.SetActive(true);
 
-        ShowTutorial("A: 왼쪽 이동\nD: 오른쪽 이동\nS: 감속\n\nF 키를 눌러 시작");
+        ShowTutorial("왼쪽/A : 왼쪽 이동\n오른쪽/D : 오른쪽 이동\n아래 방향 S: 감속\n\nF 키를 눌러 시작");
 
         foreach (var room in rooms)
         {
@@ -72,6 +72,7 @@ public class TutorialManager : MonoBehaviour
             if (isTutorialComplete)
             {
                 LoadMainScene();
+                ResumeGame();
             }
             else if (!tutorialStarted)
             {

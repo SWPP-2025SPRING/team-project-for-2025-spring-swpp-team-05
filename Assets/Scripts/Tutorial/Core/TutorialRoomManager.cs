@@ -72,7 +72,7 @@ public class TutorialRoomManager : MonoBehaviour
         {
             Vector3 spawnPos = spawnPoint.transform.position;
             Quaternion spawnRot = spawnPoint.transform.rotation;
-            GameObject monster = monsterFactory.CreateMonster(monsterType, 1, spawnPos, spawnRot, this.transform);
+            GameObject monster = monsterFactory.CreateMonster(monsterType, 4, spawnPos, spawnRot, this.transform);
         }
     }
 
