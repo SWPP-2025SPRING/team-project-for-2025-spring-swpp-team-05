@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class ProfessorController : MonoBehaviour, IMonsterController
 {
-    private bool facingForward = true;
+    public bool facingBackward = false;
     public float rotateDuration = 0.2f;
     public float facingForwardTime = 1.5f;
     public float facingBackwardTime = 1f;
     public float fieldOfView = 60f; // 시야각
     public float stunTime = 2f; // 스턴 시간
-
+    public float speedThreshold = 5f;
     public int maxHP = 100;
     public int currentHP;
     private Animator animator;
@@ -44,16 +44,11 @@ public class ProfessorController : MonoBehaviour, IMonsterController
 
     void Update()
     {
-        if (player == null)
+        if (facingBackward && player.transform.position.z < transform.position.z)
         {
-            return;
+            CheckPlayerMovement();
+            lastPlayerPosition = player.transform.position;
         }
-        if (!facingForward && IsPlayerInView() && Vector3.Distance(player.transform.position, lastPlayerPosition) > 0.1f)
-        {
-            Debug.Log("Player Movement Detected - Attacking!");
-            Attack(stunTime);
-        }
-        lastPlayerPosition = player.transform.position;
     }
 
     IEnumerator PatrolRoutine()
@@ -61,7 +56,7 @@ public class ProfessorController : MonoBehaviour, IMonsterController
         while (true)
         {
             // 정지 시간: 2초 또는 1초
-            float waitTime = facingForward ? facingForwardTime : facingBackwardTime;
+            float waitTime = !facingBackward ? facingForwardTime : facingBackwardTime;
             yield return new WaitForSeconds(waitTime);
 
             // 현재 방향 기준으로 목표 회전 계산
@@ -84,7 +79,7 @@ public class ProfessorController : MonoBehaviour, IMonsterController
             // 다음 단계에서 반대 방향 대기 시간 사용하도록 플래그 토글
             if (elapsed >= rotateDuration)
             {
-                facingForward = !facingForward;
+                facingBackward = !facingBackward;
             }
         }
     }
@@ -99,7 +94,7 @@ public class ProfessorController : MonoBehaviour, IMonsterController
 
     // ...existing code...
 
-    void Attack(float stunTime)
+    void Stun(float stunTime)
     {
         PlayerStatus.instance.StunPlayer(stunTime);
     }
@@ -127,21 +122,26 @@ public class ProfessorController : MonoBehaviour, IMonsterController
         }
     }
 
-    private bool IsPlayerInView()
+    private void CheckPlayerMovement()
     {
-        if (player == null) return false;
-        Vector3 directionToPlayer = player.transform.position - transform.position;
-        float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
-
-        // 플레이어가 시야각 내에 있는지 확인
-        return angleToPlayer < fieldOfView / 2f;
+        float playerSpeed = GetPlayerSpeed();
+        if (playerSpeed > speedThreshold)
+        {
+            Debug.Log("Player is moving too fast! Stunned!");
+            Stun(stunTime); // 플레이어를 스턴
+        }
     }
-    // ...existing code...
+
+    private float GetPlayerSpeed()
+    {
+        // 플레이어의 속도를 계산
+        Vector3 playerVelocity = (player.transform.position - lastPlayerPosition) / Time.deltaTime;
+        return playerVelocity.magnitude; // 속도의 크기 반환
+    }
 
     public void EndMonster()
     {
         // Implement any cleanup or end logic for the monster here
-        Debug.Log("ProfessorController EndMonster called.");
         Destroy(gameObject); // Example: destroy the monster GameObject
     }
 }
