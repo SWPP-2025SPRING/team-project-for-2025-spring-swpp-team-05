@@ -17,6 +17,7 @@ enum AttackType
 
 public class PEController : MonoBehaviour, IMonsterController
 {
+    public AudioClip attackSound; // Sound effect for the attack
     private GameObject player;
     private Animator animator;
 
@@ -74,6 +75,7 @@ public class PEController : MonoBehaviour, IMonsterController
         }
         onComplete = () =>
         {
+            SoundEffectManager.Instance.PlayOneShotOnce(attackSound); // Play attack sound effect
             isAttacking = false;
             isDynamicAttack = false; // Reset dynamic attack flag after attack
             Debug.Log("Attack completed .");

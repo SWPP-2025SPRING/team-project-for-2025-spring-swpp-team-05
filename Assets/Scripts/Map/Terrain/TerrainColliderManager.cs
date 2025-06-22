@@ -6,14 +6,17 @@ using UnityEngine;
 public class TerrainColliderManager : MonoBehaviour
 {
     public float trackInterval = 3.0f;
+    public AudioClip audioClip;
     private List<Vector3> lastPosition;
     private float trackTimer;
     public int maxStoredPositions = 10; // Maximum number of positions to store
     // Start is called before the first frame update
     void Start()
     {
-        lastPosition = new List<Vector3>(maxStoredPositions);
-        lastPosition.Add(transform.position); // Initialize with the current position
+        lastPosition = new List<Vector3>(maxStoredPositions)
+        {
+            transform.position // Initialize with the current position
+        };
         trackTimer = trackInterval; // Initialize the timer
     }
 
@@ -41,6 +44,7 @@ public class TerrainColliderManager : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Terrain"))
         {
+            SoundEffectManager.Instance.PlayOneShotOnce(audioClip);
             TitleManager.Instance.ShowEventText("가속은 금물! 적당한 속도로 이동하세요.", Color.white, FlashPreset.StandardFlash);
             transform.position = lastPosition[lastPosition.Count - 1]; // Reset to the last stored position
             PlayerStatus.instance.SetSpeedZero();

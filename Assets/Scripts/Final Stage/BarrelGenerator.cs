@@ -53,7 +53,7 @@ public class BarrelGenerator : MonoBehaviour
             int[] barrelIndex = new int[summonCount]; // Array to store random barrel indices
             for (int i = 0; i < summonCount; i++)
             {
-                bool empty = Random.Range(0f, 1f) < 0.5f; // 20% chance to skip summoning a barrel
+                bool empty = Random.Range(0f, 1f) < 0.8f; // 20% chance to skip summoning a barrel
                 if (empty)
                 {
                     barrelIndex[i] = -1; // Set to -1 to indicate no barrel
