@@ -7,6 +7,7 @@ using UnityEngine;
 public class PlayerStatus : MonoBehaviour
 {
     public AudioClip levelUpSound; // Sound played when the player levels up
+    public AudioClip boostSound; // Sound played when the player uses a booster
     public static PlayerStatus instance { get; private set; }
 
     public float moveSpeed { get; private set; }
@@ -37,6 +38,9 @@ public class PlayerStatus : MonoBehaviour
     public int level { get; private set; } = 1;
     public int maxLevel { get; private set; } = 50;
 
+    public bool isBoost { get; private set; } = false;
+    public bool isFinal { get; private set; } = false; // 최종 레벨 도달 여부
+
 
     public float attackGrowthRate = 1.1f; // 공격력 성장률
     public float attackRangeGrowthRate = 1.1f; // 공격 범위 성장률
@@ -65,10 +69,11 @@ public class PlayerStatus : MonoBehaviour
     public void ResetPlayerStatus()
     {
         moveSpeed = defaultMoveSpeed;
-        maxSpeed = defaultMoveSpeed;
+        maxSpeed = defaultMoveSpeed * 1.5f;
         minSpeed = defaultMinSpeed;
         acceleration = defaultAcceleration;
         deceleration = defaultDeceleration;
+        isFinal = true;
     }
 
     public void LevelUp(MonsterType type, int levelIncrement = 1, int per = 3)
@@ -139,6 +144,14 @@ public class PlayerStatus : MonoBehaviour
         }
     }
 
+    public void ResetSlow()
+    {
+        slowRateAgg = 0f;
+        maxSpeed = GetMaxSpeed();
+        isSlow = false;
+        DebufManager.Instance.UpdateDebufText(DebufType.None);
+    }
+
     public void StunPlayer(float stunTime)
     {
         isStun = true;
@@ -180,6 +193,7 @@ public class PlayerStatus : MonoBehaviour
             moveSpeed = Mathf.MoveTowards(moveSpeed, targetSpeed, deceleration * dt);
         }
         moveSpeed = Mathf.Clamp(moveSpeed, minSpeed, maxSpeed);
+        GameManager.Instance.uiManager.UpdateSpeed(moveSpeed);
     }
 
     public void DeAccelerate(float factor, float dt)
@@ -194,6 +208,7 @@ public class PlayerStatus : MonoBehaviour
             moveSpeed = Mathf.MoveTowards(moveSpeed, targetSpeed, acceleration * dt);
         }
         moveSpeed = Mathf.Clamp(moveSpeed, minSpeed, maxSpeed);
+        GameManager.Instance.uiManager.UpdateSpeed(moveSpeed);
     }
 
     public void IncreaseSpeed()
@@ -242,6 +257,44 @@ public class PlayerStatus : MonoBehaviour
             spa
         };
         return statusList;
+    }
+
+    public void Booster()
+    {
+        if (!isFinal)
+        {
+            Debug.LogWarning("최종 레벨에 도달하여 부스터를 사용할 수 없습니다.");
+            return;
+        }
+        if (level < 5)
+        {
+            Debug.LogWarning("레벨이 너무 낮아 부스터를 사용할 수 없습니다.");
+            return;
+        }
+        if (isBoost)
+        {
+            Debug.LogWarning("이미 부스터를 사용 중입니다.");
+            return;
+        }
+        StartCoroutine(UseBooster());
+    }
+
+    private IEnumerator UseBooster()
+    {
+        isBoost = true;
+        float originalSpeed = moveSpeed;
+        float originalMaxSpeed = maxSpeed;
+        moveSpeed *= 2;
+        maxSpeed *= 2f;
+        level -= 5; // 레벨을 5 감소
+        GameManager.Instance.uiManager.UpdateSpeed(moveSpeed);
+        SoundEffectManager.Instance.PlayOneShotOnce(boostSound);
+        GameManager.Instance.uiManager.UpdateLevel(level);
+        yield return new WaitForSeconds(4f); // 5초 동안 부스트 효과
+        moveSpeed = originalSpeed;
+        maxSpeed = originalMaxSpeed;
+        isBoost = false;
+        GameManager.Instance.uiManager.UpdateSpeed(moveSpeed);
     }
 
 
