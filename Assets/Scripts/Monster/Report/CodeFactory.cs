@@ -78,4 +78,16 @@ public class CodeFactory
             Debug.LogError($"Solve Error: {e.Message}");
         }
     }
+
+    public void Reset()
+    {
+        solveCodes.Clear();
+        prevCode = ' ';
+        currentCode = ' ';
+        nextCode = ' ';
+        nextNextCode = ' ';
+        PlayerStatus.instance.ResetSlow();
+        UpdateCodeText();
+        CodeUIManager.Instance.DeactivateCodeUI();
+    }
 }
