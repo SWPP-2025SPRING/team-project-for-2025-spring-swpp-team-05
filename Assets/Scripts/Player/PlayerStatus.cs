@@ -108,7 +108,7 @@ public class PlayerStatus : MonoBehaviour
         if (!isSlow)
         {
             isSlow = true;
-            DebufManager.Instance.UpdateDebufText(DebufType.Stun);
+            DebufManager.Instance.UpdateDebufText(DebufType.Slow);
         }
         slowRateAgg += slowRate;
         maxSpeed = GetMaxSpeed() * (1 - slowRateAgg);
@@ -139,18 +139,34 @@ public class PlayerStatus : MonoBehaviour
 
     public void StunPlayer(float stunTime)
     {
-        isStun = true;
+        if (isStun) return;
         StartCoroutine(StunPlayerCoroutine(stunTime));
     }
 
+
     IEnumerator StunPlayerCoroutine(float stunTime)
     {
+        isStun = true;
+        isStop = true;
+
         float tempSpeed = moveSpeed;
         moveSpeed = 0;
+
+        // 디버프 UI 반영
+        DebufManager.Instance.UpdateDebufText(DebufType.Stun);
+
+        // 해당 시간 동안 완전 멈춤
         yield return new WaitForSeconds(stunTime);
-        moveSpeed = tempSpeed;
+
+        // 복구
         isStun = false;
+        isStop = false;
+        moveSpeed = tempSpeed;
+
+        DebufManager.Instance.UpdateDebufText(DebufType.None);
+        Debug.Log("Player recovered from stun.");
     }
+
 
     public void SetReverseControl(bool isReverse)
     {
@@ -167,7 +183,8 @@ public class PlayerStatus : MonoBehaviour
 
     public void Accelerate(float factor, float dt)
     {
-        if (isStop) return; // 가속 중지 상태면 가속하지 않음
+        if (isStop || isStun) return;
+
         float targetSpeed = maxSpeed * factor;
         if (moveSpeed < targetSpeed)
         {
@@ -182,6 +199,8 @@ public class PlayerStatus : MonoBehaviour
 
     public void DeAccelerate(float factor, float dt)
     {
+        if (isStop || isStun) return;
+
         float targetSpeed = minSpeed * factor;
         if (moveSpeed > targetSpeed)
         {

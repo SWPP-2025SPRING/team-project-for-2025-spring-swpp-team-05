@@ -9,6 +9,7 @@ public enum DebufType
 {
     None,
     Stun,
+    Slow,
     ControlInversion,
     Slip,
     Mosquito,
