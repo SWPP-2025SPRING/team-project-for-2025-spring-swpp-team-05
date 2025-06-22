@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SpiderWebSlowZone : MonoBehaviour
 {
+    public AudioClip webCollisionSound; // 거미줄 장애물과 충돌 시 재생할 소리
     public float knockbackForce = 32f; // 밀려나는 힘
     public float upwardForce = 9f;     // 살짝 위로 튕기는 느낌
     public float cooldownTime = 0.5f;
@@ -21,6 +22,7 @@ public class SpiderWebSlowZone : MonoBehaviour
             if (playerRb != null)
             {
                 currentHitCount++;
+                SoundEffectManager.Instance.PlayOneShotOnce(webCollisionSound); // 거미줄 장애물과 충돌 시 소리 재생
 
                 // 1. 방향은 수평(xz 평면) 기준으로 계산
                 Vector3 horizontalDir = collision.collider.transform.position - transform.position;

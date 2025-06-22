@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BarrelObstacle : MonoBehaviour
 {
+    public AudioClip barrelCollisionSound; // 장애물과 충돌 시 재생할 소리
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +24,7 @@ public class BarrelObstacle : MonoBehaviour
             Rigidbody playerRigidbody = collision.gameObject.GetComponent<Rigidbody>();
             if (playerRigidbody != null)
             {
+                SoundEffectManager.Instance.PlayOneShotOnce(barrelCollisionSound); // 장애물과 충돌 시 소리 재생
                 // 플레이어에게 힘을 가하여 밀어내기
                 Vector3 pushDirection = collision.transform.position - transform.position;
                 pushDirection.y = 0; // Y축 방향은 무시

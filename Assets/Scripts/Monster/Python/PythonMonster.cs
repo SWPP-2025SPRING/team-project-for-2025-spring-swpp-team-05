@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class PythonMonster : MonoBehaviour, IMonsterController
 {
+    public AudioClip attackSound; // Sound effect for the attack
 
     public float moveSpeed = 5f;
     public float moveRange = 3f;
@@ -76,6 +77,7 @@ public class PythonMonster : MonoBehaviour, IMonsterController
             {
                 Debug.LogWarning("DebuffHandler component not found on Player.");
             }
+            SoundEffectManager.Instance.PlayOneShotOnce(attackSound); // Play attack sound effect
 
             // 3. Destroy the monster after applying the debuff
             // TODO: Add a sound effect, particle effect

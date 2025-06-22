@@ -136,6 +136,7 @@ public class RoomSpawnManager : MonoBehaviour
         {
             SpawnMonsters();
         }
+        SoundEffectManager.Instance.PlayOneShotOnce(MonsterManager.Instance.GetMonsterSound(monsterType));
         TitleManager.Instance.ShowSubtitle(roomDescription, Color.white, FlashPreset.StandardFlash);
         yield return new WaitForSecondsRealtime(0.5f); // Wait for a moment after spawning
     }

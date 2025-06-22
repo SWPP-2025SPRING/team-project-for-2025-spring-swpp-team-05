@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class PlayerStatus : MonoBehaviour
 {
+    public AudioClip levelUpSound; // Sound played when the player levels up
     public static PlayerStatus instance { get; private set; }
 
     public float moveSpeed { get; private set; }
@@ -98,6 +99,7 @@ public class PlayerStatus : MonoBehaviour
                 break;
         }
 
+        SoundEffectManager.Instance.PlayOneShotOnce(levelUpSound);
         List<float> statusAfter = GetStatusList();
         GameManager.Instance.uiManager.UpdateLevel(level);
         StatusUIManager.Instance.ShowStatusUpdate(statusBefore, statusAfter);
@@ -241,4 +243,6 @@ public class PlayerStatus : MonoBehaviour
         };
         return statusList;
     }
+
+
 }
