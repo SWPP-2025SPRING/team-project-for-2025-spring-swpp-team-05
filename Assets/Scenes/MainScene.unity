@@ -4619,6 +4619,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89f577629a1b849f4a631bee60ee6c2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  goalSound: {fileID: 8300000, guid: 52320e590bf774734a288886eba557ba, type: 3}
+  player: {fileID: 2093303578}
+  playerEnd: {fileID: 88186130}
 --- !u!1 &230234733
 GameObject:
   m_ObjectHideFlags: 0
