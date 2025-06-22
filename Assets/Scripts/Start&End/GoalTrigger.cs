@@ -39,6 +39,9 @@ public class GoalTrigger : MonoBehaviour
         BGMManager.Instance.StopBGM(); // 현재 BGM 정지
         yield return new WaitForSeconds(2f); // 2초 대기
         BGMManager.Instance.PlayFieldBGM(); // 엔딩 BGM 재생
+        float spa = PlayerStatus.instance.spa;
+        GradeResult gradeResult = GradeResult.GetString(spa);
+        TitleManager.Instance.ShowEndSubtitle($"Final Grade : {spa:F2} ({gradeResult.Grade})", Color.white, FlashPreset.Dramatic);
         FollowPlayer followPlayer = Camera.main.GetComponent<FollowPlayer>();
         yield return new WaitForSeconds(3f); // 2초 대기
         followPlayer.SetEndScene(playerEnd);

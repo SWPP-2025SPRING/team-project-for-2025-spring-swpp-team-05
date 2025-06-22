@@ -30,6 +30,8 @@ public class RoomSpawnManager : MonoBehaviour
     private bool isCleared = false;
     private bool isOnRoom = false;
 
+    private float enterTime = 0f;
+
     private Vector3 playerPosition = Vector3.zero; // Player's position for debugging
 
 
@@ -47,10 +49,19 @@ public class RoomSpawnManager : MonoBehaviour
         roomZSize = roomCollider.size.z;
     }
 
+    void Update()
+    {
+        if (isOnRoom && !isCleared && !isSpawned)
+        {
+            enterTime += Time.deltaTime;
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
+            enterTime = 0f; // Reset enter time when player enters the room
             isOnRoom = true; // Set the flag to true when player enters the room
         }
     }
@@ -106,7 +117,8 @@ public class RoomSpawnManager : MonoBehaviour
             monsterFactory?.DestroyMonsters();
             if (roomLevel > 1)
             {
-                PlayerStatus.instance.LevelUp(monsterType, roomLevel - 1);
+                GradeResult gradeResult = GradeResult.CalculateSPA(enterTime);
+                PlayerStatus.instance.LevelUp(monsterType, gradeResult.GPA, roomLevel - 1);
             }
             if (monsterType == MonsterType.Report)
             {
@@ -227,3 +239,42 @@ public class RoomSpawnManager : MonoBehaviour
         playerControl.ResetCodeFactory(); // Reset the code factory when exiting the report
     }
 }
+
+public class GradeResult
+{
+    public string Grade; // 등급 문자열
+    public float GPA;    // 학점 수치
+
+    public static GradeResult CalculateSPA(float enterTime)
+    {
+        if (enterTime <= 5f) return new GradeResult { Grade = "A+", GPA = 4.3f };
+        else if (enterTime <= 7f) return new GradeResult { Grade = "A0", GPA = 4.0f };
+        else if (enterTime <= 9f) return new GradeResult { Grade = "A-", GPA = 3.7f };
+        else if (enterTime <= 11f) return new GradeResult { Grade = "B+", GPA = 3.3f };
+        else if (enterTime <= 13f) return new GradeResult { Grade = "B0", GPA = 3.0f };
+        else if (enterTime <= 15f) return new GradeResult { Grade = "B-", GPA = 2.7f };
+        else if (enterTime <= 17f) return new GradeResult { Grade = "C+", GPA = 2.3f };
+        else if (enterTime <= 19f) return new GradeResult { Grade = "C0", GPA = 2.0f };
+        else if (enterTime <= 21f) return new GradeResult { Grade = "C-", GPA = 1.7f };
+        else if (enterTime <= 23f) return new GradeResult { Grade = "D+", GPA = 1.3f };
+        else if (enterTime <= 25f) return new GradeResult { Grade = "D0", GPA = 1.0f };
+        else return new GradeResult { Grade = "F", GPA = 0.0f };
+    }
+
+    public static GradeResult GetString(float GPA)
+    {
+        if (GPA >= 4.3f) return new GradeResult { Grade = "A+", GPA = 4.3f };
+        else if (GPA >= 4.0f) return new GradeResult { Grade = "A0", GPA = 4.0f };
+        else if (GPA >= 3.7f) return new GradeResult { Grade = "A-", GPA = 3.7f };
+        else if (GPA >= 3.3f) return new GradeResult { Grade = "B+", GPA = 3.3f };
+        else if (GPA >= 3.0f) return new GradeResult { Grade = "B0", GPA = 3.0f };
+        else if (GPA >= 2.7f) return new GradeResult { Grade = "B-", GPA = 2.7f };
+        else if (GPA >= 2.3f) return new GradeResult { Grade = "C+", GPA = 2.3f };
+        else if (GPA >= 2.0f) return new GradeResult { Grade = "C0", GPA = 2.0f };
+        else if (GPA >= 1.7f) return new GradeResult { Grade = "C-", GPA = 1.7f };
+        else if (GPA >= 1.3f) return new GradeResult { Grade = "D+", GPA = 1.3f };
+        else if (GPA >= 1.0f) return new GradeResult { Grade = "D0", GPA = 1.0f };
+        else return new GradeResult { Grade = "F", GPA = 0.0f };
+    }
+}
+
