@@ -22,6 +22,10 @@ public class ReportController : MonoBehaviour, IMonsterController
     public int codeLength = 6;
     private SolveCode solveCode;
 
+    [Header("Sound Effects")]
+    public AudioClip launchSound;
+    public AudioClip attachSound;
+
 
     [Header("Flags & Temps")]
     private bool isLaunched = false;
@@ -95,6 +99,7 @@ public class ReportController : MonoBehaviour, IMonsterController
         Vector3 force = direction * launchForce + Vector3.up * launchForce;
         reportRigidbody.velocity = Vector3.zero; // 초기 속도 초기화
         reportRigidbody.AddForce(force, ForceMode.VelocityChange);
+        SoundEffectManager.Instance.PlayOneShotOnce(launchSound); // 발사 사운드 재생
     }
 
 
@@ -107,6 +112,7 @@ public class ReportController : MonoBehaviour, IMonsterController
         transform.SetParent(player.transform); // 플레이어의 자식으로 설정
         Destroy(reportRigidbody);
         player.GetComponent<PlayerControl>().StunPlayer(solveCode);
+        SoundEffectManager.Instance.PlayOneShotOnce(attachSound); // 부착 사운드 재생
     }
 
     void ChasePlayer()

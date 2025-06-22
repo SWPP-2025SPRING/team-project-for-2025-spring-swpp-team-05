@@ -9,6 +9,13 @@ public class MonsterManager : MonoBehaviour
     public GameObject pythonMonsterPrefab;
     public GameObject peMonsterPrefab;
 
+    public AudioClip reportMonsterSound;
+    public AudioClip professorMonsterSound;
+    public AudioClip pythonMonsterSound;
+    public AudioClip peMonsterSound;
+
+    public AudioClip clearSound;
+
     public static MonsterManager Instance { get; private set; }
     private void Awake()
     {
@@ -53,6 +60,23 @@ public class MonsterManager : MonoBehaviour
                 return "PE Monster";
             default:
                 return "Unknown Monster";
+        }
+    }
+
+    public AudioClip GetMonsterSound(MonsterType type)
+    {
+        switch (type)
+        {
+            case MonsterType.Report:
+                return reportMonsterSound;
+            case MonsterType.Professor:
+                return professorMonsterSound;
+            case MonsterType.Python:
+                return pythonMonsterSound;
+            case MonsterType.PE:
+                return peMonsterSound;
+            default:
+                return null;
         }
     }
 }

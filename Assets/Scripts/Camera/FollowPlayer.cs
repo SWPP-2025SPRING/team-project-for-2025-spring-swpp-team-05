@@ -22,6 +22,11 @@ public class FollowPlayer : MonoBehaviour
     private float externalTiltAngle = 0f;
     private Camera cam;
 
+    [Header("End Scene Settings")]
+    private bool isEndScene = false;
+    public float duration = 5.0f; // 전체 연출 시간
+    public float lookSpeed = 2.0f; // 회전 속도
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,6 +48,7 @@ public class FollowPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isEndScene) return;
         // 1: left
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
@@ -64,7 +70,7 @@ public class FollowPlayer : MonoBehaviour
 
     void LateUpdate()
     {
-        if (player == null) return;
+        if (player == null || isEndScene) return;
 
         Vector3 targetPosition = player.transform.TransformPoint(currentOffset);
         transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, 1f / followSpeed);
@@ -89,5 +95,48 @@ public class FollowPlayer : MonoBehaviour
     public void SetTiltAngle(float angle)
     {
         externalTiltAngle = angle;
+    }
+
+    public void SetEndScene(GameObject player2)
+    {
+        if (isEndScene) return; // 이미 엔드 씬이 진행 중이면 무시
+
+        isEndScene = true;
+        StartCoroutine(EndScene(player2));
+    }
+
+    public IEnumerator EndScene(GameObject player2)
+    {
+        Vector3 playerPos = player2.transform.position;
+
+        // 시작 위치: player2보다 위쪽 (푸른 하늘)
+        Vector3 startPos = playerPos + new Vector3(0, 20f, 0);
+        Quaternion startRot = Quaternion.LookRotation(Vector3.up); // 하늘 방향
+
+        // 도착 위치: player2 앞쪽에서 약간 떨어진 곳
+        Vector3 endPos = playerPos + player2.transform.forward * 10f + Vector3.up * 3f;
+        Quaternion endRot = Quaternion.LookRotation(playerPos + Vector3.up * 3f - endPos); // player2를 바라보는 회전
+
+        float elapsed = 0f;
+
+        // 초기 위치/회전 세팅
+        transform.position = startPos;
+        transform.rotation = startRot;
+
+        while (elapsed < duration)
+        {
+            float t = elapsed / duration;
+
+            // 카메라 이동 & 회전 보간
+            transform.position = Vector3.Lerp(startPos, endPos, t);
+            transform.rotation = Quaternion.Slerp(startRot, endRot, t);
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        // 마지막 위치 정확히 정렬
+        transform.position = endPos;
+        transform.rotation = endRot;
     }
 }

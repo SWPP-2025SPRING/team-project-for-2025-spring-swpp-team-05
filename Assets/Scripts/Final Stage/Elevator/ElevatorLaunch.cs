@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ElevatorLaunch : MonoBehaviour
 {
+    public AudioClip elevatorSound; // 엘리베이터 소리
     // Start is called before the first frame update
     public float waitTime = 5f;
     public float riseHeight = 150f;
@@ -55,6 +56,7 @@ public class ElevatorLaunch : MonoBehaviour
     {
         yield return new WaitForSeconds(waitTime);
         TitleManager.Instance.ShowEventText("발사!", Color.white, FlashPreset.Dramatic);
+        SoundEffectManager.Instance.PlayOneShotOnce(elevatorSound); // 엘리베이터 소리 재생
 
         Vector3 startPos = elevator.position;
         Vector3 peakPos = startPos + Vector3.up * riseHeight;
