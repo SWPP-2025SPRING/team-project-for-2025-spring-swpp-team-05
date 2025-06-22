@@ -20,7 +20,6 @@ public class SpiderWebSlowZone : MonoBehaviour
             Rigidbody playerRb = collision.collider.GetComponent<Rigidbody>();
             if (playerRb != null)
             {
-                // Debug.Log("💥 거미줄 충돌!");
                 currentHitCount++;
 
                 // 1. 방향은 수평(xz 평면) 기준으로 계산
@@ -31,7 +30,6 @@ public class SpiderWebSlowZone : MonoBehaviour
                 // 2. 수평 + 위로 살짝 힘 분리
                 Vector3 knockback = horizontalDir * knockbackForce + Vector3.up * upwardForce;
 
-                // Debug.Log("📦 최종 knockback force: " + knockback);
                 playerRb.AddForce(knockback, ForceMode.Impulse);
 
                 StartCoroutine(CooldownCoroutine());

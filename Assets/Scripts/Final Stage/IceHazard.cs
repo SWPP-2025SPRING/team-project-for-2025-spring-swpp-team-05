@@ -12,7 +12,6 @@ public class IceHazard : MonoBehaviour
             if (player != null)
             {
                 player.EnterIceZone();
-                Debug.Log("Ice In");
             }
         }
     }
@@ -25,7 +24,6 @@ public class IceHazard : MonoBehaviour
             if (player != null)
             {
                 player.ExitIceZone();
-                Debug.Log("Ice Out");
             }
         }
     }
