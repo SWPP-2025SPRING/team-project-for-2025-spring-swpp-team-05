@@ -7,15 +7,12 @@ public class PythonNotifier : MonoBehaviour
     private void Start()
     {
         if (pythonTask== null)
-            pythonTask = GetComponentInParent<PythonTask>();
+            pythonTask = FindObjectOfType<PythonTask>();
     }
 
-    private void OnCollisionEnter(Collision collision)
+    public void OnDestroy()
     {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            pythonTask?.NotifyDebuffTriggered();
-        }
+        pythonTask?.NotifyDebuffTriggered();
     }
 }
 

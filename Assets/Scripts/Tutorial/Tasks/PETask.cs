@@ -10,7 +10,7 @@ public class PETask : MonoBehaviour, ITutorialTask
 
     [Header("Task Settings")]
     private int hitCount = 0;
-    [SerializeField] private int requiredHits = 2;
+    [SerializeField] private int requiredHits = 1;
 
     public void Initialize(TutorialRoomManager manager) => roomManager = manager;
 
@@ -25,7 +25,7 @@ public class PETask : MonoBehaviour, ITutorialTask
 
     }
 
-    public string GetTaskDescription() => "PE 몬스터가 던진 공에 두 번 맞아 보세요!";
+    public string GetTaskDescription() => "PE 몬스터가 던진 공에 한 번 맞아 보세요!";
 
     public void NotifyProjectileHit()
     {

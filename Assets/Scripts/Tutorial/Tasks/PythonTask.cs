@@ -9,14 +9,12 @@ public class PythonTask : MonoBehaviour, ITutorialTask
     private int debuffCount = 0;
     [SerializeField] private int requiredDebuffCount = 2;
 
-    private bool isActive = false;
 
     public void Initialize(TutorialRoomManager manager) => roomManager = manager;
 
     public void StartTask()
     {
         debuffCount = 0;
-        isActive = true;
         UpdateProgress();
     }
 
@@ -29,8 +27,6 @@ public class PythonTask : MonoBehaviour, ITutorialTask
 
     public void NotifyDebuffTriggered()
     {
-        if (!isActive) return;
-
         debuffCount++;
         UpdateProgress();
 

@@ -20,9 +20,10 @@ public class TutorialRoomManager : MonoBehaviour
     [SerializeField] private string roomDescription;
 
     [Header("Monster Settings")]
-    [SerializeField] private GameObject monsterPrefab;
+    [SerializeField] private MonsterType monsterType = MonsterType.None;
+
     [SerializeField] private Transform[] spawnPoints;
-    private List<GameObject> spawnedMonsters = new List<GameObject>();
+    private MonsterFactory monsterFactory = new MonsterFactory();
 
     void Awake()
     {
@@ -65,12 +66,13 @@ public class TutorialRoomManager : MonoBehaviour
 
     private void SpawnMonsters()
     {
-        if (monsterPrefab == null || spawnPoints.Length == 0) return;
-        
+        if (monsterType == MonsterType.None || spawnPoints.Length == 0) return;
+
         foreach (Transform spawnPoint in spawnPoints)
         {
-            GameObject monster = Instantiate(monsterPrefab, spawnPoint.position, spawnPoint.rotation);
-            spawnedMonsters.Add(monster);
+            Vector3 spawnPos = spawnPoint.transform.position;
+            Quaternion spawnRot = spawnPoint.transform.rotation;
+            GameObject monster = monsterFactory.CreateMonster(monsterType, 1, spawnPos, spawnRot, this.transform);
         }
     }
 
@@ -88,11 +90,7 @@ public class TutorialRoomManager : MonoBehaviour
 
     public void CleanupRoom()
     {
-        foreach (var monster in spawnedMonsters)
-        {
-            if (monster != null) Destroy(monster);
-        }
-        spawnedMonsters.Clear();
+        monsterFactory.DestroyMonsters();
         currentTask?.Cleanup();
     }
     

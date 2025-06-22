@@ -9,7 +9,7 @@ public class PENotifier : MonoBehaviour
     private void Start()
     {
         if (peTask == null)
-            peTask = GetComponentInParent<PETask>();
+            peTask = FindObjectOfType<PETask>();
     }
 
     private void OnCollisionEnter(Collision collision)

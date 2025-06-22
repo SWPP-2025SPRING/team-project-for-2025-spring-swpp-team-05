@@ -121,15 +121,15 @@ public class ProfessorController : MonoBehaviour, IMonsterController
     }
 
     // Tutorial task purpose
-    public void IsPlayerInView()
+    public bool IsPlayerInView()
     {
-        if (player == null || PlayerStatus.instance == null) return;
+        if (player == null || PlayerStatus.instance == null) return false;
 
         Vector3 origin = transform.position + Vector3.up * eyeHeight;
         Vector3 directionToPlayer = player.transform.position - origin;
         float distanceToPlayer = directionToPlayer.magnitude;
 
-        if (distanceToPlayer > viewDistance) return;
+        if (distanceToPlayer > viewDistance) return false;
 
         float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer.normalized);
 

@@ -31,5 +31,6 @@ public class TaskProgressUI : MonoBehaviour
     public void ShowCompletion()
     {
         progressText.text += "\n<color=green>클리어!</color>";
+        taskDescriptionText.text = "";
     }
 }
