@@ -1,24 +1,29 @@
+using Codice.Client.Commands;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 
 public class PlayerStatus : MonoBehaviour
 {
     public static PlayerStatus instance { get; private set; }
 
     public float moveSpeed { get; private set; }
-    public float attackPower { get; private set; }
-    public float attackRange { get; private set; }
 
     public float maxSpeed { get; private set; }
     public float minSpeed { get; private set; }
     public float acceleration { get; private set; }
     public float deceleration { get; private set; }
 
+    public int generalExp { get; private set; } = 0;
+    public int peExp { get; private set; } = 0;
+    public int majorExp { get; private set; } = 0;
+    public int thesisExp { get; private set; } = 0;
+    public int credit { get; private set; } = 0;
+    public float spa { get; private set; } = 0f;
+
     public float defaultMoveSpeed = 10.0f;
     public float defaultMinSpeed = 3.0f;
-    public float defaultAttackPower = 10;
-    public float defaultAttackRange = 3.0f;
     public float defaultAcceleration = 5.0f;
     public float defaultDeceleration = 5.0f;
 
@@ -38,15 +43,7 @@ public class PlayerStatus : MonoBehaviour
     public float accelGrowthRate = 0.2f; // 가속도 성장률
     public float decelGrowthRate = 0.2f; // 감속도 성장률
 
-
-    //public int exp { get; private set; } = 0;
-    //public int nextExp { get; private set; } = 100;
-
-    // 🔐 고정 상수 (외부 수정 방지)
-    // TODO: 공격 스탯 필요없다는 결론 나오면 다 삭제
-    public static readonly float maxAttackPower = 100f;
-    public static readonly float maxAttackRange = 10f;
-    public static readonly float speedStep = 2f;
+    public static readonly float speedStep = 1.5f;
     public static readonly float attackStep = 1f;
 
     private void Awake()
@@ -58,16 +55,24 @@ public class PlayerStatus : MonoBehaviour
         }
         instance = this;
         moveSpeed = defaultMinSpeed;
-        attackPower = defaultAttackPower;
-        attackRange = defaultAttackRange;
         maxSpeed = defaultMoveSpeed;
         acceleration = defaultAcceleration;
         deceleration = defaultDeceleration;
         DontDestroyOnLoad(gameObject);
     }
 
-    public void LevelUp(int levelIncrement = 1)
+    public void ResetPlayerStatus()
     {
+        moveSpeed = defaultMoveSpeed;
+        maxSpeed = defaultMoveSpeed;
+        minSpeed = defaultMinSpeed;
+        acceleration = defaultAcceleration;
+        deceleration = defaultDeceleration;
+    }
+
+    public void LevelUp(MonsterType type, int levelIncrement = 1, int per = 3)
+    {
+        List<float> statusBefore = GetStatusList();
         level += levelIncrement;
         if (level > maxLevel)
         {
@@ -76,10 +81,26 @@ public class PlayerStatus : MonoBehaviour
         maxSpeed = defaultMoveSpeed + (level - 1) * speedGrowthRate;
         acceleration = defaultAcceleration + (level - 1) * accelGrowthRate;
         deceleration = defaultDeceleration + (level - 1) * decelGrowthRate;
-        attackPower = GetAttackPower(level);
-        attackRange = GetAttackRange(level);
-        GameManager.Instance.uiManager.UpdateLevel(level);
 
+        switch (type)
+        {
+            case MonsterType.Report:
+                generalExp += per;
+                break;
+            case MonsterType.Professor:
+                thesisExp += per;
+                break;
+            case MonsterType.Python:
+                majorExp += per;
+                break;
+            case MonsterType.PE:
+                peExp += per;
+                break;
+        }
+
+        List<float> statusAfter = GetStatusList();
+        GameManager.Instance.uiManager.UpdateLevel(level);
+        StatusUIManager.Instance.ShowStatusUpdate(statusBefore, statusAfter);
     }
 
     public void SlowPlayer(float slowRate)
@@ -87,13 +108,13 @@ public class PlayerStatus : MonoBehaviour
         if (!isSlow)
         {
             isSlow = true;
-            DebufManager.Instance.UpdateDebufText(DebufType.Stun);
+            DebufManager.Instance.UpdateDebufText(DebufType.Slow);
         }
         slowRateAgg += slowRate;
-        moveSpeed = defaultMoveSpeed * (1 - slowRateAgg);
-        if (moveSpeed < 0)
+        maxSpeed = GetMaxSpeed() * (1 - slowRateAgg);
+        if (maxSpeed < 0)
         {
-            moveSpeed = 0.01f;
+            maxSpeed = 0.01f;
         }
     }
 
@@ -104,10 +125,10 @@ public class PlayerStatus : MonoBehaviour
         {
             slowRateAgg = 0;
         }
-        moveSpeed = defaultMoveSpeed * (1 - slowRateAgg);
-        if (moveSpeed < 0)
+        maxSpeed = GetMaxSpeed() * (1 - slowRateAgg);
+        if (maxSpeed < 0)
         {
-            moveSpeed = 0.01f;
+            maxSpeed = 0.01f;
         }
         if (slowRateAgg < 0.01f)
         {
@@ -118,18 +139,34 @@ public class PlayerStatus : MonoBehaviour
 
     public void StunPlayer(float stunTime)
     {
-        isStun = true;
+        if (isStun) return;
         StartCoroutine(StunPlayerCoroutine(stunTime));
     }
 
+
     IEnumerator StunPlayerCoroutine(float stunTime)
     {
+        isStun = true;
+        isStop = true;
+
         float tempSpeed = moveSpeed;
         moveSpeed = 0;
+
+        // 디버프 UI 반영
+        DebufManager.Instance.UpdateDebufText(DebufType.Stun);
+
+        // 해당 시간 동안 완전 멈춤
         yield return new WaitForSeconds(stunTime);
-        moveSpeed = tempSpeed;
+
+        // 복구
         isStun = false;
+        isStop = false;
+        moveSpeed = tempSpeed;
+
+        DebufManager.Instance.UpdateDebufText(DebufType.None);
+        Debug.Log("Player recovered from stun.");
     }
+
 
     public void SetReverseControl(bool isReverse)
     {
@@ -146,7 +183,8 @@ public class PlayerStatus : MonoBehaviour
 
     public void Accelerate(float factor, float dt)
     {
-        if (isStop) return; // 가속 중지 상태면 가속하지 않음
+        if (isStop || isStun) return;
+
         float targetSpeed = maxSpeed * factor;
         if (moveSpeed < targetSpeed)
         {
@@ -161,6 +199,8 @@ public class PlayerStatus : MonoBehaviour
 
     public void DeAccelerate(float factor, float dt)
     {
+        if (isStop || isStun) return;
+
         float targetSpeed = minSpeed * factor;
         if (moveSpeed > targetSpeed)
         {
@@ -173,26 +213,6 @@ public class PlayerStatus : MonoBehaviour
         moveSpeed = Mathf.Clamp(moveSpeed, minSpeed, maxSpeed);
     }
 
-    public void IncreaseAttackPower()
-    {
-        attackPower = Mathf.Min(attackPower + attackStep, maxAttackPower);
-    }
-
-    public void IncreaseAttackRange()
-    {
-        attackRange = Mathf.Min(attackRange + attackStep, maxAttackRange);
-    }
-
-    public float GetAttackPowerRatio()
-    {
-        return Mathf.Clamp01(attackPower / maxAttackPower);
-    }
-
-    public float GetAttackRangeRatio()
-    {
-        return Mathf.Clamp01(attackRange / maxAttackRange);
-    }
-
     public void IncreaseSpeed()
     {
         moveSpeed = Mathf.Min(moveSpeed + speedStep, maxSpeed);
@@ -202,15 +222,9 @@ public class PlayerStatus : MonoBehaviour
     {
         moveSpeed = Mathf.Max(moveSpeed - speedStep, minSpeed);
     }
-
-    private float GetAttackPower(int level)
+    private float GetMaxSpeed()
     {
-        return Mathf.Clamp(defaultAttackPower * Mathf.Pow(attackGrowthRate, level - 1), 0, maxAttackPower);
-    }
-
-    private float GetAttackRange(int level)
-    {
-        return Mathf.Clamp(defaultAttackRange * Mathf.Pow(attackRangeGrowthRate, level - 1), 0, maxAttackRange);
+        return defaultMoveSpeed + (level - 1) * speedGrowthRate;
     }
 
     public void StopPlayer()
@@ -222,5 +236,28 @@ public class PlayerStatus : MonoBehaviour
     public void ResumePlayer()
     {
         isStop = false;
+    }
+
+    public void SetSpeedZero()
+    {
+        moveSpeed = 0;
+    }
+
+    private List<float> GetStatusList()
+    {
+        List<float> statusList = new List<float>
+        {
+            level,
+            maxSpeed,
+            acceleration,
+            deceleration,
+            generalExp,
+            peExp,
+            majorExp,
+            thesisExp,
+            credit,
+            spa
+        };
+        return statusList;
     }
 }

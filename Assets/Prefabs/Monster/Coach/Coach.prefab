@@ -1368,7 +1368,6 @@ GameObject:
   - component: {fileID: 4227194317496637631}
   - component: {fileID: 4404726768822566746}
   - component: {fileID: 4404726768822566747}
-  - component: {fileID: 4404726768822566744}
   m_Layer: 0
   m_Name: Coach
   m_TagString: Untagged
@@ -1444,27 +1443,6 @@ MonoBehaviour:
   tennisBallForce: 30
   summonInterval: 10
   maxRotationSpeed: 100
---- !u!114 &4404726768822566744
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3594385396099678725}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 679bb583edc150c48a757090c234271d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  balls:
-  - {fileID: 4437379321653709331, guid: 12dfbf9de968b4b4d90ab6e01f05244c, type: 3}
-  - {fileID: 8577920988230986991, guid: eaa7c75b5fb4c254bb36aae8cad0da5f, type: 3}
-  - {fileID: 3630638548100165544, guid: f5fd03aa6b95b6c4eab29e25cfc20e3c, type: 3}
-  - {fileID: 5918204948540114256, guid: cc0e77b55336aee409429ee6cd1862fc, type: 3}
-  - {fileID: 1197219622356541440, guid: fca392d276a242f4aab238b653257174, type: 3}
-  - {fileID: 1388489846497119046, guid: bee39803173061443a819c8ed6b87a5a, type: 3}
-  - {fileID: 4186378214774759808, guid: c9a6d7b3e8c6f6c43ac242a30e7831d9, type: 3}
-  defaultBall: {fileID: 4437379321653709331, guid: 12dfbf9de968b4b4d90ab6e01f05244c, type: 3}
 --- !u!1 &3613500108252799326
 GameObject:
   m_ObjectHideFlags: 0

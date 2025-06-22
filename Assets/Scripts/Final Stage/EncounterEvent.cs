@@ -37,6 +37,7 @@ public class EncounterEvent : MonoBehaviour
         if (other.CompareTag("Player") && !isEncountered)
         {
             isEncountered = true; // Set the flag to true to prevent multiple spawns
+            PlayerStatus.instance.ResetPlayerStatus();
             StartCoroutine(SpawnCoroutine());
         }
     }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4471061022533775357}
   - component: {fileID: 4471061022533775354}
   - component: {fileID: 4158691759673839687}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ReportMonster 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -64,12 +64,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  launchForce: 30
+  launchForce: 5
   horizontalForce: 0
-  homingSpeed: 2
+  homingSpeed: 4
   detectionRadius: 10
   attatchDistance: 3
-  stunRate: 0.1
+  stunRate: 0.2
   codeLength: 4
 --- !u!65 &4158691759673839687
 BoxCollider:
@@ -150,6 +150,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 1c7cc0cc7ac93944697a0fd1fe56bb1d, type: 3}
       propertyPath: m_Name
       value: ReportMesh
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1c7cc0cc7ac93944697a0fd1fe56bb1d, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1c7cc0cc7ac93944697a0fd1fe56bb1d, type: 3}
