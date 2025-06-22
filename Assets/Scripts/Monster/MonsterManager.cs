@@ -38,4 +38,21 @@ public class MonsterManager : MonoBehaviour
                 return null;
         }
     }
+
+    public string GetMonsterName(MonsterType type)
+    {
+        switch (type)
+        {
+            case MonsterType.Report:
+                return "Report Monster";
+            case MonsterType.Professor:
+                return "Professor Monster";
+            case MonsterType.Python:
+                return "Python Monster";
+            case MonsterType.PE:
+                return "PE Monster";
+            default:
+                return "Unknown Monster";
+        }
+    }
 }
