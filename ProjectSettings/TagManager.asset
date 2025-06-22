@@ -9,18 +9,21 @@ TagManager:
   - Ground
   - Barrel
   - Enemy
+  - Terrain
+  - Key
+  - Road
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Props
+  - Building
+  - Monster
+  - Wall
+  - Report
   - 
   - 
   - 

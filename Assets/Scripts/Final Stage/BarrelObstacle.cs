@@ -26,7 +26,7 @@ public class BarrelObstacle : MonoBehaviour
                 // 플레이어에게 힘을 가하여 밀어내기
                 Vector3 pushDirection = collision.transform.position - transform.position;
                 pushDirection.y = 0; // Y축 방향은 무시
-                playerRigidbody.AddForce(pushDirection.normalized * 2000f, ForceMode.Impulse);
+                playerRigidbody.AddForce(pushDirection.normalized * 10, ForceMode.Impulse);
                 Destroy(gameObject); // 충돌 후 장애물 제거
             }
         }

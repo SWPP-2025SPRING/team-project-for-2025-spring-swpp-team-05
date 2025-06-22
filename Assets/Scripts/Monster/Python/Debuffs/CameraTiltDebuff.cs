@@ -37,6 +37,8 @@ public class CameraTiltDebuff : IDebuff
         if (follow == null) yield break;
 
         float timer = 0f;
+
+        DebufManager.Instance.UpdateDebufText(DebufType.CameraTilt);
         while (timer < Duration)
         {
             float zTilt = Mathf.Sin(Time.time * 10f) * tiltAmount;
@@ -46,5 +48,6 @@ public class CameraTiltDebuff : IDebuff
         }
 
         follow.SetTiltAngle(0f);
+        DebufManager.Instance.UpdateDebufText(DebufType.None);
     }
 }

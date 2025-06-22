@@ -14,7 +14,6 @@ public class BarrelMove : MonoBehaviour
     void Start()
     {
         direction = transform.forward; // Set the initial direction of the barrel
-        Debug.Log("BarrelMove Start: " + direction);
     }
 
     // Update is called once per frame

@@ -20,7 +20,6 @@ public class WebGLBuildScript
 
         if (scenes.Length == 0)
         {
-            Debug.LogError("No scenes are added to the Build Settings!");
             return;
         }
 
