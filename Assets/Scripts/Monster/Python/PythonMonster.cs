@@ -81,6 +81,10 @@ public class PythonMonster : MonoBehaviour, IMonsterController
 
             // 3. Destroy the monster after applying the debuff
             // TODO: Add a sound effect, particle effect
+            if (transform.parent != null) 
+            {
+                Destroy(transform.parent.gameObject);
+            }
             Destroy(gameObject);
         }
     }

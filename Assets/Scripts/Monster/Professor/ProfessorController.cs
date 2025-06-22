@@ -119,4 +119,20 @@ public class ProfessorController : MonoBehaviour, IMonsterController
         Gizmos.color = playerVisible ? Color.green : Color.gray;
         Gizmos.DrawLine(origin, player.transform.position);
     }
+
+    // Tutorial task purpose
+    public bool IsPlayerInView()
+    {
+        if (player == null || PlayerStatus.instance == null) return false;
+
+        Vector3 origin = transform.position + Vector3.up * eyeHeight;
+        Vector3 directionToPlayer = player.transform.position - origin;
+        float distanceToPlayer = directionToPlayer.magnitude;
+
+        if (distanceToPlayer > viewDistance) return false;
+
+        float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer.normalized);
+
+        return angleToPlayer < fieldOfView / 2f;
+    }
 }

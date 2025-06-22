@@ -37,6 +37,9 @@ public class PlayerControl : MonoBehaviour
     private float currentSpeed = 0f;
     private bool isBraking = false;
 
+    // Tutorial
+    private TutorialManager tutorialManager;
+
 
     // Start is called before the first frame update
     void Start()
@@ -44,6 +47,7 @@ public class PlayerControl : MonoBehaviour
         playerRb = GetComponent<Rigidbody>();
         playerAnimator = GetComponent<Animator>();
         playerAudio = GetComponent<AudioSource>();
+        tutorialManager = TutorialManager.Instance;
         Physics.gravity *= 1;
 
         // Initialize Code Factory
@@ -54,6 +58,9 @@ public class PlayerControl : MonoBehaviour
     void Update()
     {
         if (PlayerStatus.instance.isStun) return;
+
+        if (tutorialManager != null && tutorialManager.IsPaused()) 
+            return;
 
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
@@ -111,41 +118,32 @@ public class PlayerControl : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!gameManager.isGameActive) return;
-
-        if (PlayerStatus.instance.isStun)
-        {
-            playerAnimator.speed = 0f;
-            playerAnimator.SetFloat("Speed_f", 0f);
+        if (tutorialManager != null && tutorialManager.IsPaused()) 
             return;
-        }
 
-        MovePlayerForward();
+        if (gameManager.isGameActive)
+        {
+            MovePlayerForward();
+            if (isBraking)
+            {
+                float decelerationFactor = isOnIce ? 0.5f : 1.0f;
+                Debug.Log("Decelerating with factor: " + decelerationFactor + " With speed: " + PlayerStatus.instance.moveSpeed);
+                PlayerStatus.instance.DeAccelerate(decelerationFactor, Time.deltaTime);
+            }
+            else
+            {
+                float accelerationFactor = isOnIce ? 2.0f : 1.0f;
+                Debug.Log("Accelerating with factor: " + accelerationFactor + " With speed: " + PlayerStatus.instance.moveSpeed);
+                PlayerStatus.instance.Accelerate(accelerationFactor, Time.deltaTime);
+            }
 
-        if (isBraking)
-        {
-            float decelerationFactor = isOnIce ? 0.5f : 1.0f;
-            PlayerStatus.instance.DeAccelerate(decelerationFactor, Time.deltaTime);
-        }
-        else
-        {
-            float accelerationFactor = isOnIce ? 2.0f : 1.0f;
-            PlayerStatus.instance.Accelerate(accelerationFactor, Time.deltaTime);
         }
     }
 
-
     void MovePlayerForward()
     {
-        Vector3 velocity = Vector3.zero;
-
-        if (PlayerStatus.instance.isStun)
-        {
-            // 스턴 상태에서는 이동 없음
-            velocity = Vector3.zero;
-            playerAnimator.speed = 0f;
-        }
-        else if (isOnIce)
+        Vector3 velocity;
+        if (isOnIce)
         {
             velocity = HandleIceMovement(transform.forward);
             playerAnimator.speed = 0.2f;
@@ -159,11 +157,10 @@ public class PlayerControl : MonoBehaviour
         Vector3 newPosition = transform.position + velocity * Time.deltaTime;
         playerRb.MovePosition(newPosition);
 
-        // 애니메이션 속도 업데이트
+        // 애니메이션 동작 결정
         float animationSpeed = PlayerStatus.instance.moveSpeed / PlayerStatus.instance.defaultMoveSpeed;
         playerAnimator.SetFloat("Speed_f", animationSpeed);
     }
-
 
     public void StunPlayer(SolveCode code)
     {
@@ -209,6 +206,7 @@ public class PlayerControl : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        Debug.Log("Collision with: " + collision.gameObject.name);
         if (collision.gameObject.CompareTag("Enemy"))
         {
             StartCoroutine(TriggerAttacked());
