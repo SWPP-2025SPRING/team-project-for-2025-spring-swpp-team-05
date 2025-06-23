@@ -1,4 +1,3 @@
-using Codice.Client.Commands;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -76,7 +75,7 @@ public class PlayerStatus : MonoBehaviour
         isFinal = true;
     }
 
-    public void LevelUp(MonsterType type, int levelIncrement = 1, int per = 3)
+    public void LevelUp(MonsterType type, float spa, int levelIncrement = 1, int per = 3)
     {
         List<float> statusBefore = GetStatusList();
         level += levelIncrement;
@@ -103,6 +102,10 @@ public class PlayerStatus : MonoBehaviour
                 peExp += per;
                 break;
         }
+        float totalSPA = credit * this.spa;
+
+        this.credit += per;
+        this.spa = (spa + totalSPA) / credit;
 
         SoundEffectManager.Instance.PlayOneShotOnce(levelUpSound);
         List<float> statusAfter = GetStatusList();

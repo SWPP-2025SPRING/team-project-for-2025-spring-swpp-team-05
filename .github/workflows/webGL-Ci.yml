@@ -25,6 +25,14 @@ jobs:
           key: Library-${{ runner.os }}-${{ hashFiles('**/*.cs') }}
           restore-keys: |
             Library-${{ runner.os }}-
+      - name: Free up disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet \
+                      /usr/local/lib/android \
+                      /opt/ghc \
+                      /usr/local/share/boost \
+                      ~/.cache
+          df -h
 
       - name: Build WebGL
         uses: game-ci/unity-builder@v4.4.0

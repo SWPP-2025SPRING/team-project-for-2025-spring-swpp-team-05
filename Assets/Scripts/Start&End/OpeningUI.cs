@@ -1,6 +1,7 @@
+
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class OpeningUI : MonoBehaviour
@@ -13,24 +14,55 @@ public class OpeningUI : MonoBehaviour
     public float maxScale = 1.2f;
 
     private Vector3 origScale;
-
     private float t = 0f;
-    // Start is called before the first frame update
+
+    private RectTransform startRect;
+    private RectTransform tutorialRect;
+    private Vector2 startOrigin;
+    private Vector2 tutorialOrigin;
+
+    private bool moveToCenter = false;
+
     void Start()
     {
         origScale = titleText.transform.localScale;
+
+        startRect = startButton.GetComponent<RectTransform>();
+        tutorialRect = tutorialButton.GetComponent<RectTransform>();
+
+        startOrigin = startRect.anchoredPosition;
+        tutorialOrigin = tutorialRect.anchoredPosition;
+
+        startButton.onClick.AddListener(() =>
+        {
+            SceneManager.LoadScene("MainScene", LoadSceneMode.Single);
+        });
+        tutorialButton.onClick.AddListener(() =>
+        {
+            SceneManager.LoadScene("TutorialScene", LoadSceneMode.Single);
+        });
     }
 
-    // Update is called once per frame
     void Update()
     {
         t += Time.deltaTime * speed;
+
+        // 타이틀 펄스 효과
         float scale = Mathf.Lerp(minScale, maxScale, Mathf.PingPong(t, 1f));
         titleText.transform.localScale = origScale * scale;
+
+        // 특정 시간 이후 중앙으로 이동 시작
         if (t >= 9f && t <= 12f)
         {
-            startButton.transform.Translate(Vector3.up * 2);
-            tutorialButton.transform.Translate(Vector3.up * 2);
+            moveToCenter = true;
+        }
+
+        if (moveToCenter)
+        {
+            Vector2 center = Vector2.zero;
+
+            startRect.anchoredPosition = Vector2.Lerp(startOrigin, center + new Vector2(0, -100), (t - 9f) / 3f);
+            tutorialRect.anchoredPosition = Vector2.Lerp(tutorialOrigin, center + new Vector2(0, -250), (t - 9f) / 3f + 0.2f); // 살짝 시간 차이
         }
     }
 }

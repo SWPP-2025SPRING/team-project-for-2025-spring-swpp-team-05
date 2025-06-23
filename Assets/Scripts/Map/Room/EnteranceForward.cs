@@ -7,6 +7,7 @@ public class EnteranceForward : MonoBehaviour
     public enum EnteranceType { Enter, Exit }
     public EnteranceType enteranceType; // Enter or Exit
     private RoomSpawnManager parentManager; // Reference to the RoomSpawnManager
+    private Collider enteranceCollider; // Reference to the collider of this enterance
     // Start is called before the first frame update
     void Start()
     {
@@ -15,6 +16,8 @@ public class EnteranceForward : MonoBehaviour
         {
             Debug.LogError("EnteranceForward: Parent RoomSpawnManager not found!");
         }
+        parentManager.RegisterEnterance(this); // Register this enterance with the parent manager
+        enteranceCollider = GetComponent<Collider>();
     }
 
     public void OnTriggerEnter(Collider other)
@@ -23,12 +26,20 @@ public class EnteranceForward : MonoBehaviour
         {
             if (enteranceType == EnteranceType.Enter)
             {
-                parentManager.HandleEnter(other);
+                enteranceCollider.isTrigger = parentManager.HandleEnter(other);
             }
             else if (enteranceType == EnteranceType.Exit)
             {
-                parentManager.HandleExit(other);
+                enteranceCollider.isTrigger = parentManager.HandleExit(other);
             }
+        }
+    }
+
+    public void SetTrigger(bool isTrigger)
+    {
+        if (enteranceCollider != null)
+        {
+            enteranceCollider.isTrigger = isTrigger;
         }
     }
 }
