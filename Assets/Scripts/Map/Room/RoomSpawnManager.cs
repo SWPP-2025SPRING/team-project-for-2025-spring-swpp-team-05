@@ -39,6 +39,8 @@ public class RoomSpawnManager : MonoBehaviour
     public string roomName = "Default Room"; // Name of the room for debugging
     public string roomDescription = "This is a default room for monster spawning."; // Description of the room for debugging
 
+    private List<EnteranceForward> enterances = new List<EnteranceForward>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -57,6 +59,14 @@ public class RoomSpawnManager : MonoBehaviour
         }
     }
 
+    public void RegisterEnterance(EnteranceForward enterance)
+    {
+        if (!enterances.Contains(enterance))
+        {
+            enterances.Add(enterance);
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -71,6 +81,10 @@ public class RoomSpawnManager : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             isOnRoom = false;
+            foreach (var enterance in enterances)
+            {
+                enterance.SetTrigger(true); // Disable triggers for all enterances when exiting
+            }
             if (!isCleared)
             {
                 monsterFactory?.DestroyMonsters(); // Clean up monsters when exiting
@@ -86,7 +100,7 @@ public class RoomSpawnManager : MonoBehaviour
             }
         }
     }
-    public void HandleEnter(Collider other)
+    public bool HandleEnter(Collider other)
     {
         if (!isCleared && !isOnRoom)
         {
@@ -97,18 +111,21 @@ public class RoomSpawnManager : MonoBehaviour
             {
                 StartCoroutine(SpawnCoroutine());
             }
+            return true; // 아직은 방에 들어갈 수 있음
         }
         else if (isOnRoom) // 입구로 나가려고함
         {
             TitleManager.Instance.ShowEventText("입구로 나갈 수 없습니다.", Color.white, FlashPreset.StandardFlash);
+            return false; // Still block the player from entering
         }
-        else
+        else // 이미 클리어된 방에 들어가려고함
         {
             TitleManager.Instance.ShowEventText("이 방은 이미 클리어되었습니다.", Color.white, FlashPreset.StandardFlash);
+            return false; // Still block the player from entering
         }
     }
 
-    public void HandleExit(Collider other)
+    public bool HandleExit(Collider other)
     {
         if (isOnRoom && !isCleared)
         {
@@ -125,14 +142,17 @@ public class RoomSpawnManager : MonoBehaviour
                 HandleReportExit(other.GetComponent<PlayerControl>());
             }
             TitleManager.Instance.HideRoomText();
+            return true; // Successfully exited the room
         }
         else if (!isOnRoom) // 출구로 들어올려함
         {
             TitleManager.Instance.ShowEventText("출구로 들어올 수 없습니다.", Color.white, FlashPreset.StandardFlash);
+            return false;
         }
-        else
+        else // 이미 클리어된 방에 나가려고함
         {
-            TitleManager.Instance.ShowEventText("이 방은 이미 클리어되었습니다.", Color.white, FlashPreset.StandardFlash);
+            TitleManager.Instance.ShowEventText("해당 과목은 재수강이 불가합니다.", Color.white, FlashPreset.StandardFlash);
+            return true; // 그래... 나가긴 해야지..
         }
     }
 
