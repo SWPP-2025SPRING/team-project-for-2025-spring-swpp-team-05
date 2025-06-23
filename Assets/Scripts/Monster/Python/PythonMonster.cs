@@ -77,7 +77,7 @@ public class PythonMonster : MonoBehaviour, IMonsterController
             {
                 Debug.LogWarning("DebuffHandler component not found on Player.");
             }
-            SoundEffectManager.Instance.PlayOneShotOnce(attackSound); // Play attack sound effect
+            // SoundEffectManager.Instance.PlayOneShotOnce(attackSound); // Play attack sound effect
 
             // 3. Destroy the monster after applying the debuff
             // TODO: Add a sound effect, particle effect
