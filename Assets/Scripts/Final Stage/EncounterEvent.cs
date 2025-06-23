@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EncounterEvent : MonoBehaviour
 {
+    public AudioClip encounterSound;
 
     private BoxCollider roomCollider;
     private Vector3 roomCenter;
@@ -44,7 +45,7 @@ public class EncounterEvent : MonoBehaviour
 
     public IEnumerator SpawnCoroutine()
     {
-        Vector3 cameraFocusPosition = roomCenter + new Vector3(0, 30, -100);
+        Vector3 cameraFocusPosition = roomCenter + new Vector3(0, 30, -300);
         GameObject target = gameObject;
         IEnumerator spawnEvent = SpawnEventCoroutine();
         yield return StartCoroutine(CinematicCamera.Instance.StartCinematic(
@@ -54,9 +55,12 @@ public class EncounterEvent : MonoBehaviour
 
     public IEnumerator SpawnEventCoroutine()
     {
+        BGMManager.Instance.StopBGM(); // Stop current BGM
         TitleManager.Instance.ShowTitle(roomName, Color.white, FlashPreset.StandardFlash);
+        SoundEffectManager.Instance.PlayOneShotOnce(encounterSound); // Play encounter sound
         yield return new WaitForSecondsRealtime(0.5f); // Wait for a moment before spawning monsters
         TitleManager.Instance.ShowSubtitle(roomDescription, Color.white, FlashPreset.StandardFlash);
         yield return new WaitForSecondsRealtime(0.5f); // Wait for a moment after spawning
+        BGMManager.Instance.PlayBattleBGM(); // Play final stage BGM
     }
 }

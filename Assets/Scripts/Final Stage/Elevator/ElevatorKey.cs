@@ -5,6 +5,9 @@ using UnityEngine;
 public class ElevatorKey : MonoBehaviour
 {
 
+    public AudioClip doorOpenSound; // 문 열리는 소리
+    public AudioClip doorRejectSound; // 문 열리지 않는 소리
+
     public GameObject door1; // 엘리베이터 문1
     public GameObject door2; // 엘리베이터 문2
     public float openSpeed = 2f; // 문 열리는 속도
@@ -36,6 +39,7 @@ public class ElevatorKey : MonoBehaviour
             // 키가 없을떄
             if (itemManager != null && !itemManager.HasItem(ItemType.Key))
             {
+                SoundEffectManager.Instance.PlayOneShotOnce(doorRejectSound); // 문 열리지 않는 소리 재생
                 TitleManager.Instance.ShowEventText("이 엘리베이터를 타려면 열쇠가 필요해보인다...", Color.white, FlashPreset.Dramatic);
             }
             else
@@ -70,6 +74,7 @@ public class ElevatorKey : MonoBehaviour
 
         Vector3 targetPosition1 = door1InitialPosition + Vector3.right * openDistance;
         Vector3 targetPosition2 = door2InitialPosition + Vector3.left * openDistance;
+        SoundEffectManager.Instance.PlayOneShotOnce(doorOpenSound); // 문 열리는 소리 재생
 
         while (Vector3.Distance(door1.transform.position, targetPosition1) > 0.01f ||
                Vector3.Distance(door2.transform.position, targetPosition2) > 0.01f)

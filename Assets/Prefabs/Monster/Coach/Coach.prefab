@@ -1436,6 +1436,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40db60162f1eb47ae9a263e4ed2c8000, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackSound: {fileID: 8300000, guid: fe0b1f9aeb45b41b089175aeeabd5d95, type: 3}
   footballForce: 100
   bowlingForce: 20000
   basketballForce: 100

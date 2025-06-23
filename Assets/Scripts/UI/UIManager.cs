@@ -13,9 +13,6 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI levelUpText;
 
     // TODO: 공격 스탯 필요없다는 결론 나오면 다 삭제
-    [Header("Stat Bars")]
-    public Image atkBar;
-    public Image rangeBar;
 
     [Header("Speed Feedback")]
     private float lastSpeed;
@@ -138,19 +135,6 @@ public class UIManager : MonoBehaviour
         Debug.Log("Level up text faded out.");
         levelUpText.alpha = 0f;
         levelText.color = defaultColor; // Reset color after fading out
-    }
-
-    // Player ATK / RANGE Update
-    // TODO: 공격 스탯 필요없다는 결론 나오면 다 삭제
-    public void UpdateStats(float speed, float atkRatio, float rangeRatio)
-    {
-        UpdateSpeed(speed);
-
-        if (atkBar != null)
-            atkBar.fillAmount = atkRatio;
-
-        if (rangeBar != null)
-            rangeBar.fillAmount = rangeRatio;
     }
 }
 

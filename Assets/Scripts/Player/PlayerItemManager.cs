@@ -10,6 +10,7 @@ public enum ItemType
 
 public class PlayerItemManager : MonoBehaviour
 {
+    public AudioClip keySound; // Sound played when the player collects a key
     List<ItemType> collectedItems = new List<ItemType>();
     // Start is called before the first frame update
     void Start()
@@ -38,6 +39,7 @@ public class PlayerItemManager : MonoBehaviour
             if (!collectedItems.Contains(itemType))
             {
                 collectedItems.Add(itemType);
+                SoundEffectManager.Instance.PlayOneShotOnce(keySound);
                 TitleManager.Instance.ShowEventText("어딘가의 열쇠를 획득하였다...", Color.white, FlashPreset.Dramatic);
                 Debug.Log("Key collected!");
                 Destroy(other.gameObject); // 키 오브젝트 삭제

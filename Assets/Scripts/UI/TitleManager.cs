@@ -85,6 +85,22 @@ public class TitleManager : MonoBehaviour
         amountText.alpha = 1f; // Show amount text
     }
 
+    public void ShowEndTitle(string title, Color color, FlashPreset preset = FlashPreset.StandardFlash)
+    {
+        titleText.text = title;
+        float duration1, duration2, duration3;
+        GetDurations(preset, out duration1, out duration2, out duration3);
+        StartCoroutine(ShowForever(titleText, color, duration1, duration2));
+    }
+
+    public void ShowEndSubtitle(string subtitle, Color color, FlashPreset preset = FlashPreset.StandardFlash)
+    {
+        subtitleText.text = subtitle;
+        float duration1, duration2, duration3;
+        GetDurations(preset, out duration1, out duration2, out duration3);
+        StartCoroutine(ShowForever(subtitleText, color, duration1, duration2));
+    }
+
     public void HideRoomText()
     {
         levelText.alpha = 0f; // Hide level text
@@ -113,6 +129,23 @@ public class TitleManager : MonoBehaviour
             text.alpha = Mathf.Lerp(1f, 0f, elapsedTime / duration3);
             yield return null;
         }
+    }
+
+    private IEnumerator ShowForever(TextMeshProUGUI text, Color color, float duration1, float duration2)
+    {
+        Color originalColor = text.color;
+        float elapsedTime = 0f;
+        text.alpha = 0f; // Start with text invisible
+        text.color = color; // Set the text color to the specified color
+
+        while (elapsedTime < duration1)
+        {
+            elapsedTime += Time.unscaledDeltaTime;
+            text.alpha = Mathf.Lerp(0f, 1f, elapsedTime / duration1);
+            yield return null;
+        }
+        // Hold the text visible for duration2
+        yield return new WaitForSeconds(duration2);
     }
 
     public static void GetDurations(FlashPreset preset, out float duration1, out float duration2, out float duration3)
