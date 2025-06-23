@@ -9,6 +9,13 @@ public class MonsterManager : MonoBehaviour
     public GameObject pythonMonsterPrefab;
     public GameObject peMonsterPrefab;
 
+    public AudioClip reportMonsterSound;
+    public AudioClip professorMonsterSound;
+    public AudioClip pythonMonsterSound;
+    public AudioClip peMonsterSound;
+
+    public AudioClip clearSound;
+
     public static MonsterManager Instance { get; private set; }
 
     // !!! for integration test: dictionary override
@@ -61,5 +68,22 @@ public class MonsterManager : MonoBehaviour
     public void OverrideMonsterPrefab(MonsterType type, GameObject dummy)
     {
         monsterPrefabDict[type] = dummy;
+    }
+
+    public AudioClip GetMonsterSound(MonsterType type)
+    {
+        switch (type)
+        {
+            case MonsterType.Report:
+                return reportMonsterSound;
+            case MonsterType.Professor:
+                return professorMonsterSound;
+            case MonsterType.Python:
+                return pythonMonsterSound;
+            case MonsterType.PE:
+                return peMonsterSound;
+            default:
+                return null;
+        }
     }
 }

@@ -37,6 +37,9 @@ public class PlayerControl : MonoBehaviour
     private float currentSpeed = 0f;
     private bool isBraking = false;
 
+    // Tutorial
+    private TutorialManager tutorialManager;
+
 
     // Start is called before the first frame update
     void Start()
@@ -44,6 +47,7 @@ public class PlayerControl : MonoBehaviour
         playerRb = GetComponent<Rigidbody>();
         playerAnimator = GetComponent<Animator>();
         playerAudio = GetComponent<AudioSource>();
+        tutorialManager = TutorialManager.Instance;
         Physics.gravity *= 1;
 
         // Initialize Code Factory
@@ -53,6 +57,11 @@ public class PlayerControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (PlayerStatus.instance.isStun) return;
+
+        if (tutorialManager != null && tutorialManager.IsPaused()) 
+            return;
+
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
         // TODO: 킥보드로 바꾸고 나서는 킥보드 애니메이션으로 바꾸기
@@ -64,6 +73,11 @@ public class PlayerControl : MonoBehaviour
         {
             Quaternion turnRotation = Quaternion.Euler(0, horizontalInput * 100 * Time.deltaTime, 0);
             transform.rotation *= turnRotation;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            PlayerStatus.instance.Booster();
         }
 
         if (PlayerStatus.instance.isSlow)
@@ -100,23 +114,26 @@ public class PlayerControl : MonoBehaviour
         {
             isBraking = false;
         }
-
-
     }
 
     void FixedUpdate()
     {
+        if (tutorialManager != null && tutorialManager.IsPaused()) 
+            return;
+
         if (gameManager.isGameActive)
         {
             MovePlayerForward();
             if (isBraking)
             {
                 float decelerationFactor = isOnIce ? 0.5f : 1.0f;
+                Debug.Log("Decelerating with factor: " + decelerationFactor + " With speed: " + PlayerStatus.instance.moveSpeed);
                 PlayerStatus.instance.DeAccelerate(decelerationFactor, Time.deltaTime);
             }
             else
             {
                 float accelerationFactor = isOnIce ? 2.0f : 1.0f;
+                Debug.Log("Accelerating with factor: " + accelerationFactor + " With speed: " + PlayerStatus.instance.moveSpeed);
                 PlayerStatus.instance.Accelerate(accelerationFactor, Time.deltaTime);
             }
 
@@ -166,6 +183,11 @@ public class PlayerControl : MonoBehaviour
         DebufManager.Instance.UpdateDebufText(DebufType.None);
     }
 
+    public void ResetCodeFactory()
+    {
+        codeFactory.Reset();
+    }
+
     private Vector3 HandleIceMovement(Vector3 baseDirection)
     {
         if (justEnteredIce)
@@ -184,6 +206,7 @@ public class PlayerControl : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        Debug.Log("Collision with: " + collision.gameObject.name);
         if (collision.gameObject.CompareTag("Enemy"))
         {
             StartCoroutine(TriggerAttacked());

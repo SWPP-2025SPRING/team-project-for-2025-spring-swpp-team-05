@@ -71,6 +71,8 @@ MonoBehaviour:
   attatchDistance: 3
   stunRate: 0.2
   codeLength: 4
+  launchSound: {fileID: 8300000, guid: 7e9ee6dc04a5d40d1a5dfc4beb9865e7, type: 3}
+  attachSound: {fileID: 8300000, guid: 29bde6326b4c34ad8a12da475f79b50a, type: 3}
 --- !u!65 &4158691759673839687
 BoxCollider:
   m_ObjectHideFlags: 0

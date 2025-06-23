@@ -1,4 +1,3 @@
-using Codice.Client.Commands;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +5,8 @@ using UnityEngine;
 
 public class PlayerStatus : MonoBehaviour
 {
+    public AudioClip levelUpSound; // Sound played when the player levels up
+    public AudioClip boostSound; // Sound played when the player uses a booster
     public static PlayerStatus instance { get; private set; }
 
     public float moveSpeed { get; private set; }
@@ -36,6 +37,9 @@ public class PlayerStatus : MonoBehaviour
     public int level { get; private set; } = 1;
     public int maxLevel { get; private set; } = 50;
 
+    public bool isBoost { get; private set; } = false;
+    public bool isFinal { get; private set; } = false; // 최종 레벨 도달 여부
+
 
     public float attackGrowthRate = 1.1f; // 공격력 성장률
     public float attackRangeGrowthRate = 1.1f; // 공격 범위 성장률
@@ -64,13 +68,14 @@ public class PlayerStatus : MonoBehaviour
     public void ResetPlayerStatus()
     {
         moveSpeed = defaultMoveSpeed;
-        maxSpeed = defaultMoveSpeed;
+        maxSpeed = defaultMoveSpeed * 1.5f;
         minSpeed = defaultMinSpeed;
         acceleration = defaultAcceleration;
         deceleration = defaultDeceleration;
+        isFinal = true;
     }
 
-    public void LevelUp(MonsterType type, int levelIncrement = 1, int per = 3)
+    public void LevelUp(MonsterType type, float spa, int levelIncrement = 1, int per = 3)
     {
         List<float> statusBefore = GetStatusList();
         level += levelIncrement;
@@ -97,7 +102,12 @@ public class PlayerStatus : MonoBehaviour
                 peExp += per;
                 break;
         }
+        float totalSPA = credit * this.spa;
 
+        this.credit += per;
+        this.spa = (spa + totalSPA) / credit;
+
+        SoundEffectManager.Instance.PlayOneShotOnce(levelUpSound);
         List<float> statusAfter = GetStatusList();
         GameManager.Instance.uiManager.UpdateLevel(level);
         StatusUIManager.Instance.ShowStatusUpdate(statusBefore, statusAfter);
@@ -108,7 +118,7 @@ public class PlayerStatus : MonoBehaviour
         if (!isSlow)
         {
             isSlow = true;
-            DebufManager.Instance.UpdateDebufText(DebufType.Stun);
+            DebufManager.Instance.UpdateDebufText(DebufType.Slow);
         }
         slowRateAgg += slowRate;
         maxSpeed = GetMaxSpeed() * (1 - slowRateAgg);
@@ -137,20 +147,44 @@ public class PlayerStatus : MonoBehaviour
         }
     }
 
+    public void ResetSlow()
+    {
+        slowRateAgg = 0f;
+        maxSpeed = GetMaxSpeed();
+        isSlow = false;
+        DebufManager.Instance.UpdateDebufText(DebufType.None);
+    }
+
     public void StunPlayer(float stunTime)
     {
-        isStun = true;
+        if (isStun) return;
         StartCoroutine(StunPlayerCoroutine(stunTime));
     }
 
+
     IEnumerator StunPlayerCoroutine(float stunTime)
     {
+        isStun = true;
+        isStop = true;
+
         float tempSpeed = moveSpeed;
         moveSpeed = 0;
+
+        // 디버프 UI 반영
+        DebufManager.Instance.UpdateDebufText(DebufType.Stun);
+
+        // 해당 시간 동안 완전 멈춤
         yield return new WaitForSeconds(stunTime);
-        moveSpeed = tempSpeed;
+
+        // 복구
         isStun = false;
+        isStop = false;
+        moveSpeed = tempSpeed;
+
+        DebufManager.Instance.UpdateDebufText(DebufType.None);
+        Debug.Log("Player recovered from stun.");
     }
+
 
     public void SetReverseControl(bool isReverse)
     {
@@ -167,7 +201,8 @@ public class PlayerStatus : MonoBehaviour
 
     public void Accelerate(float factor, float dt)
     {
-        if (isStop) return; // 가속 중지 상태면 가속하지 않음
+        if (isStop || isStun) return;
+
         float targetSpeed = maxSpeed * factor;
         if (moveSpeed < targetSpeed)
         {
@@ -178,10 +213,13 @@ public class PlayerStatus : MonoBehaviour
             moveSpeed = Mathf.MoveTowards(moveSpeed, targetSpeed, deceleration * dt);
         }
         moveSpeed = Mathf.Clamp(moveSpeed, minSpeed, maxSpeed);
+        GameManager.Instance.uiManager.UpdateSpeed(moveSpeed);
     }
 
     public void DeAccelerate(float factor, float dt)
     {
+        if (isStop || isStun) return;
+
         float targetSpeed = minSpeed * factor;
         if (moveSpeed > targetSpeed)
         {
@@ -192,6 +230,7 @@ public class PlayerStatus : MonoBehaviour
             moveSpeed = Mathf.MoveTowards(moveSpeed, targetSpeed, acceleration * dt);
         }
         moveSpeed = Mathf.Clamp(moveSpeed, minSpeed, maxSpeed);
+        GameManager.Instance.uiManager.UpdateSpeed(moveSpeed);
     }
 
     public void IncreaseSpeed()
@@ -241,4 +280,44 @@ public class PlayerStatus : MonoBehaviour
         };
         return statusList;
     }
+
+    public void Booster()
+    {
+        if (!isFinal)
+        {
+            Debug.LogWarning("최종 레벨에 도달하여 부스터를 사용할 수 없습니다.");
+            return;
+        }
+        if (level < 5)
+        {
+            Debug.LogWarning("레벨이 너무 낮아 부스터를 사용할 수 없습니다.");
+            return;
+        }
+        if (isBoost)
+        {
+            Debug.LogWarning("이미 부스터를 사용 중입니다.");
+            return;
+        }
+        StartCoroutine(UseBooster());
+    }
+
+    private IEnumerator UseBooster()
+    {
+        isBoost = true;
+        float originalSpeed = moveSpeed;
+        float originalMaxSpeed = maxSpeed;
+        moveSpeed *= 2;
+        maxSpeed *= 2f;
+        level -= 5; // 레벨을 5 감소
+        GameManager.Instance.uiManager.UpdateSpeed(moveSpeed);
+        SoundEffectManager.Instance.PlayOneShotOnce(boostSound);
+        GameManager.Instance.uiManager.UpdateLevel(level);
+        yield return new WaitForSeconds(4f); // 5초 동안 부스트 효과
+        moveSpeed = originalSpeed;
+        maxSpeed = originalMaxSpeed;
+        isBoost = false;
+        GameManager.Instance.uiManager.UpdateSpeed(moveSpeed);
+    }
+
+
 }

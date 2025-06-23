@@ -130,6 +130,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25aba60d00da2e14fb7a5eb5f0e2ece2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  barrelCollisionSound: {fileID: 8300000, guid: a0010a1a0c474473b81729eb770c485f, type: 3}
 --- !u!1 &6967813024819632013
 GameObject:
   m_ObjectHideFlags: 0
