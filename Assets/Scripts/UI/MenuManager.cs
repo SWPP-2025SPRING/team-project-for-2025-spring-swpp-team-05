@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour
 {
+    public Button pauseButton;
     public GameObject mainUI;
     public GameObject menuUI;
     public Button resumeButton;
@@ -16,6 +17,8 @@ public class MenuManager : MonoBehaviour
     {
         mainUI.SetActive(true);
         menuUI.SetActive(false);
+
+        pauseButton.onClick.AddListener(ToggleMenu);
         resumeButton.onClick.AddListener(ToggleMenu);
         restartButton.onClick.AddListener(() =>
         {
