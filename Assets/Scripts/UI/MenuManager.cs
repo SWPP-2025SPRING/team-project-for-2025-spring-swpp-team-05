@@ -44,15 +44,20 @@ public class MenuManager : MonoBehaviour
     public void ToggleMenu()
     {
         bool isActive = mainUI.activeSelf;
-        mainUI.SetActive(!isActive);
-        menuUI.SetActive(isActive);
-        if (isActive)
+
+        if (isActive && GameManager.Instance.isGameActive)
         {
+            mainUI.SetActive(!isActive);
+            menuUI.SetActive(isActive);
+            Debug.Log("Pause Game");
             GameManager.Instance.StopTimeTick(); // 게임 일시 정지
             if (BGMManager.Instance != null) BGMManager.Instance.PauseBGM(); // BGM 일시 정지
         }
-        else
+        else if (!isActive && !GameManager.Instance.isGameActive)
         {
+            mainUI.SetActive(!isActive);
+            menuUI.SetActive(isActive);
+            Debug.Log("Resume Game");
             GameManager.Instance.ResumeTimeTick(); // 게임 재개
             if (BGMManager.Instance != null) BGMManager.Instance.ResumeBGM(); // BGM 재개
         }
