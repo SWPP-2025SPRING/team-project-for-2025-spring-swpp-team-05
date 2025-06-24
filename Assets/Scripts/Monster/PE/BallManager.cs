@@ -20,7 +20,6 @@ public class BallManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject); // 선택사항: 씬 전환 시 유지하고 싶을 때
     }
 
     public GameObject GetBallPrefab(BallType type)

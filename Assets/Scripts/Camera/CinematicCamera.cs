@@ -16,7 +16,6 @@ public class CinematicCamera : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject); // 씬 변경 시 유지하고 싶을 경우
     }
     // Start is called before the first frame update
     void Start()

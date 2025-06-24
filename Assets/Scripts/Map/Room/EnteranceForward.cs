@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnteranceForward : MonoBehaviour
 {
-    public enum EnteranceType { Enter, Exit }
+    public enum EnteranceType { Enter, Exit, Both }
     public EnteranceType enteranceType; // Enter or Exit
     private RoomSpawnManager parentManager; // Reference to the RoomSpawnManager
     private Collider enteranceCollider; // Reference to the collider of this enterance
@@ -31,6 +31,10 @@ public class EnteranceForward : MonoBehaviour
             else if (enteranceType == EnteranceType.Exit)
             {
                 enteranceCollider.isTrigger = parentManager.HandleExit(other);
+            }
+            else if (enteranceType == EnteranceType.Both)
+            {
+                enteranceCollider.isTrigger = parentManager.HandleEnterance(other);
             }
         }
     }

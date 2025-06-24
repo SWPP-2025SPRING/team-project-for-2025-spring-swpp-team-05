@@ -14,7 +14,6 @@ public class SoundEffectManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
 
             oneShotSource = gameObject.AddComponent<AudioSource>();
             oneShotSource.loop = false;

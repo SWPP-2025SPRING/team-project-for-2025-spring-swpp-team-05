@@ -106,7 +106,7 @@ public class SolveCode
 
     string GenerateRandomCode(int length)
     {
-        const string chars = "BCEFGHIJKLMNOPQTUVXYZ456789";
+        const string chars = "1234QEZXCVFVTGB5"; // 키보드 왼쪽만 나오게
         System.Random rand = new System.Random();  // Unity Random은 MonoBehaviour밖에 사용 못함
         char[] result = new char[length];
 

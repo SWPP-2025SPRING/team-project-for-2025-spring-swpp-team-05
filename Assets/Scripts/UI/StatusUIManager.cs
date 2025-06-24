@@ -15,6 +15,8 @@ public class StatusUIManager : MonoBehaviour
     public TextMeshProUGUI[] statusAfterTexts;
     public GameObject statusInt;
 
+    RectTransform rt;
+
     public static StatusUIManager Instance;
 
     public void Awake()
@@ -22,7 +24,6 @@ public class StatusUIManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -33,6 +34,7 @@ public class StatusUIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        rt = GetComponent<RectTransform>();
         HideTexts();
     }
 
@@ -110,33 +112,33 @@ public class StatusUIManager : MonoBehaviour
 
     IEnumerator MoveRight()
     {
-        Vector3 startPosition = transform.position;
-        Vector3 targetPosition = startPosition + new Vector3(xOffset, 0, 0);
+        Vector2 startPosition = rt.anchoredPosition;
+        Vector2 targetPosition = startPosition + new Vector2(xOffset, 0);
         float elapsedTime = 0f;
 
         while (elapsedTime < duration)
         {
-            transform.position = Vector3.Lerp(startPosition, targetPosition, elapsedTime / duration);
+            rt.anchoredPosition = Vector2.Lerp(startPosition, targetPosition, elapsedTime / duration);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        transform.position = targetPosition;
+        rt.anchoredPosition = targetPosition;
     }
 
     IEnumerator MoveLeft()
     {
-        Vector3 startPosition = transform.position;
-        Vector3 targetPosition = startPosition - new Vector3(xOffset, 0, 0);
+        Vector2 startPosition = rt.anchoredPosition;
+        Vector2 targetPosition = startPosition - new Vector2(xOffset, 0);
         float elapsedTime = 0f;
 
         while (elapsedTime < duration)
         {
-            transform.position = Vector3.Lerp(startPosition, targetPosition, elapsedTime / duration);
+            rt.anchoredPosition = Vector2.Lerp(startPosition, targetPosition, elapsedTime / duration);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        transform.position = targetPosition;
+        rt.anchoredPosition = targetPosition;
     }
 }

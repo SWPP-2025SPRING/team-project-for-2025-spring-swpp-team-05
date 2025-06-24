@@ -175,6 +175,7 @@ MonoBehaviour:
   viewDistance: 30
   stunTime: 2
   eyeHeight: 1
+  professorSound: {fileID: 8300000, guid: b9eff218e132a4e76be78840eca96fb2, type: 3}
 --- !u!54 &6583833324394734992
 Rigidbody:
   m_ObjectHideFlags: 0

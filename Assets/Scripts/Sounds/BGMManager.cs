@@ -21,7 +21,6 @@ public class BGMManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject); // 씬 변경 시 유지하고 싶을 경우
 
         audioSource = GetComponent<AudioSource>();
         audioSource.clip = fieldBGM;
@@ -34,6 +33,22 @@ public class BGMManager : MonoBehaviour
         if (audioSource.isPlaying)
         {
             audioSource.Stop();
+        }
+    }
+
+    public void PauseBGM()
+    {
+        if (audioSource.isPlaying)
+        {
+            audioSource.Pause();
+        }
+    }
+
+    public void ResumeBGM()
+    {
+        if (!audioSource.isPlaying)
+        {
+            audioSource.Play();
         }
     }
 
