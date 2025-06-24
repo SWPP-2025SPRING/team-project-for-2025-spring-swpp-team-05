@@ -26,7 +26,6 @@ public class MonsterManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     public GameObject GetMonsterPrefab(MonsterType type)

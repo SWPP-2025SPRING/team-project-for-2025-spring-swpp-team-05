@@ -109,7 +109,6 @@ public class ReportController : MonoBehaviour, IMonsterController
         isAttatched = true;
         reportRigidbody.velocity = Vector3.zero; // 속도 초기화
         attachOffset = transform.position - player.transform.position; // 플레이어와의 상대 위치 저장
-        transform.SetParent(player.transform); // 플레이어의 자식으로 설정
         Destroy(reportRigidbody);
         player.GetComponent<PlayerControl>().StunPlayer(solveCode);
         SoundEffectManager.Instance.PlayOneShotOnce(attachSound); // 부착 사운드 재생

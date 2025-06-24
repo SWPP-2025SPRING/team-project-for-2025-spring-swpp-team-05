@@ -17,6 +17,9 @@ public class ProfessorController : MonoBehaviour, IMonsterController
     private GameObject player;
     private Animator animator;
 
+    [Header("Sound Effects")]
+    public AudioClip professorSound;
+
     public void SetLevel(int level)
     {
         float stunTimeGrowth = 0.1f;
@@ -69,7 +72,9 @@ public class ProfessorController : MonoBehaviour, IMonsterController
     void Stun(float duration)
     {
         if (PlayerStatus.instance != null)
-            PlayerStatus.instance.StunPlayer(duration);
+        {
+            PlayerStatus.instance.StunPlayer(duration, professorSound);
+        }
     }
 
     private System.Collections.IEnumerator ResetAttackedFlag()

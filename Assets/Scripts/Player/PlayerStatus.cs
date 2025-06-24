@@ -62,7 +62,6 @@ public class PlayerStatus : MonoBehaviour
         maxSpeed = defaultMoveSpeed;
         acceleration = defaultAcceleration;
         deceleration = defaultDeceleration;
-        DontDestroyOnLoad(gameObject);
     }
 
     public void ResetPlayerStatus()
@@ -155,9 +154,13 @@ public class PlayerStatus : MonoBehaviour
         DebufManager.Instance.UpdateDebufText(DebufType.None);
     }
 
-    public void StunPlayer(float stunTime)
+    public void StunPlayer(float stunTime, AudioClip sound = null)
     {
         if (isStun) return;
+        if (sound != null)
+        {
+            SoundEffectManager.Instance.PlayOneShotOnce(sound);
+        }
         StartCoroutine(StunPlayerCoroutine(stunTime));
     }
 

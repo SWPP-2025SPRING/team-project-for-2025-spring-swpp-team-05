@@ -176,7 +176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e976dd87a03d4c48b9ca46cfe42ffa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enteranceType: 0
+  enteranceType: 2
 --- !u!1 &7640364614572020969
 GameObject:
   m_ObjectHideFlags: 0
@@ -309,7 +309,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e976dd87a03d4c48b9ca46cfe42ffa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enteranceType: 1
+  enteranceType: 2
 --- !u!1001 &4848820892595143823
 PrefabInstance:
   m_ObjectHideFlags: 0

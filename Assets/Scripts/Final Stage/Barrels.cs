@@ -20,7 +20,6 @@ public class Barrels : MonoBehaviour
         Instance = this;
 
         // 필요 시 DontDestroyOnLoad 설정
-        // DontDestroyOnLoad(gameObject);
     }
 
     public int GetBarrelCount()
