@@ -121,7 +121,7 @@ public class RoomSpawnManager : MonoBehaviour
         else // 이미 클리어된 방에 들어가려고함
         {
             TitleManager.Instance.ShowEventText("이 방은 이미 클리어되었습니다.", Color.white, FlashPreset.StandardFlash);
-            return false; // Still block the player from entering
+            return true; // Still block the player from entering
         }
     }
 
@@ -153,6 +153,18 @@ public class RoomSpawnManager : MonoBehaviour
         {
             TitleManager.Instance.ShowEventText("해당 과목은 재수강이 불가합니다.", Color.white, FlashPreset.StandardFlash);
             return true; // 그래... 나가긴 해야지..
+        }
+    }
+
+    public bool HandleEnterance(Collider other)
+    {
+        if (isOnRoom)
+        {
+            return HandleExit(other);
+        }
+        else
+        {
+            return HandleEnter(other);
         }
     }
 

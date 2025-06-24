@@ -97,9 +97,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 766fd79e1f68c44febf9dc38c7877aa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackSound: {fileID: 8300000, guid: 5fdb13d3756c84fecac96f5a2d124370, type: 3}
+  moveSpeed: 5
+  moveRange: 3
   slowRate: 0.3
   slowDuration: 5
   reverseDuration: 3
+  cameraTiltDuration: 5
+  cameraFlipDuration: 5
 --- !u!65 &5325200022412546419
 BoxCollider:
   m_ObjectHideFlags: 0

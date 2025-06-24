@@ -25,6 +25,10 @@ public class GoalTrigger : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player") && !isTriggered)
         {
+            if (collision.transform.position.y < transform.position.y)
+            {
+                return; // 플레이어가 GoalTrigger보다 아래에 있을 때는 무시
+            }
             // 플레이어가 GoalTrigger에 닿았을 때
             isTriggered = true; // GoalTrigger가 트리거되었음을 표시
             Debug.Log("Goal Triggered!");

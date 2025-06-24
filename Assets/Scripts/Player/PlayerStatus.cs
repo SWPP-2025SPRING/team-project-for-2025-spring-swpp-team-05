@@ -62,7 +62,6 @@ public class PlayerStatus : MonoBehaviour
         maxSpeed = defaultMoveSpeed;
         acceleration = defaultAcceleration;
         deceleration = defaultDeceleration;
-        DontDestroyOnLoad(gameObject);
     }
 
     public void ResetPlayerStatus()

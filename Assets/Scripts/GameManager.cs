@@ -24,7 +24,6 @@ public class GameManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject); // 씬 변경 시 유지하고 싶을 경우
 
         isGameActive = true;
     }
