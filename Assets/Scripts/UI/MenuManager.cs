@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour
 {
+    public Button pauseButton;
     public GameObject mainUI;
     public GameObject menuUI;
     public Button resumeButton;
@@ -16,11 +17,13 @@ public class MenuManager : MonoBehaviour
     {
         mainUI.SetActive(true);
         menuUI.SetActive(false);
+
+        pauseButton.onClick.AddListener(ToggleMenu);
         resumeButton.onClick.AddListener(ToggleMenu);
         restartButton.onClick.AddListener(() =>
         {
             GameManager.Instance.ResumeTimeTick(); // 게임 시간 재개
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // 현재 씬 재시작
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name); // 현재 씬 재시작
         });
         exitButton.onClick.AddListener(() =>
         {
@@ -46,12 +49,12 @@ public class MenuManager : MonoBehaviour
         if (isActive)
         {
             GameManager.Instance.StopTimeTick(); // 게임 일시 정지
-            BGMManager.Instance.PauseBGM(); // BGM 일시 정지
+            if (BGMManager.Instance != null) BGMManager.Instance.PauseBGM(); // BGM 일시 정지
         }
         else
         {
             GameManager.Instance.ResumeTimeTick(); // 게임 재개
-            BGMManager.Instance.ResumeBGM(); // BGM 재개
+            if (BGMManager.Instance != null) BGMManager.Instance.ResumeBGM(); // BGM 재개
         }
     }
 }
