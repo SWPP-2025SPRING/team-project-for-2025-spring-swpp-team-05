@@ -17,6 +17,9 @@ public class MonsterManager : MonoBehaviour
     public AudioClip clearSound;
 
     public static MonsterManager Instance { get; private set; }
+
+    // !!! for integration test: dictionary override
+    private Dictionary<MonsterType, GameObject> monsterPrefabDict = new();
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -30,36 +33,40 @@ public class MonsterManager : MonoBehaviour
 
     public GameObject GetMonsterPrefab(MonsterType type)
     {
-        switch (type)
+        // 1. 테스트 딕셔너리에 있으면 그걸 먼저 반환
+        if (monsterPrefabDict.ContainsKey(type))
         {
-            case MonsterType.Report:
-                return reportMonsterPrefab;
-            case MonsterType.Professor:
-                return professorMonsterPrefab;
-            case MonsterType.Python:
-                return pythonMonsterPrefab;
-            case MonsterType.PE:
-                return peMonsterPrefab;
-            default:
-                return null;
+            return monsterPrefabDict[type];
         }
+
+        // 2. 아니면 원래 프리팹 반환
+        return type switch
+        {
+            MonsterType.Report => reportMonsterPrefab,
+            MonsterType.Professor => professorMonsterPrefab,
+            MonsterType.Python => pythonMonsterPrefab,
+            MonsterType.PE => peMonsterPrefab,
+            _ => null,
+        };
+
     }
 
     public string GetMonsterName(MonsterType type)
     {
-        switch (type)
+        return type switch
         {
-            case MonsterType.Report:
-                return "Report Monster";
-            case MonsterType.Professor:
-                return "Professor Monster";
-            case MonsterType.Python:
-                return "Python Monster";
-            case MonsterType.PE:
-                return "PE Monster";
-            default:
-                return "Unknown Monster";
-        }
+            MonsterType.Report => "Report Monster",
+            MonsterType.Professor => "Professor Monster",
+            MonsterType.Python => "Python Monster",
+            MonsterType.PE => "PE Monster",
+            _ => "Unknown Monster",
+        };
+    }
+
+    // !!! for integration test: dummy prefab override
+    public void OverrideMonsterPrefab(MonsterType type, GameObject dummy)
+    {
+        monsterPrefabDict[type] = dummy;
     }
 
     public AudioClip GetMonsterSound(MonsterType type)
