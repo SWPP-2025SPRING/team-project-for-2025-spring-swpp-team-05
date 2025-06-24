@@ -2,9 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public struct CamPoint
+{
+    public Vector3 position;
+    public Quaternion rotation;
+    public float duration; // ≤0 이면 defaultDuration 사용
+}
+
 public class CinematicCamera : MonoBehaviour
 {
     public static CinematicCamera Instance { get; private set; }
+    [Header("Cinematic Points")]
+    public CamPoint[] points;
+
+    [Header("Settings")]
+    public AnimationCurve easeCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+    public float defaultDuration = 3f;
 
     void Awake()
     {
@@ -75,5 +89,54 @@ public class CinematicCamera : MonoBehaviour
 
             yield return null;
         }
+    }
+
+
+    /**
+    * Function for initial cinematic camera setup.
+    */
+
+    public void StartCinematic()
+    {
+        GameManager.Instance.StopTimeTick(); // Stop game time for cinematic
+        StartCoroutine(PlayCinematic());
+    }
+
+
+    private IEnumerator PlayCinematic()
+    {
+        if (points == null || points.Length == 0) yield break;
+
+        Transform camT = transform;
+        // 첫 포인트로 즉시 세팅
+        camT.position = points[0].position;
+        camT.rotation = points[0].rotation;
+        yield return null;
+
+        // 나머지 구간 보간
+        for (int i = 1; i < points.Length; i++)
+        {
+            Vector3 startPos = camT.position;
+            Quaternion startRot = camT.rotation;
+            Vector3 endPos = points[i].position;
+            Quaternion endRot = points[i].rotation;
+            float dur = points[i].duration > 0 ? points[i].duration : defaultDuration;
+
+            float elapsed = 0f;
+            while (elapsed < dur)
+            {
+                float t = easeCurve.Evaluate(elapsed / dur);
+                camT.position = Vector3.Lerp(startPos, endPos, t);
+                camT.rotation = Quaternion.Slerp(startRot, endRot, t);
+                elapsed += Time.unscaledDeltaTime;
+                yield return null;
+            }
+
+            camT.position = endPos;
+            camT.rotation = endRot;
+        }
+
+        GameManager.Instance.ResumeTimeTick(); // Resume game time after cinematic
+        // (끝나고 다른 로직이 필요하면 여기서 호출)
     }
 }

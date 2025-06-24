@@ -34,6 +34,7 @@ public class PlayerControl : MonoBehaviour
     private float iceLerpFactor = 0.02f;
 
     // Acceleration 
+    public AudioClip accelerationSound;
     private float currentSpeed = 0f;
     private bool isBraking = false;
 
@@ -52,6 +53,7 @@ public class PlayerControl : MonoBehaviour
 
         // Initialize Code Factory
         codeFactory = new CodeFactory();
+        CinematicCamera.Instance.StartCinematic();
     }
 
     // Update is called once per frame
@@ -59,7 +61,7 @@ public class PlayerControl : MonoBehaviour
     {
         if (PlayerStatus.instance.isStun) return;
 
-        if (tutorialManager != null && tutorialManager.IsPaused()) 
+        if (tutorialManager != null && tutorialManager.IsPaused())
             return;
 
         horizontalInput = Input.GetAxis("Horizontal");
@@ -118,7 +120,7 @@ public class PlayerControl : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (tutorialManager != null && tutorialManager.IsPaused()) 
+        if (tutorialManager != null && tutorialManager.IsPaused())
             return;
 
         if (gameManager.isGameActive)
@@ -126,12 +128,14 @@ public class PlayerControl : MonoBehaviour
             MovePlayerForward();
             if (isBraking)
             {
+                SoundEffectManager.Instance.StopSound("AccelerationSound");
                 float decelerationFactor = isOnIce ? 0.5f : 1.0f;
                 Debug.Log("Decelerating with factor: " + decelerationFactor + " With speed: " + PlayerStatus.instance.moveSpeed);
                 PlayerStatus.instance.DeAccelerate(decelerationFactor, Time.deltaTime);
             }
             else
             {
+                SoundEffectManager.Instance.PlaySound("AccelerationSound", accelerationSound, true);
                 float accelerationFactor = isOnIce ? 2.0f : 1.0f;
                 Debug.Log("Accelerating with factor: " + accelerationFactor + " With speed: " + PlayerStatus.instance.moveSpeed);
                 PlayerStatus.instance.Accelerate(accelerationFactor, Time.deltaTime);
