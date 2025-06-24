@@ -73,8 +73,7 @@ public class ProfessorController : MonoBehaviour, IMonsterController
     {
         if (PlayerStatus.instance != null)
         {
-            SoundEffectManager.Instance.PlayOneShotOnce(professorSound);
-            PlayerStatus.instance.StunPlayer(duration);
+            PlayerStatus.instance.StunPlayer(duration, professorSound);
         }
     }
 
